@@ -1,0 +1,163 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.1308228980322,
+        "y": 5.292468694096601
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.9177587200285107,
+        "y": 5.642803913481474
+      },
+      "isLocked": false,
+      "linkedName": "DepotShootAcc"
+    },
+    {
+      "anchor": {
+        "x": 3.134934210526316,
+        "y": 7.370224625623959
+      },
+      "prevControl": {
+        "x": 2.3425249216144146,
+        "y": 7.133274763097839
+      },
+      "nextControl": {
+        "x": 3.3744549880186856,
+        "y": 7.44184722784875
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.279440789473685,
+        "y": 7.370224625623959
+      },
+      "prevControl": {
+        "x": 5.358293659660901,
+        "y": 7.462476578958904
+      },
+      "nextControl": {
+        "x": 7.456721448980765,
+        "y": 7.25232115836238
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.116052631578948,
+        "y": 5.380983589951378
+      },
+      "prevControl": {
+        "x": 7.121622451919303,
+        "y": 5.739446696902051
+      },
+      "nextControl": {
+        "x": 7.108696435636029,
+        "y": 4.907552726493984
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.654473684210526,
+        "y": 4.5158114035087715
+      },
+      "prevControl": {
+        "x": 6.955202103583096,
+        "y": 4.5138205697512
+      },
+      "nextControl": {
+        "x": 6.13524463459649,
+        "y": 4.519248719882262
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.712083333333334,
+        "y": 5.380983589951378
+      },
+      "prevControl": {
+        "x": 5.967489557895027,
+        "y": 5.2666221436572735
+      },
+      "nextControl": {
+        "x": 4.98125,
+        "y": 5.708223684210526
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.2179248658318427,
+        "y": 5.380983589951378
+      },
+      "prevControl": {
+        "x": 2.457064403166813,
+        "y": 5.518044725159076
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 1.8908594815825404,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 1.9072305593451562,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 5.255115961800825,
+      "rotationDegrees": -51.99421801591983
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Extend",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Extend"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.12,
+    "maxAcceleration": 7.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": true
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -34.94291107917901
+  },
+  "reversed": false,
+  "folder": "Depot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -24.56717132060136
+  },
+  "useDefaultConstraints": false
+}

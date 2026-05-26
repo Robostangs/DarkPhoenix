@@ -1,0 +1,123 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5321824686940966,
+        "y": 4.0593381037567084
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.898018914111174,
+        "y": 6.547338579683372
+      },
+      "isLocked": false,
+      "linkedName": "CenterStartDepot"
+    },
+    {
+      "anchor": {
+        "x": 0.9685688729874773,
+        "y": 5.9414847942754925
+      },
+      "prevControl": {
+        "x": 0.721300714042316,
+        "y": 5.904627534856615
+      },
+      "nextControl": {
+        "x": 1.2158370319326386,
+        "y": 5.97834205369437
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.8771914132379246,
+        "y": 5.746779964221824
+      },
+      "prevControl": {
+        "x": 1.6928753023974934,
+        "y": 5.9981201153678665
+      },
+      "nextControl": {
+        "x": 2.0556708407871196,
+        "y": 5.50339892665474
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.48778175313059,
+        "y": 4.903059033989266
+      },
+      "prevControl": {
+        "x": 1.7473881932021467,
+        "y": 5.195116279069768
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "DepotEndAcc"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0989304812834213,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.7220338983050847,
+      "maxWaypointRelativePos": 1.3525423728813564,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Retract",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Extend"
+        }
+      }
+    },
+    {
+      "name": "Extend",
+      "waypointRelativePos": 0.76271186440678,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.12,
+    "maxAcceleration": 9.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 1080.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -26.565051177078036
+  },
+  "reversed": false,
+  "folder": "Center",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

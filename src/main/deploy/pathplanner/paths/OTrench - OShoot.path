@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.422793793213246,
+        "y": 0.7327363650836969
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.373966179949054,
+        "y": 1.0762619405021825
+      },
+      "isLocked": false,
+      "linkedName": "OutpostTrenchIn"
+    },
+    {
+      "anchor": {
+        "x": 1.464064717521834,
+        "y": 2.386087211153566
+      },
+      "prevControl": {
+        "x": 1.5029600504912661,
+        "y": 1.5689860239264917
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.12,
+    "maxAcceleration": 9.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 1080.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 27.118240551279648
+  },
+  "reversed": false,
+  "folder": "Outpost",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 45.0
+  },
+  "useDefaultConstraints": true
+}

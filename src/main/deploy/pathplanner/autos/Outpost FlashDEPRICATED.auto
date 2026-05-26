@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost Trench Start"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FullShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Second Dip"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FullShoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Outpost",
+  "choreoAuto": false
+}

@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.4465797852983986,
+        "y": 7.353470023653566
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.243567082878457,
+        "y": 6.847032842066958
+      },
+      "isLocked": false,
+      "linkedName": "DepotTrenchIn"
+    },
+    {
+      "anchor": {
+        "x": 1.8549628138646286,
+        "y": 5.337295533114993
+      },
+      "prevControl": {
+        "x": 1.9747404930858807,
+        "y": 6.3973928197780205
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.12,
+    "maxAcceleration": 9.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 1080.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -25.30159561379129
+  },
+  "reversed": false,
+  "folder": "Depot",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": -45.0
+  },
+  "useDefaultConstraints": true
+}
