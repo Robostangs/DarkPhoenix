@@ -55,8 +55,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
-    private final PIDController xController = new PIDController(10.0, 0.0, 0.0);
-    private final PIDController yController = new PIDController(10.0, 0.0, 0.0);
+    private final PIDController xController = new PIDController(50.0, 0.0, 0.0);
+    private final PIDController yController = new PIDController(50.0, 0.0, 0.0);
     private final PIDController headingController = new PIDController(7.5, 0.0, 0.0);
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */

@@ -1,4 +1,6 @@
-package frc.robot;
+ 
+
+        package frc.robot;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
@@ -108,17 +110,17 @@ public class RobotContainer {
                 setDrivetrain();
 
                 xDrive.rightTrigger().whileTrue(
-                                (ShootFactory.DumbShoot()));
+                                (ShootFactory.SmartShoot()));
 
                 xDrive.leftBumper().whileTrue(new HomeIntake(false));
 
                 // close shoot
 
-               // xDrive.rm().whileTrue(new setKirbyWheels(() -> 1));
-              /*   xDrive.lm()
+               xDrive.rm().whileTrue(new setKirbyWheels(() -> 1));
+                 xDrive.lm()
                                 .whileTrue(ShootFactory.DumbShoot())
                                 .onFalse(new setHoodPosition(() -> 0));
-                */
+                
 
                 xDrive.rightPaddle().whileTrue(IntakeFactory.ExtendIntake());
                 xDrive.leftPaddle().whileTrue(IntakeFactory.RetractIntake());
@@ -137,10 +139,10 @@ public class RobotContainer {
                 // xDrive.povRight().onTrue(new InstantCommand(
                 //                 (() -> useVision = !useVision)));
 
-              /*   xDrive.a().whileTrue(new AutoAlign(() -> xDrive.getLeftY(), () -> xDrive.getLeftX(),
+              xDrive.a().whileTrue(new AutoAlign(() -> xDrive.getLeftY(), () -> xDrive.getLeftX(),
                                 () -> xDrive.getLeftTriggerAxis() < 0.2)
                                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Auto Align"));
-                */
+                
                 xDrive.y().whileTrue(IntakeFactory.TrueSpit());
                 xDrive.b().whileTrue(IntakeFactory.ballStuck());
         }

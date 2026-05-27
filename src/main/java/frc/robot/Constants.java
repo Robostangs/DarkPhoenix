@@ -202,7 +202,7 @@ public final class Constants {
                 public static final double kShooterVelocityTolerance = 3;
                 public static final int kFlywheelMotorID = 9;
                 public static final int kFlywheelSlaveMotorID = 10;
-                public static final double kDumbShootRPS = 60;
+                public static final double kDumbShootRPS = 27;
                 public static final double kShooterSlaveMotorStatorCurrentLimit = 60;
                 public static final double kHalfSetpoint = 30;
                 public static final double kTrenchSetpoint = 0;

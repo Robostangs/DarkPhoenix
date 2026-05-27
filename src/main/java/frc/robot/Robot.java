@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.io.Console;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
@@ -326,11 +327,11 @@ public class Robot extends TimedRobotstangs {
 
     @Override
     public void autonomousInit() {
+        System.out.println("Initified");
         CommandScheduler.getInstance().cancelAll();
         Command myTrajectory = autoFactory.trajectoryCmd("daBatman");
-        CommandScheduler.getInstance().schedule(
-                new WaitCommand(SmartDashboard.getNumber("Auto Delay", 0)).andThen(
-                        myTrajectory));
+        CommandScheduler.getInstance().schedule(myTrajectory);
+        System.out.println("Enditified");
     }
 
     @Override
