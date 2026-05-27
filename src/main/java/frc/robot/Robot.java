@@ -19,6 +19,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 
+import choreo.auto.AutoFactory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -69,7 +70,7 @@ public class Robot extends TimedRobotstangs {
     CommandSwerveDrivetrain drivetrain = CommandSwerveDrivetrain.getInstance();
     public static RobotContainer m_robotContainer;
     public static ShuffleboardTab disableTab, teleopTab;
-
+    public AutoFactory autoFactory;
     public static Field2d teleopField = new Field2d();
     private static GcStatsCollector gscollect = new GcStatsCollector();
     private int lastMatchSecond = -1;
@@ -140,9 +141,15 @@ public class Robot extends TimedRobotstangs {
                     DataLogManager.log(action.getName() + " Command Interrupted by: " + reason);
                     SmartDashboard.putString("Auto/LastInterrupt", action.getName() + " <- " + reason);
                 });
-
         CommandScheduler.getInstance()
                 .onCommandFinish((action) -> DataLogManager.log(action.getName() + " Command Finished"));
+        autoFactory = new AutoFactory(
+            drivetrain::getPose, // A function that returns the current robot pose
+            drivetrain::resetPose, // A function that resets the current robot pose to the provided Pose2d
+            drivetrain::followTrajectory, // The drive subsystem trajectory follower 
+            false, // If alliance flipping should be enabled 
+            drivetrain // The drive subsystem
+        );
 
         configureDisabledTab();
         configureTeleopTab();
@@ -308,43 +315,7 @@ public class Robot extends TimedRobotstangs {
             autoname = "";
         }
 
-        if (autoname != null) {
-            autoname = autoChooser.getSelected();
-            flip = flipChooser.getSelected().booleanValue();
-
-            if (!autoname.equals(oldAutoname) || flip != oldFlip) {
-
-                if (autoname != null) {
-
-                    autoAlert.set(false);
-                    if (autoname.equals("SitAndShit")) {
-                        autoCommand = new PrintCommand("Pooping");
-                    } else {
-
-                        autoCommand = new PathPlannerAuto(autoname, flip);
-
-                        drawCurrentAuto(autoCommand.getName());
-
-                    }
-
-                } else {
-                    autoCommand = new PrintCommand("Auto not Autoing....");
-                    autoAlert.set(true);
-
-                }
-
-                autoGroup = new SequentialCommandGroup(
-                        new WaitCommand(delay),
-                        new InstantCommand(() -> Hood.getInstance().setHoodPositionAuto(0)),
-                        new InstantCommand(
-                                () -> IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kHomePosition)),
-                        autoCommand);
-                SmartDashboard.putString("Auto/Auto Name", autoCommand.getName());
-
-            }
-            oldAutoname = autoname;
-            oldFlip = flip;
-        }
+        
     }
 
     @Override
@@ -355,12 +326,11 @@ public class Robot extends TimedRobotstangs {
 
     @Override
     public void autonomousInit() {
-
         CommandScheduler.getInstance().cancelAll();
-
+        Command myTrajectory = autoFactory.trajectoryCmd("daBatman");
         CommandScheduler.getInstance().schedule(
                 new WaitCommand(SmartDashboard.getNumber("Auto Delay", 0)).andThen(
-                        autoGroup));
+                        myTrajectory));
     }
 
     @Override
