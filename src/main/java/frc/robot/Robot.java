@@ -151,6 +151,8 @@ public class Robot extends TimedRobotstangs {
             false, // If alliance flipping should be enabled 
             drivetrain // The drive subsystem
         );
+       // autoFactory
+           // .bind("intake", intakeSubsystem.intake());
 
         configureDisabledTab();
         configureTeleopTab();
@@ -329,8 +331,8 @@ public class Robot extends TimedRobotstangs {
     public void autonomousInit() {
         System.out.println("Initified");
         CommandScheduler.getInstance().cancelAll();
-        Command myTrajectory = autoFactory.trajectoryCmd("daBatman");
-        CommandScheduler.getInstance().schedule(myTrajectory);
+        autoCommand = autoFactory.trajectoryCmd("daBatman");
+        CommandScheduler.getInstance().schedule(autoCommand);
         System.out.println("Enditified");
     }
 
