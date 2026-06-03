@@ -55,9 +55,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
-    private final PIDController xController = new PIDController(10.0, 0.0, 0.0);
-    private final PIDController yController = new PIDController(10.0, 0.0, 0.0);
-    private final PIDController headingController = new PIDController(10, 0.0, 0.0);
+    private final PIDController xController = new PIDController(500.0, 500, 500);
+    private final PIDController yController = new PIDController(500.0, 500, 500);
+    private final PIDController headingController = new PIDController(500, 500, 500);
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -162,12 +162,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         configurePathPlanner();
 
         this.setVisionMeasurementStdDevs(Constants.AutoConstants.kErrorInMyVisionReg);
-         headingController.enableContinuousInput(-Math.PI, Math.PI);
+        headingController.enableContinuousInput(-Math.PI, Math.PI);
         if (Utils.isSimulation()) {
             startSimThread();
         }
     }
      public void followTrajectory(SwerveSample sample) {
+        SmartDashboard.putString("autoFollow", "Followed");
         // Get the current pose of the robot
         Pose2d pose = this.getState().Pose;
 
@@ -177,9 +178,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             sample.vy + yController.calculate(pose.getY(), sample.y),
             sample.omega + headingController.calculate(pose.getRotation().getRadians(), sample.heading)
         );
-
+        SmartDashboard.putNumber("autoFOllowX", speeds.vxMetersPerSecond);
+        SmartDashboard.putNumber("autoFOllowY", speeds.vyMetersPerSecond);
+        SmartDashboard.putNumber("autoFOllowRot", speeds.omegaRadiansPerSecond);
+        System.out.println("Doing John");
         // Apply the generated speeds
-        setControl(new SwerveRequest.RobotCentric().withVelocityX(speeds.vxMetersPerSecond).withVelocityY(speeds.vyMetersPerSecond).withRotationalRate(speeds.omegaRadiansPerSecond));
+        this.setControl(new SwerveRequest.FieldCentric().withVelocityX(speeds.vxMetersPerSecond).withVelocityY(speeds.vyMetersPerSecond).withRotationalRate(speeds.omegaRadiansPerSecond));
+        SmartDashboard.putString("autoFollow", "NoEror");
     }
     public Pose2d getPose(){
         return this.getState().Pose;
