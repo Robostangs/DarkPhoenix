@@ -55,9 +55,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
-    private final PIDController xController = new PIDController(500.0, 500, 500);
-    private final PIDController yController = new PIDController(500.0, 500, 500);
-    private final PIDController headingController = new PIDController(500, 500, 500);
+    private final PIDController xController = new PIDController(2.0, 0.0, 0.0);
+    private final PIDController yController = new PIDController(2.0, 0.0, 0.0);
+    private final PIDController headingController = new PIDController(3, 0.0, 0.0);
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -159,7 +159,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             SwerveDrivetrainConstants drivetrainConstants,
             SwerveModuleConstants<?, ?, ?>... modules) {
         super(drivetrainConstants, modules);
-        configurePathPlanner();
 
         this.setVisionMeasurementStdDevs(Constants.AutoConstants.kErrorInMyVisionReg);
         headingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -490,21 +489,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 visionMeasurementStdDevs);
     }
 
-    public void configurePathPlanner() {
-        AutoBuilder.configure(
-                () -> this.getState().Pose,
-                this::resetPose,
-                () -> this.getState().Speeds,
-                (speed, feedforward) -> this.setControl(
-                        AutoDrive
-                                .withSpeeds(speed.times(1.5))
-                                .withWheelForceFeedforwardsX(feedforward.robotRelativeForcesX())
-                                .withWheelForceFeedforwardsY(feedforward.robotRelativeForcesY())),
-                new PPHolonomicDriveController((Constants.AutoConstants.translationPID),
-                        (Constants.AutoConstants.rotationPID)),
-                Constants.AutoConstants.RobotConfig,
-                () -> Robot.isRed(), this);
-    }
+  
 
     /**
      * Return the pose at a given timestamp, if the buffer is not empty.

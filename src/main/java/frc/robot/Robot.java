@@ -42,6 +42,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -151,7 +152,7 @@ public class Robot extends TimedRobotstangs {
             false, // If alliance flipping should be enabled 
             drivetrain // The drive subsystem
         );
-        
+
        // autoFactory
            // .bind("intake", intakeSubsystem.intake());
 
@@ -165,7 +166,7 @@ public class Robot extends TimedRobotstangs {
         // IntakePivot.getInstance().setDefaultCommand(new MovePivot(() -> 0d));
         Kirby.getInstance().setDefaultCommand(new setKirbyWheels(() -> 0));
         Hopper.getInstance().setDefaultCommand(new RunHopper(() -> 0d));
-
+        CommandScheduler.getInstance().schedule(autoFactory.warmupCmd());
     }
 
     void setupAutoPitTest() {
@@ -327,7 +328,11 @@ public class Robot extends TimedRobotstangs {
         drawCurrentAuto(null);
 
     }
-
+    public Command log(String log){
+        return new InstantCommand(()->{
+            SmartDashboard.putString("autoOngoing", log);
+        });
+    }
     @Override
     public void autonomousInit() {
         SmartDashboard.putString("autoStatud", "Started");
@@ -335,12 +340,15 @@ public class Robot extends TimedRobotstangs {
         try{
             //SmartDashboard.putString("eeeee", autoname);
             autoCommand = autoFactory.trajectoryCmd("daBatman");
+            autoGroup = new SequentialCommandGroup(
+                       
+                        autoCommand);
             SmartDashboard.putString("autoStatud", "Good");
         }catch(Exception e){
             SmartDashboard.putString("autoStatud", "Error");
         }
         
-        CommandScheduler.getInstance().schedule(autoCommand);
+        CommandScheduler.getInstance().schedule(log("started").andThen(autoGroup).andThen(log("finished")));
         SmartDashboard.putString("autoStatud", "Done");
     }
 

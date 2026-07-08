@@ -25,6 +25,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -212,8 +213,8 @@ public final class Constants {
         }
 
         public class AutoConstants {
-                public static final PIDConstants translationPID = new PIDConstants(2, 0, 0);
-                public static final PIDConstants rotationPID = new PIDConstants(3, 0, 0);
+                public static final PIDController translationPID = new PIDController(2, 0, 0);
+                public static final PIDController rotationPID = new PIDController(3, 0, 0);
                 private final static MomentOfInertia kRobotMomentOfInertia = KilogramSquareMeters.of(0.01);
                 private final static double robotWeight = 69;
                 private final static double wheelCOF = 0.2; // typical carpet COF for colson/nitrile wheels
