@@ -153,8 +153,8 @@ public class Robot extends TimedRobotstangs {
             drivetrain // The drive subsystem
         );
 
-       // autoFactory
-           // .bind("intake", intakeSubsystem.intake());
+        autoFactory.bind("Intake", IntakeFactory.ExtendIntake());
+
 
         configureDisabledTab();
         configureTeleopTab();
