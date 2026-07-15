@@ -4,7 +4,36 @@
  "type":"Swerve",
  "variables":{
   "expressions":{},
-  "poses":{}
+  "poses":{
+   "BumpEnterMiddle":{
+    "x":{
+     "exp":"5.7499237060546875 m",
+     "val":5.7499237060546875
+    },
+    "y":{
+     "exp":"5.510603427886963 m",
+     "val":5.510603427886963
+    },
+    "heading":{
+     "exp":"-0.9097521918443324 rad",
+     "val":-0.9097521918443324
+    }
+   },
+   "BumpExitSide":{
+    "x":{
+     "exp":"3.6400933265686035 m",
+     "val":3.640093326568603
+    },
+    "y":{
+     "exp":"5.484474182128906 m",
+     "val":5.484474182128906
+    },
+    "heading":{
+     "exp":"BumpExitSIde.heading",
+     "val":-0.8725556686482726
+    }
+   }
+  }
  },
  "config":{
   "frontLeft":{

@@ -295,6 +295,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
         SmartDashboard.putNumber("Drivetrain/Vely", this.getState().Speeds.vyMetersPerSecond);
         SmartDashboard.putNumber("Drivetrain/Velx", this.getState().Speeds.vxMetersPerSecond);
+        SmartDashboard.putNumber("Drivetrain/Velocity", Math.sqrt(
+                Math.pow(this.getState().Speeds.vxMetersPerSecond, 2) +
+                        Math.pow(this.getState().Speeds.vyMetersPerSecond, 2)));
 
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent(allianceColor -> {

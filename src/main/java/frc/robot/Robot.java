@@ -341,7 +341,10 @@ public class Robot extends TimedRobotstangs {
             //SmartDashboard.putString("eeeee", autoname);
             autoCommand = autoFactory.trajectoryCmd("daBatman");
             autoGroup = new SequentialCommandGroup(
-                       
+                        new WaitCommand(delay),
+                        new InstantCommand(() -> Hood.getInstance().setHoodPositionAuto(0)),
+                        new InstantCommand(
+                                () -> IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kHomePosition)),
                         autoCommand);
             SmartDashboard.putString("autoStatud", "Good");
         }catch(Exception e){
