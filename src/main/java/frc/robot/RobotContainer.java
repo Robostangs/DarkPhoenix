@@ -122,7 +122,7 @@ public class RobotContainer {
                                 .onFalse(new setHoodPosition(() -> 0));
                 
 
-                xDrive.rightPaddle().whileTrue(IntakeFactory.ExtendIntake());
+                xDrive.rightPaddle().whileTrue(IntakeFactory.SmartIntake());
                 xDrive.leftPaddle().whileTrue(IntakeFactory.RetractIntake());
                 xDrive.rightBumper().whileTrue(new HomeHood());
                 // TODO Find ts pose
@@ -195,7 +195,7 @@ public class RobotContainer {
                 xTest.rightPaddle().whileTrue(new HomeIntake(false));
                 xTest.leftPaddle().whileTrue(new HomeIntake(true));
                 xTest.a().whileTrue(new HomeHood());
-                xTest.leftBumper().whileTrue(IntakeFactory.ExtendIntake());
+                xTest.leftBumper().whileTrue(IntakeFactory.SmartIntake());
                 xTest.rightBumper().whileTrue(IntakeFactory.RetractIntake());
 
                 xTest.leftTrigger().whileTrue(new setKirbyWheels(() -> 1));

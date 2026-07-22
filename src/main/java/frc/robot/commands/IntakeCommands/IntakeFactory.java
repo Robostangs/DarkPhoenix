@@ -18,9 +18,13 @@ public class IntakeFactory {
                 .alongWith(new RunHopper(() -> -0.5));
     }
 
-    public static Command ExtendIntake() {
+    public static Command SmartIntake() {
         return new setIntakePosition(Constants.KirbyConstants.kExtendSetpoint)
                 .alongWith(new setKirbyWheels(() -> 1))
+                .withName("Extend and run Intake Command");
+    }
+    public static Command ExtendIntake() {
+        return new setIntakePosition(Constants.KirbyConstants.kExtendSetpoint)
                 .withName("Extend Intake Command");
     }
 

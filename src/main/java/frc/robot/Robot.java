@@ -20,6 +20,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 
+import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -48,6 +49,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.Constants.ElasticConstants.whoCanScore;
 import frc.robot.FeederCommands.setFeederSpeed;
 import frc.robot.Stable.LimelightHelpers;
@@ -93,7 +95,7 @@ public class Robot extends TimedRobotstangs {
 
     public Color allianceScore = Constants.ElasticConstants.purple;
 
-    private SendableChooser<String> autoChooser = new SendableChooser<>();
+    private AutoChooser autoChooser = new AutoChooser();
     private SendableChooser<Boolean> flipChooser = new SendableChooser<>();
 
     public PowerDistribution pdh = new PowerDistribution(Constants.ElasticConstants.kPdhCanId, ModuleType.kRev);
@@ -153,8 +155,12 @@ public class Robot extends TimedRobotstangs {
             drivetrain // The drive subsystem
         );
 
-        autoFactory.bind("Intake", IntakeFactory.ExtendIntake());
+        autoFactory
+            .bind("Start Intake", IntakeFactory.SmartIntake())
+            .bind("Extend Intake", IntakeFactory.ExtendIntake())
+            .bind("Shoot", ShootFactory.SmartShoot());
 
+        
 
         configureDisabledTab();
         configureTeleopTab();
@@ -228,7 +234,7 @@ public class Robot extends TimedRobotstangs {
                 }));
         SmartDashboard.putData("PitTest/HoodSetpoints", hoodSetpointChooser);
 
-        intakePivotSetpointChooser.addOption("Extend", IntakeFactory.ExtendIntake());
+        intakePivotSetpointChooser.addOption("Extend", IntakeFactory.SmartIntake());
         intakePivotSetpointChooser.addOption("Retract", IntakeFactory.RetractIntake());
 
         SmartDashboard.putData("PitTest/IntakePivotSetpoints", intakePivotSetpointChooser);
@@ -284,30 +290,31 @@ public class Robot extends TimedRobotstangs {
         delay = 0;
 
         SmartDashboard.putNumber("Auto Delay", delay);
+         // Create the auto chooser
+        autoChooser = new AutoChooser();
+        // Add options to the chooser
+        autoChooser.addCmd("doubledipTrench",() -> autoFactory.trajectoryCmd("doubledipTrench"));
+        autoChooser.addCmd("Test",() -> autoFactory.trajectoryCmd("daBatman"));
+
+        // Put the auto chooser on the dashboard
+        SmartDashboard.putData(autoChooser);
+
+        // Schedule the selected auto during the autonomous period
+        
 
         flipChooser.setDefaultOption("N", Boolean.valueOf(false));
         flipChooser.addOption("Y", Boolean.valueOf(true));
         SmartDashboard.putData("Flip Chooser", flipChooser);
 
-        for (String name : AutoBuilder.getAllAutoNames()) {
-            autoChooser.addOption(name, name);
-        }
+     
 
-        autoChooser.setDefaultOption("Sit and Shit", "SitAndShit");
         // autoChooser.addOption("Piss", "Piss");
         // autoChooser.addOption("DStart - DTrench - DIntake - DBump - DShoot", "DStart
         // - DTrench - DIntake - DBump - DShoot");
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
-        if (autoChooser.getSelected() == null) {
-            autoname = "";
-        } else {
-            autoname = autoChooser.getSelected();
-
-        }
-        oldAutoname = "nada";
-        oldFlip = false;
+        
     }
 
     @Override
@@ -326,7 +333,16 @@ public class Robot extends TimedRobotstangs {
     @Override
     public void disabledExit() {
         drawCurrentAuto(null);
-
+        SmartDashboard.putString("ddd",autoChooser.selectedCommand().getName());
+        autoCommand = autoChooser.selectedCommand();
+        autoGroup = new SequentialCommandGroup(
+                    autoFactory.resetOdometry("doubledipTrench"),
+                    new WaitCommand(0),
+                    new InstantCommand(() -> Hood.getInstance().setHoodPositionAuto(0)),
+                    new InstantCommand(
+                            () -> IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kHomePosition)),
+                    autoCommand);
+        
     }
     public Command log(String log){
         return new InstantCommand(()->{
@@ -337,21 +353,15 @@ public class Robot extends TimedRobotstangs {
     public void autonomousInit() {
         SmartDashboard.putString("autoStatud", "Started");
         CommandScheduler.getInstance().cancelAll();
+        CommandScheduler.getInstance().schedule(autoGroup);
         try{
             //SmartDashboard.putString("eeeee", autoname);
-            autoCommand = autoFactory.trajectoryCmd("daBatman");
-            autoGroup = new SequentialCommandGroup(
-                        new WaitCommand(delay),
-                        new InstantCommand(() -> Hood.getInstance().setHoodPositionAuto(0)),
-                        new InstantCommand(
-                                () -> IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kHomePosition)),
-                        autoCommand);
+            
             SmartDashboard.putString("autoStatud", "Good");
         }catch(Exception e){
             SmartDashboard.putString("autoStatud", "Error");
         }
         
-        CommandScheduler.getInstance().schedule(log("started").andThen(autoGroup).andThen(log("finished")));
         SmartDashboard.putString("autoStatud", "Done");
     }
 
@@ -549,7 +559,7 @@ public class Robot extends TimedRobotstangs {
 
     public void loadNamedCommands() {
 
-        NamedCommands.registerCommand("Extend", IntakeFactory.ExtendIntake());
+        NamedCommands.registerCommand("Extend", IntakeFactory.SmartIntake());
 
         NamedCommands.registerCommand("Retract", IntakeFactory.RetractIntake());
 
