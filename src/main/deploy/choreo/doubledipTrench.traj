@@ -40,7 +40,7 @@
  },
  "params":{
   "waypoints":[
-    {"x":{"exp":"4.296706199645996 m", "val":4.296706199645996}, "y":{"exp":"7.43993616104126 m", "val":7.43993616104126}, "heading":{"exp":"6.1346765955835725 mrad", "val":0.006134676595583572}, "intervals":15, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"4.296666622161865 m", "val":4.296666622161865}, "y":{"exp":"7.287020683288574 m", "val":7.287020683288574}, "heading":{"exp":"6.1346765955835725 mrad", "val":0.006134676595583572}, "intervals":15, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"5.585211753845215 m", "val":5.585211753845215}, "y":{"exp":"7.374969482421875 m", "val":7.374969482421875}, "heading":{"exp":"-19.22882238848256 mrad", "val":-0.01922882238848256}, "intervals":20, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"6.884544849395752 m", "val":6.884544849395752}, "y":{"exp":"7.2450361251831055 m", "val":7.2450361251831055}, "heading":{"exp":"0.7188299996216245 rad", "val":0.7188299996216245}, "intervals":20, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.674973011016846 m", "val":7.674973011016846}, "y":{"exp":"6.346330642700195 m", "val":6.346330642700195}, "heading":{"exp":"1.5574634860502725 rad", "val":1.5574634860502723}, "intervals":23, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
@@ -1029,6 +1029,5 @@
    {"name":"Extend Intake 2nd time", "from":{"target":10, "targetTimestamp":7.38269, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Extend Intake"}}},
    {"name":"Intake 2nd time", "from":{"target":12, "targetTimestamp":8.449, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
        {"type":"named", "data":{"name":"Start Intake"}},
-       {"type":"wait", "data":{"waitTime":{"exp":"3.2 s", "val":3.2}}}]}}},
-   {"name":"Extend Intake", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Extend Intake"}}}]
+       {"type":"wait", "data":{"waitTime":{"exp":"3.2 s", "val":3.2}}}]}}}]
 }

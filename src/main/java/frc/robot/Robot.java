@@ -10,6 +10,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.ctre.phoenix6.HootAutoReplay;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -20,8 +21,11 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 
+import choreo.Choreo;
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
+import choreo.trajectory.SwerveSample;
+import choreo.trajectory.Trajectory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -95,7 +99,7 @@ public class Robot extends TimedRobotstangs {
 
     public Color allianceScore = Constants.ElasticConstants.purple;
 
-    private AutoChooser autoChooser = new AutoChooser();
+    private SendableChooser<String> autoChooser = new SendableChooser<>();
     private SendableChooser<Boolean> flipChooser = new SendableChooser<>();
 
     public PowerDistribution pdh = new PowerDistribution(Constants.ElasticConstants.kPdhCanId, ModuleType.kRev);
@@ -151,7 +155,7 @@ public class Robot extends TimedRobotstangs {
             drivetrain::getPose, // A function that returns the current robot pose
             drivetrain::resetPose, // A function that resets the current robot pose to the provided Pose2d
             drivetrain::followTrajectory, // The drive subsystem trajectory follower 
-            false, // If alliance flipping should be enabled 
+            (true), // If alliance flipping should be enabled 
             drivetrain // The drive subsystem
         );
 
@@ -172,7 +176,7 @@ public class Robot extends TimedRobotstangs {
         // IntakePivot.getInstance().setDefaultCommand(new MovePivot(() -> 0d));
         Kirby.getInstance().setDefaultCommand(new setKirbyWheels(() -> 0));
         Hopper.getInstance().setDefaultCommand(new RunHopper(() -> 0d));
-        CommandScheduler.getInstance().schedule(autoFactory.warmupCmd());
+        //CommandScheduler.getInstance().schedule(autoFactory.warmupCmd());
     }
 
     void setupAutoPitTest() {
@@ -291,11 +295,11 @@ public class Robot extends TimedRobotstangs {
 
         SmartDashboard.putNumber("Auto Delay", delay);
          // Create the auto chooser
-        autoChooser = new AutoChooser();
+        
         // Add options to the chooser
-        autoChooser.addCmd("doubledipTrench",() -> autoFactory.trajectoryCmd("doubledipTrench"));
-        autoChooser.addCmd("Test",() -> autoFactory.trajectoryCmd("daBatman"));
-
+        autoChooser.addOption("Double Dip", "doubledipTrench");
+        autoChooser.setDefaultOption("Double Dip", "doubledipTrench");
+    
         // Put the auto chooser on the dashboard
         SmartDashboard.putData(autoChooser);
 
@@ -322,6 +326,7 @@ public class Robot extends TimedRobotstangs {
 
         flip = flipChooser.getSelected().booleanValue();
         SmartDashboard.putBoolean("FLIPPPPPPP", flip);
+        drawCurrentAuto("doubledipTrench");
 
         if (autoname == null) {
             autoname = "";
@@ -332,13 +337,15 @@ public class Robot extends TimedRobotstangs {
 
     @Override
     public void disabledExit() {
-        drawCurrentAuto(null);
-        SmartDashboard.putString("ddd",autoChooser.selectedCommand().getName());
-        autoCommand = autoChooser.selectedCommand();
-        autoGroup = new SequentialCommandGroup(
+       // drawCurrentAuto(autoChooser.getSelected()!=null? autoChooser.getSelected() : "");
+        autoCommand= autoFactory.trajectoryCmd("doubledipTrench");
+        SmartDashboard.putString("ddd",autoChooser.getSelected());
+                autoGroup = new SequentialCommandGroup(
                     autoFactory.resetOdometry("doubledipTrench"),
+
                     new WaitCommand(0),
                     new InstantCommand(() -> Hood.getInstance().setHoodPositionAuto(0)),
+                    //IntakeFactory.ExtendIntake(),
                     new InstantCommand(
                             () -> IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kHomePosition)),
                     autoCommand);
@@ -385,7 +392,6 @@ public class Robot extends TimedRobotstangs {
     @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
-
         lastMatchSecond = (int) DriverStation.getMatchTime();
 
     }
@@ -659,31 +665,35 @@ public class Robot extends TimedRobotstangs {
         return shooterIsDumb;
     }
 
-    public void drawCurrentAuto(String autoName) {
+   public void drawCurrentAuto(String autoName) {
         List<Pose2d> poses = new ArrayList<>();
-        poses.clear();
-        if (autoName != null && !autoName.equals("")) {
-            try {
 
-                for (PathPlannerPath path : PathPlannerAuto.getPathGroupFromAutoFile(autoName)) {
-                    for (Pose2d pose : path.getPathPoses()) {
-                        if (Robot.isRed()) {
-                            pose = FlippingUtil.flipFieldPose(pose);
-                        }
-                        poses.add(pose);
-                    }
+        if (autoName != null && !autoName.isEmpty()) {
+            // 1. Load the trajectory (returns Optional<Trajectory<SwerveSample>>)
+            Optional<Trajectory<SwerveSample>> optTrajectory = Choreo.loadTrajectory(autoName);
 
+            if (optTrajectory.isPresent()) {
+                Trajectory<SwerveSample> trajectory = optTrajectory.get();
+
+                // 2. Check if we need to mirror for Red Alliance
+                boolean isRed = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
+                if (isRed) {
+                    // Flips the trajectory across the field centerline
+                    trajectory = trajectory.flipped();
                 }
+
+                // 3. Extract the list of Pose2d objects from the trajectory samples
+                poses = List.of(trajectory.getPoses());
+
                 autoAlert.set(false);
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                // Trajectory file was not found or failed to parse
                 autoAlert.set(true);
             }
 
+            // 4. Update the Field2d / Elastic field widget
             teleopField.getObject("auto").setPoses(poses);
-
         }
-
     }
 
     private static final class GcStatsCollector {
