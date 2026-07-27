@@ -24,6 +24,8 @@ import com.pathplanner.lib.util.FlippingUtil;
 import choreo.Choreo;
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
+import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -327,7 +329,7 @@ public class Robot extends TimedRobotstangs {
         Boolean selectedflip = flipChooser.getSelected();
         flip = selectedflip != null ? selectedflip.booleanValue() : false;
         SmartDashboard.putBoolean("FLIPPPPPPP", flip);
-        drawCurrentAuto("doubledipTrench");
+        drawCurrentAuto("doubledipTrench", flip);
 
         if (autoname == null) {
             autoname = "";
@@ -338,20 +340,9 @@ public class Robot extends TimedRobotstangs {
 
     @Override
     public void disabledExit() {
-       // drawCurrentAuto(autoChooser.getSelected()!=null? autoChooser.getSelected() : "");
-        autoCommand= autoFactory.trajectoryCmd("doubledipTrench");
-        //SmartDashboard.putString("ddd",autoChooser.getSelected());
-        String selectedAuto = autoChooser.getSelected();
-        SmartDashboard.putString("ddd", selectedAuto != null ? selectedAuto : "");
-                autoGroup = new SequentialCommandGroup(
-                    autoFactory.resetOdometry("doubledipTrench"),
-
-                    new WaitCommand(0),
-                    new InstantCommand(() -> Hood.getInstance().setHoodPositionAuto(0)),
-                    //IntakeFactory.ExtendIntake(),
-                    new InstantCommand(
-                            () -> IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kHomePosition)),
-                    autoCommand);
+        
+        
+        
         
     }
     public Command log(String log){
@@ -361,19 +352,56 @@ public class Robot extends TimedRobotstangs {
     }
     @Override
     public void autonomousInit() {
-        SmartDashboard.putString("autoStatud", "Started");
         CommandScheduler.getInstance().cancelAll();
-        CommandScheduler.getInstance().schedule(autoGroup);
-        try{
-            //SmartDashboard.putString("eeeee", autoname);
-            
-            SmartDashboard.putString("autoStatud", "Good");
-        }catch(Exception e){
-            SmartDashboard.putString("autoStatud", "Error");
-        }
         
-        SmartDashboard.putString("autoStatud", "Done");
+        String selectedAuto = autoChooser.getSelected();
+        SmartDashboard.putString("ddd", selectedAuto != null ? selectedAuto : "");
+        Optional<Trajectory<SwerveSample>> optTrajectory = Choreo.loadTrajectory(selectedAuto);
+            
+        Trajectory<SwerveSample> auto = null;
+        
+        if (optTrajectory.isPresent()) {
+            auto = optTrajectory.get();
+            
+            if (flip) {
+                auto = auto.mirrorY();
+            }
+            if (Robot.isRed()) {
+                auto = auto.flipped();
+            }
+            
+            Optional<Pose2d> startPose = auto.getInitialPose(false);
+            if (startPose.isPresent()){
+                drivetrain.resetPose(startPose.get());
+            }
+            
+        }
+
+        if (auto != null) {
+            AutoRoutine routine = autoFactory.newRoutine("auto");
+            AutoTrajectory choreoAutoTrajectory = routine.trajectory(auto);
+
+            choreoAutoTrajectory.atTime("Start Intake").onTrue(IntakeFactory.SmartIntake());
+            choreoAutoTrajectory.atTime("Extend Intake").onTrue(IntakeFactory.ExtendIntake());
+            choreoAutoTrajectory.atTime("Shoot").onTrue(ShootFactory.SmartShoot());
+
+
+            routine.active().onTrue(choreoAutoTrajectory.cmd());
+
+            autoGroup = new SequentialCommandGroup(
+                new WaitCommand(delay), 
+                new InstantCommand(() -> Hood.getInstance().setHoodPositionAuto(0)),
+                new InstantCommand(() -> IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kHomePosition)),
+                
+                routine.cmd() 
+            );
+
+            CommandScheduler.getInstance().schedule(autoGroup);
+        } else {
+            SmartDashboard.putString("autoStatus", "Error - Trajectory Not Found");
+        }
     }
+
 
     @Override
     public void autonomousPeriodic() {
@@ -668,21 +696,27 @@ public class Robot extends TimedRobotstangs {
         return shooterIsDumb;
     }
 
-   public void drawCurrentAuto(String autoName) {
+   public void drawCurrentAuto(String autoName, Boolean flip) {
         List<Pose2d> poses = new ArrayList<>();
 
         if (autoName != null && !autoName.isEmpty()) {
             // 1. Load the trajectory (returns Optional<Trajectory<SwerveSample>>)
             Optional<Trajectory<SwerveSample>> optTrajectory = Choreo.loadTrajectory(autoName);
+            
 
             if (optTrajectory.isPresent()) {
-                Trajectory<SwerveSample> trajectory = optTrajectory.get();
 
+                Trajectory<SwerveSample> trajectory = optTrajectory.get();
+                
                 // 2. Check if we need to mirror for Red Alliance
                 boolean isRed = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red;
                 if (isRed) {
                     // Flips the trajectory across the field centerline
                     trajectory = trajectory.flipped();
+                }
+
+                if (flip) {
+                    trajectory = trajectory.mirrorY();
                 }
 
                 // 3. Extract the list of Pose2d objects from the trajectory samples
