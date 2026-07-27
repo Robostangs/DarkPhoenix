@@ -324,7 +324,8 @@ public class Robot extends TimedRobotstangs {
     @Override
     public void disabledPeriodic() {
 
-        flip = flipChooser.getSelected().booleanValue();
+        Boolean selectedflip = flipChooser.getSelected();
+        flip = selectedflip != null ? selectedflip.booleanValue() : false;
         SmartDashboard.putBoolean("FLIPPPPPPP", flip);
         drawCurrentAuto("doubledipTrench");
 
@@ -339,7 +340,9 @@ public class Robot extends TimedRobotstangs {
     public void disabledExit() {
        // drawCurrentAuto(autoChooser.getSelected()!=null? autoChooser.getSelected() : "");
         autoCommand= autoFactory.trajectoryCmd("doubledipTrench");
-        SmartDashboard.putString("ddd",autoChooser.getSelected());
+        //SmartDashboard.putString("ddd",autoChooser.getSelected());
+        String selectedAuto = autoChooser.getSelected();
+        SmartDashboard.putString("ddd", selectedAuto != null ? selectedAuto : "");
                 autoGroup = new SequentialCommandGroup(
                     autoFactory.resetOdometry("doubledipTrench"),
 
