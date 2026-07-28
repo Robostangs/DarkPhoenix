@@ -31,8 +31,6 @@ import frc.robot.commands.IntakeCommands.HomeIntake;
 import frc.robot.commands.IntakeCommands.IntakeFactory;
 import frc.robot.commands.IntakeCommands.setKirbyWheels;
 import frc.robot.commands.AutoAlign;
-import frc.robot.commands.BlockerCommands.HomeBlocker;
-import frc.robot.commands.BlockerCommands.setBlockerPosition;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Dumper.Flywheel;
 
@@ -69,7 +67,7 @@ public class RobotContainer {
         public RobotContainer() {
                 configureDrivingBinding();
                 configureManipBindings();
-                // configureTestBindings();
+                configureTestBindings();
 
                 if (Robot.isSimulation()) {
                         configureSimBinds();
@@ -134,12 +132,8 @@ public class RobotContainer {
 
                 xDrive.povUp().onTrue(drivetrain.runOnce(
                                 () -> drivetrain.seedFieldCentric()));
-                // setoperatorperspective???? huh tweakin
 
-                // xDrive.povRight().onTrue(new InstantCommand(
-                //                 (() -> useVision = !useVision)));
-
-              xDrive.a().whileTrue(new AutoAlign(() -> xDrive.getLeftY(), () -> xDrive.getLeftX(),
+                xDrive.a().whileTrue(new AutoAlign(() -> xDrive.getLeftY(), () -> xDrive.getLeftX(),
                                 () -> xDrive.getLeftTriggerAxis() < 0.2)
                                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Auto Align"));
                 xDrive.x().whileTrue(new HomeIntake(false));
@@ -171,14 +165,6 @@ public class RobotContainer {
                 xManip.y().whileTrue(ShootFactory.FarPass())
                                 .onFalse(new setHoodPosition(() -> 0));;
 
-           
-                xManip.rightPaddle().whileTrue(new setBlockerPosition(Constants.BlockerConstants.kExtendSetpoint,false))
-                .whileFalse(new setBlockerPosition(Constants.BlockerConstants.kRetractSetpoint,true));
-
-                xManip.leftPaddle().whileTrue(new setBlockerPosition(Constants.BlockerConstants.kRetractSetpoint,true));
-
-                xManip.rightBumper().whileTrue(new HomeBlocker());
-
 
                 xManip.leftBumper().whileTrue(ShootFactory.SmartFeed());
 
@@ -187,7 +173,8 @@ public class RobotContainer {
                 xManip.leftTrigger().onTrue(new InstantCommand(() -> Robot.toggleDefense()));
 
 
-        }
+        }[\]
+        
 
         public void configureTestBindings() {
                 setDrivetrain();
@@ -268,9 +255,9 @@ public class RobotContainer {
                 // new Trigger(() -> xSim.getRawButtonPressed(2))
                 //                 .onTrue(new InstantCommand(() -> Robot.toggleDefense()));
 
-         new Trigger(() -> xSim.getRawButtonPressed(1))
-                                .whileTrue(new  setBlockerPosition(0.5, false));       
-                                  new Trigger(() -> xSim.getRawButtonPressed(2))
-                                .whileTrue(new  setBlockerPosition(0, true));     
+        //  new Trigger(() -> xSim.getRawButtonPressed(1))
+        //                         .whileTrue(new  setBlockerPosition(0.5, false));       
+        //                           new Trigger(() -> xSim.getRawButtonPressed(2))
+        //                         .whileTrue(new  setBlockerPosition(0, true));     
 }
 }

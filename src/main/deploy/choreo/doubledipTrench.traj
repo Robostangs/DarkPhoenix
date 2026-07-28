@@ -1023,11 +1023,10 @@
    {"name":"Shoot", "from":{"target":8, "targetTimestamp":3.84345, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
        {"type":"named", "data":{"name":"Shoot"}},
        {"type":"wait", "data":{"waitTime":{"exp":"3.2 s", "val":3.2}}}]}}},
-   {"name":"Shoot 2nd time", "from":{"target":18, "targetTimestamp":11.53202, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
+   {"name":"Shoot", "from":{"target":18, "targetTimestamp":11.53202, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
        {"type":"named", "data":{"name":"Shoot"}},
        {"type":"wait", "data":{"waitTime":{"exp":"3 s", "val":3.0}}}]}}},
-   {"name":"Extend Intake 2nd time", "from":{"target":10, "targetTimestamp":7.38269, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Extend Intake"}}},
-   {"name":"Intake 2nd time", "from":{"target":12, "targetTimestamp":8.449, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
+   {"name":"Start Intake", "from":{"target":12, "targetTimestamp":8.449, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
        {"type":"named", "data":{"name":"Start Intake"}},
        {"type":"wait", "data":{"waitTime":{"exp":"3.2 s", "val":3.2}}}]}}}]
 }

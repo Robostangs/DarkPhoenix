@@ -299,7 +299,9 @@ public class Robot extends TimedRobotstangs {
          // Create the auto chooser
         
         // Add options to the chooser
-        autoChooser.addOption("Double Dip", "doubledipTrench");
+        autoChooser.addOption("Double Dip Trench", "doubledipTrench");
+         autoChooser.addOption("Double Dip Bump", "doubledipBump");
+         autoChooser.addOption("Shoot TEst", "ShootTest");
         autoChooser.setDefaultOption("Double Dip", "doubledipTrench");
     
         // Put the auto chooser on the dashboard
@@ -329,7 +331,7 @@ public class Robot extends TimedRobotstangs {
         Boolean selectedflip = flipChooser.getSelected();
         flip = selectedflip != null ? selectedflip.booleanValue() : false;
         SmartDashboard.putBoolean("FLIPPPPPPP", flip);
-        drawCurrentAuto("doubledipTrench", flip);
+        drawCurrentAuto(autoChooser.getSelected(), flip);
 
         if (autoname == null) {
             autoname = "";
@@ -384,6 +386,8 @@ public class Robot extends TimedRobotstangs {
             choreoAutoTrajectory.atTime("Start Intake").onTrue(IntakeFactory.SmartIntake());
             choreoAutoTrajectory.atTime("Extend Intake").onTrue(IntakeFactory.ExtendIntake());
             choreoAutoTrajectory.atTime("Shoot").onTrue(ShootFactory.SmartShoot());
+            //single then pass back (semi)
+            choreoAutoTrajectory.atTime("Pass").onTrue(ShootFactory.ClosePass());
 
 
             routine.active().onTrue(choreoAutoTrajectory.cmd());
