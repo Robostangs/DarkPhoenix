@@ -145,6 +145,8 @@ public class RobotContainer {
 
                 xManip.rightBumper().onTrue(
                                 new InstantCommand(() -> Robot.toggleDefense()));
+                                
+                xManip.leftBumper().whileTrue(ShootFactory.SmartFeed());
 
 
                 new Trigger(() -> Math.abs(xManip.getLeftY()) > 0.05).whileTrue(
@@ -166,14 +168,11 @@ public class RobotContainer {
                                 .onFalse(new setHoodPosition(() -> 0));;
 
 
-                xManip.leftBumper().whileTrue(ShootFactory.SmartFeed());
 
                 xManip.leftPaddle().whileTrue(new HomeIntake(true));
 
-                xManip.leftTrigger().onTrue(new InstantCommand(() -> Robot.toggleDefense()));
 
-
-        }[\]
+        }
         
 
         public void configureTestBindings() {
