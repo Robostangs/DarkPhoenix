@@ -67,6 +67,7 @@ import frc.robot.commands.DumperCommands.Flywheel.setFlywheelDutyCycle;
 import frc.robot.commands.DumperCommands.Hood.setHoodDutyCycle;
 import frc.robot.commands.DumperCommands.Hood.setHoodPosition;
 import frc.robot.commands.HopperCommands.RunHopper;
+import frc.robot.commands.IntakeCommands.HomeIntake;
 import frc.robot.commands.IntakeCommands.IntakeFactory;
 import frc.robot.commands.IntakeCommands.setIntakePosition;
 import frc.robot.commands.IntakeCommands.setKirbyWheels;
@@ -135,6 +136,8 @@ public class Robot extends TimedRobotstangs {
     public void robotInit() {
 
         SmartDashboard.putData("Field", teleopField);
+        //idk
+        CommandSwerveDrivetrain.getInstance();
 
         DataLogManager.start("");
         DataLogManager.log("Driverstation connected");
@@ -151,21 +154,25 @@ public class Robot extends TimedRobotstangs {
                     DataLogManager.log(action.getName() + " Command Interrupted by: " + reason);
                     SmartDashboard.putString("Auto/LastInterrupt", action.getName() + " <- " + reason);
                 });
+
         CommandScheduler.getInstance()
                 .onCommandFinish((action) -> DataLogManager.log(action.getName() + " Command Finished"));
         autoFactory = new AutoFactory(
             drivetrain::getPose, // A function that returns the current robot pose
             drivetrain::resetPose, // A function that resets the current robot pose to the provided Pose2d
             drivetrain::followTrajectory, // The drive subsystem trajectory follower 
-            (true), // If alliance flipping should be enabled 
+            (false), // If alliance flipping should be enabled 
             drivetrain // The drive subsystem
         );
 
         autoFactory
             .bind("Start Intake", IntakeFactory.SmartIntake())
             .bind("Extend Intake", IntakeFactory.ExtendIntake())
-            .bind("Shoot", ShootFactory.SmartShoot());
-
+            .bind("Shoot", ShootFactory.SmartShoot())
+            .bind("Start Intake Uppies", new InstantCommand(()->{
+                IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kIntakePivotBump);
+                Kirby.getInstance().setKirbyWheels(0.3);
+            }));
         
 
         configureDisabledTab();
@@ -178,7 +185,7 @@ public class Robot extends TimedRobotstangs {
         // IntakePivot.getInstance().setDefaultCommand(new MovePivot(() -> 0d));
         Kirby.getInstance().setDefaultCommand(new setKirbyWheels(() -> 0));
         Hopper.getInstance().setDefaultCommand(new RunHopper(() -> 0d));
-        //CommandScheduler.getInstance().schedule(autoFactory.warmupCmd());
+        CommandScheduler.getInstance().schedule(autoFactory.warmupCmd());
     }
 
     void setupAutoPitTest() {
@@ -301,6 +308,7 @@ public class Robot extends TimedRobotstangs {
         // Add options to the chooser
         autoChooser.addOption("Double Dip Trench", "doubledipTrench");
          autoChooser.addOption("Double Dip Bump", "doubledipBump");
+         autoChooser.addOption("Depo", "CenterDepotShoot");
          autoChooser.addOption("Shoot TEst", "ShootTest");
         autoChooser.setDefaultOption("Double Dip", "doubledipTrench");
     
@@ -386,6 +394,10 @@ public class Robot extends TimedRobotstangs {
             choreoAutoTrajectory.atTime("Start Intake").onTrue(IntakeFactory.SmartIntake());
             choreoAutoTrajectory.atTime("Extend Intake").onTrue(IntakeFactory.ExtendIntake());
             choreoAutoTrajectory.atTime("Shoot").onTrue(ShootFactory.SmartShoot());
+            choreoAutoTrajectory.atTime("Start Intake Uppies").onTrue(new InstantCommand(()->{
+                IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kIntakePivotBump);
+                Kirby.getInstance().setKirbyWheels(0.2);
+             }));
             //single then pass back (semi)
             choreoAutoTrajectory.atTime("Pass").onTrue(ShootFactory.ClosePass());
 
@@ -394,6 +406,7 @@ public class Robot extends TimedRobotstangs {
 
             autoGroup = new SequentialCommandGroup(
                 new WaitCommand(delay), 
+                new HomeIntake(true),
                 new InstantCommand(() -> Hood.getInstance().setHoodPositionAuto(0)),
                 new InstantCommand(() -> IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kHomePosition)),
                 

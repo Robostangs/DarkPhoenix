@@ -57,7 +57,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     private final PIDController xController = new PIDController(2.0, 0.0, 0.0);
     private final PIDController yController = new PIDController(2.0, 0.0, 0.0);
-    private final PIDController headingController = new PIDController(3, 0.0, 0.0);
+    //idk again
+    private final PIDController headingController = new PIDController(3, 0.0, 0.0);{
+        headingController.enableContinuousInput(-Math.PI, Math.PI);
+    };
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -177,6 +180,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             sample.vy + yController.calculate(pose.getY(), sample.y),
             sample.omega + headingController.calculate(pose.getRotation().getRadians(), sample.heading)
         );
+
         SmartDashboard.putNumber("autoFOllowX", speeds.vxMetersPerSecond);
         SmartDashboard.putNumber("autoFOllowY", speeds.vyMetersPerSecond);
         SmartDashboard.putNumber("autoFOllowRot", speeds.omegaRadiansPerSecond);
@@ -185,6 +189,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         this.setControl(new SwerveRequest.FieldCentric().withVelocityX(speeds.vxMetersPerSecond).withVelocityY(speeds.vyMetersPerSecond).withRotationalRate(speeds.omegaRadiansPerSecond));
         SmartDashboard.putString("autoFollow", "NoEror");
     }
+
+
+
     public Pose2d getPose(){
         return this.getState().Pose;
     }

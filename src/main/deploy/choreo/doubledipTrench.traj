@@ -942,5 +942,8 @@
        {"type":"wait", "data":{"waitTime":{"exp":"3.2 s", "val":3.2}}}]}}},
    {"name":"Shoot", "from":{"target":19, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
        {"type":"named", "data":{"name":"Shoot"}},
+       {"type":"wait", "data":{"waitTime":{"exp":"3.2 s", "val":3.2}}}]}}},
+   {"name":"Shoot", "from":{"target":9, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
+       {"type":"named", "data":{"name":"Shoot"}},
        {"type":"wait", "data":{"waitTime":{"exp":"3.2 s", "val":3.2}}}]}}}]
 }
