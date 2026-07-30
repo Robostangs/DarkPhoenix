@@ -468,10 +468,10 @@
    {"name":"Shoot", "from":{"target":8, "targetTimestamp":4.68369, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
        {"type":"named", "data":{"name":"Shoot"}},
        {"type":"wait", "data":{"waitTime":{"exp":"4 s", "val":4.0}}}]}}},
-   {"name":"Start Intake 1", "from":{"target":2, "targetTimestamp":0.93877, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
+   {"name":"Start Intake", "from":{"target":2, "targetTimestamp":0.93877, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
        {"type":"named", "data":{"name":"Start Intake"}},
        {"type":"wait", "data":{"waitTime":{"exp":"3.2 s", "val":3.2}}}]}}},
-   {"name":"Start Intake 2", "from":{"target":13, "targetTimestamp":7.17274, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
+   {"name":"Start Intake", "from":{"target":13, "targetTimestamp":7.17274, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
        {"type":"named", "data":{"name":"Start Intake"}},
        {"type":"wait", "data":{"waitTime":{"exp":"3.2 s", "val":3.2}}}]}}},
    {"name":"Pass", "from":{"target":16, "targetTimestamp":9.28665, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"race", "data":{"commands":[
