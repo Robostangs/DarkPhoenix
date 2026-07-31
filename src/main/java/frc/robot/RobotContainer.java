@@ -133,6 +133,8 @@ public class RobotContainer {
                 xDrive.povUp().onTrue(drivetrain.runOnce(
                                 () -> drivetrain.seedFieldCentric()));
 
+                xDrive.povLeft().onTrue(new InstantCommand(() -> Robot.setUseVision(false)));
+
                 xDrive.a().whileTrue(new AutoAlign(() -> xDrive.getLeftY(), () -> xDrive.getLeftX(),
                                 () -> xDrive.getLeftTriggerAxis() < 0.2)
                                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Auto Align"));
