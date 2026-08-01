@@ -392,7 +392,7 @@ public class Robot extends TimedRobotstangs {
 
             choreoAutoTrajectory.atTime("Start Intake").whileTrue(IntakeFactory.SmartIntake());
             choreoAutoTrajectory.atTime("Extend Intake").whileTrue(IntakeFactory.ExtendIntake());
-            choreoAutoTrajectory.atTime("Extend Intake").whileTrue(IntakeFactory.RetractIntake());
+            choreoAutoTrajectory.atTime("Retract Intake").whileTrue(IntakeFactory.RetractIntake());
             choreoAutoTrajectory.atTime("Shoot").onTrue(ShootFactory.SmartShoot());
             choreoAutoTrajectory.atTime("Start Intake Uppies").onTrue(new InstantCommand(() -> {
                 CommandScheduler.getInstance().schedule(new InstantCommand(() -> {
