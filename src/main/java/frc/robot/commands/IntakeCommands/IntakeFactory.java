@@ -27,7 +27,11 @@ public class IntakeFactory {
         return new setIntakePosition(Constants.KirbyConstants.kExtendSetpoint)
                 .withName("Extend Intake Command");
     }
-
+    public static Command RetractIntakeQUick() {
+        return new setIntakePosition(Constants.KirbyConstants.kRetractSetpoint)
+                // .alongWith(new RunHopper(() -> 0.5))
+                .withName("Retract Intake Good");
+    }
     public static Command RetractIntake() {
         return new setIntakePosition(Constants.KirbyConstants.kRetractSetpoint)
                 .alongWith(new setKirbyWheels(() -> 1))

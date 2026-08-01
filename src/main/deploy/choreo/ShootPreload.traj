@@ -158,6 +158,5 @@
   "splits":[0]
  },
  "events":[
-   {"name":"Shoot", "from":{"target":1, "targetTimestamp":0.8003, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Shoot"}}},
-   {"name":"Retract Intake", "from":{"target":0, "targetTimestamp":0.0, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Retract Intake"}}}]
+   {"name":"Shoot", "from":{"target":1, "targetTimestamp":0.8003, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Shoot"}}}]
 }

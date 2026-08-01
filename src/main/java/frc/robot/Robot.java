@@ -61,6 +61,7 @@ import frc.robot.FeederCommands.setFeederSpeed;
 import frc.robot.Stable.LimelightHelpers;
 import frc.robot.Stable.TimedRobotstangs;
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.BlockerCommands.MovePivot;
 import frc.robot.commands.DumperCommands.ShootFactory;
 import frc.robot.commands.DumperCommands.Flywheel.ChargeUp;
 import frc.robot.commands.DumperCommands.Flywheel.setFlywheelDutyCycle;
@@ -392,7 +393,7 @@ public class Robot extends TimedRobotstangs {
 
             choreoAutoTrajectory.atTime("Start Intake").whileTrue(IntakeFactory.SmartIntake());
             choreoAutoTrajectory.atTime("Extend Intake").whileTrue(IntakeFactory.ExtendIntake());
-            choreoAutoTrajectory.atTime("Retract Intake").whileTrue(IntakeFactory.RetractIntake());
+            choreoAutoTrajectory.atTime("Retract Intake").whileTrue( new setIntakePosition(Constants.KirbyConstants.kRetractSetpoint));
             choreoAutoTrajectory.atTime("Shoot").onTrue(ShootFactory.SmartShoot());
             choreoAutoTrajectory.atTime("Start Intake Uppies").onTrue(new InstantCommand(() -> {
                 CommandScheduler.getInstance().schedule(new InstantCommand(() -> {
@@ -426,6 +427,7 @@ public class Robot extends TimedRobotstangs {
         SmartDashboard.putBoolean("Auto/CommandRunning",
                 autoGroup != null && CommandScheduler.getInstance().isScheduled(autoGroup));
     }
+
 
     @Override
     public void autonomousExit() {
