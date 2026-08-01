@@ -356,5 +356,6 @@
  "events":[
    {"name":"Shoot", "from":{"target":5, "targetTimestamp":6.29275, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Shoot"}}},
    {"name":"Start Intake Uppies", "from":{"target":2, "targetTimestamp":1.11242, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Start Intake Uppies"}}},
-   {"name":"Retract Intake", "from":{"target":5, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Retract Intake"}}}]
+   {"name":"Retract Intake", "from":{"target":5, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Retract Intake"}}},
+   {"name":"Retract Intake", "from":{"target":0, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":{"type":"named", "data":{"name":"Retract Intake"}}}]
 }
