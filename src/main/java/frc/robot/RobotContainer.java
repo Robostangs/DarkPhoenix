@@ -133,7 +133,7 @@ public class RobotContainer {
                 xDrive.povUp().onTrue(drivetrain.runOnce(
                                 () -> drivetrain.seedFieldCentric()));
 
-                xDrive.povLeft().onTrue(new InstantCommand(() -> Robot.setUseVision(false)));
+                xDrive.povLeft().onTrue(new InstantCommand(() -> RobotContainer.useVision = !RobotContainer.useVision));
 
                 xDrive.a().whileTrue(new AutoAlign(() -> xDrive.getLeftY(), () -> xDrive.getLeftX(),
                                 () -> xDrive.getLeftTriggerAxis() < 0.2)

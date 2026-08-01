@@ -147,7 +147,7 @@ public final class Constants {
                 public static final double hopperExtenderKD = 150;
                 public static final double hopperExtenderKS = 15;
                 public static final double extenderSensorToMechanismRatio = 4.0 * 4 * 48 / 16;
-                public static final double kExtendSetpoint = 0.01;
+                public static final double kExtendSetpoint = 0.011;
                 public static final double kRetractSetpoint = 0.175;
                 // TODO: find this john
                 public static final double kHopperExtensionTolerance = 0.01;
@@ -158,7 +158,7 @@ public final class Constants {
                 public static final double extenderPositionTolerance = 0.015;
                 public static final double IntakeWheelsStatorLimit = 100;
                 public static final double IntakePivotOscillateUpPos = 0.4;
-                public static final double kIntakePivotBump = .15;
+                public static final double kIntakePivotBump = 4;
         }
 
         public static class HoodConstants {

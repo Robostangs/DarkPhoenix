@@ -309,7 +309,8 @@ public class Robot extends TimedRobotstangs {
         autoChooser.addOption("Double Dip Trench", "doubledipTrench");
          autoChooser.addOption("Double Dip Bump", "doubledipBump");
          autoChooser.addOption("Depo", "CenterDepotShoot");
-         autoChooser.addOption("Shoot TEst", "ShootTest");
+        // autoChooser.addOption("Shoot TEst", "ShootTest");
+         autoChooser.addOption("SHoot Preload", "ShootPreload");
         autoChooser.setDefaultOption("Double Dip", "doubledipTrench");
     
         // Put the auto chooser on the dashboard
@@ -324,9 +325,7 @@ public class Robot extends TimedRobotstangs {
 
      
 
-        // autoChooser.addOption("Piss", "Piss");
-        // autoChooser.addOption("DStart - DTrench - DIntake - DBump - DShoot", "DStart
-        // - DTrench - DIntake - DBump - DShoot");
+      
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -391,24 +390,26 @@ public class Robot extends TimedRobotstangs {
             AutoRoutine routine = autoFactory.newRoutine("auto");
             AutoTrajectory choreoAutoTrajectory = routine.trajectory(auto);
 
-            choreoAutoTrajectory.atTime("Start Intake").onTrue(IntakeFactory.SmartIntake());
-            choreoAutoTrajectory.atTime("Extend Intake").onTrue(IntakeFactory.ExtendIntake());
+            choreoAutoTrajectory.atTime("Start Intake").whileTrue(IntakeFactory.SmartIntake());
+            choreoAutoTrajectory.atTime("Extend Intake").whileTrue(IntakeFactory.ExtendIntake());
+            choreoAutoTrajectory.atTime("Extend Intake").whileTrue(IntakeFactory.RetractIntake());
             choreoAutoTrajectory.atTime("Shoot").onTrue(ShootFactory.SmartShoot());
-            choreoAutoTrajectory.atTime("Start Intake Uppies").onTrue(new InstantCommand(()->{
-                IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kIntakePivotBump);
-                Kirby.getInstance().setKirbyWheels(0.2);
-             }));
-            //single then pass back (semi)
-            choreoAutoTrajectory.atTime("Pass").onTrue(ShootFactory.ClosePass());
-
+            choreoAutoTrajectory.atTime("Start Intake Uppies").onTrue(new InstantCommand(() -> {
+                CommandScheduler.getInstance().schedule(new InstantCommand(() -> {
+                    IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kIntakePivotBump);
+                    Kirby.getInstance().setKirbyWheels(Constants.KirbyConstants.kirbyIntakeSpeed);
+                }));
+            }));
+                
+            
+            
+                        //single then pass back (semi)
 
             routine.active().onTrue(choreoAutoTrajectory.cmd());
 
             autoGroup = new SequentialCommandGroup(
                 new WaitCommand(delay), 
                 new HomeIntake(true),
-                new InstantCommand(() -> Hood.getInstance().setHoodPositionAuto(0)),
-                new InstantCommand(() -> IntakePivot.getInstance().setPosition(Constants.KirbyConstants.kHomePosition)),
                 
                 routine.cmd() 
             );
