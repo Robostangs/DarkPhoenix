@@ -424,11 +424,14 @@ public class Robot extends TimedRobotstangs {
     @Override
     public void autonomousPeriodic() {
         SmartDashboard.putBoolean("Auto/CommandRunning",
-                autoCommand != null && CommandScheduler.getInstance().isScheduled(autoCommand));
+                autoGroup != null && CommandScheduler.getInstance().isScheduled(autoGroup));
     }
 
     @Override
     public void autonomousExit() {
+        if(autoGroup != null){
+            autoGroup.cancel();
+        }
         CommandScheduler.getInstance().cancelAll();
 
         if (DriverStation.isFMSAttached()) {
@@ -440,6 +443,9 @@ public class Robot extends TimedRobotstangs {
 
     @Override
     public void teleopInit() {
+        if(autoGroup != null){
+            autoGroup.cancel();
+        }
         CommandScheduler.getInstance().cancelAll();
         lastMatchSecond = (int) DriverStation.getMatchTime();
 
