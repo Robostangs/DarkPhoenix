@@ -312,7 +312,7 @@ public class Robot extends TimedRobotstangs {
             autoname = autoChooser.getSelected();
             flip = flipChooser.getSelected().booleanValue();
 
-            if (!autoname.equals(oldAutoname) || flip != oldFlip) {
+            if (autoname != null && !autoname.equals(oldAutoname) || flip != oldFlip) {
 
                 if (autoname != null) {
 

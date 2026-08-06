@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 2.580858676207513,
-        "y": 0.5546511627906967
+        "y": 0.5546511627906968
       },
       "nextControl": {
         "x": 4.580858676207513,
@@ -37,7 +37,7 @@
       },
       "prevControl": {
         "x": 5.597933810375671,
-        "y": 0.4897495527728075
+        "y": 0.4897495527728076
       },
       "nextControl": {
         "x": 7.66453488372093,
@@ -114,8 +114,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.12,
-    "maxAcceleration": 9.0,
+    "maxVelocity": 1000.0,
+    "maxAcceleration": 100.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 1080.0,
     "nominalVoltage": 12.0,

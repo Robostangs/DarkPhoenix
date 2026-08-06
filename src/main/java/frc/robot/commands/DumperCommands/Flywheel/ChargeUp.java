@@ -25,7 +25,7 @@ public class ChargeUp extends Command {
     public ChargeUp(DoubleSupplier targetRPS, boolean Gentle) {
         shooter = Flywheel.getInstance();
         this.targetRPS = targetRPS;
-        smort = false;
+        smort = true;
         this.Gentle = false;
         addRequirements(shooter);
 
