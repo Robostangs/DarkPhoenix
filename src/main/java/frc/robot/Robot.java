@@ -15,6 +15,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import frc.robot.subsystems.Intake.*;
+
+//import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
@@ -155,6 +157,7 @@ public class Robot extends TimedRobotstangs {
         Kirby.getInstance().setDefaultCommand(new setKirbyWheels(() -> 0));
         Hopper.getInstance().setDefaultCommand(new RunHopper(() -> 0d));
 
+        //CommandScheduler.getInstance().schedule(new InstantCommand(() -> FollowPathCommand.warmupCommand()));
     }
 
     void setupAutoPitTest() {

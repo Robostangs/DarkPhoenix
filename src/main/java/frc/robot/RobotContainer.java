@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Stable.ControllerStangs;
 import frc.robot.commands.DumperCommands.ShootFactory;
 import frc.robot.commands.DumperCommands.Hood.HomeHood;
@@ -141,12 +142,18 @@ public class RobotContainer {
                                 () -> xDrive.getLeftTriggerAxis() < 0.2)
                                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Auto Align"));
                 */
-                xDrive.y().whileTrue(IntakeFactory.TrueSpit());
-                xDrive.b().whileTrue(IntakeFactory.ballStuck());
+                //xDrive.y().whileTrue(IntakeFactory.TrueSpit());
+                //xDrive.b().whileTrue(IntakeFactory.ballStuck());
+
+                //tests
+                xDrive.y().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+                xDrive.b().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+
+                xDrive.x().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+                xDrive.a().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
         }
-
         public void configureManipBindings() {
-
+                
                 xManip.rightBumper().onTrue(
                                 new InstantCommand(() -> Robot.toggleDefense()));
 
