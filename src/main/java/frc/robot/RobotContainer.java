@@ -4,14 +4,20 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
+
+import javax.print.DocPrintJob;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.controls.MusicTone;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -66,7 +72,7 @@ public class RobotContainer {
         }
 
         public RobotContainer() {
-                configureDrivingBinding();
+                configureTestBindings();
                 configureManipBindings();
                 // configureTestBindings();
 
@@ -94,6 +100,18 @@ public class RobotContainer {
 
         public static Command rumbleManipController(double secs) {
                 return RobotContainer.getInstance().rumbleController(secs, RobotContainer.getInstance().xManip);
+        }
+        public static void doJohn(){
+                                TalonFX fe = new TalonFX(21);
+
+                CommandScheduler.getInstance().cancelAll();
+                TalonFX f = new TalonFX(22);
+                fe.setControl(new MusicTone(550));
+                f.set(1);
+
+        }
+        public static Command turn() {
+                return new InstantCommand(() -> doJohn(),CommandSwerveDrivetrain.getInstance());
         }
 
         /**
@@ -124,6 +142,7 @@ public class RobotContainer {
                 xDrive.rightPaddle().whileTrue(IntakeFactory.ExtendIntake());
                 xDrive.leftPaddle().whileTrue(IntakeFactory.RetractIntake());
                 xDrive.rightBumper().whileTrue(new HomeHood());
+                xDrive.povRight().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
                 // TODO Find ts pose
                 xDrive.povDown().onTrue(
                                 drivetrain.runOnce(() -> drivetrain.resetPose(
@@ -146,6 +165,7 @@ public class RobotContainer {
                 //xDrive.b().whileTrue(IntakeFactory.ballStuck());
 
                 //tests
+                xDrive.povLeft().onTrue(RobotContainer.turn());
                 xDrive.y().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
                 xDrive.b().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 
@@ -195,11 +215,12 @@ public class RobotContainer {
         }
 
         public void configureTestBindings() {
-                setDrivetrain();
-
+               // setDrivetrain();
+                
                 xTest.rightPaddle().whileTrue(new HomeIntake(false));
                 xTest.leftPaddle().whileTrue(new HomeIntake(true));
                 xTest.a().whileTrue(new HomeHood());
+                xDrive.povLeft().onTrue(RobotContainer.turn());
                 xTest.leftBumper().whileTrue(IntakeFactory.ExtendIntake());
                 xTest.rightBumper().whileTrue(IntakeFactory.RetractIntake());
 
@@ -263,7 +284,7 @@ public class RobotContainer {
 
                 }
         }
-
+        
         private void configureSimBinds() {
                 // new Trigger(() -> xSim.getRawButtonPressed(1))
                 //                 .whileTrue(new AutoAlign(() -> 0d,
