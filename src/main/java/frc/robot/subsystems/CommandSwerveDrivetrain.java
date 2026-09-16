@@ -21,6 +21,9 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -63,8 +66,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
-    private VisionStangs LL4Front = new VisionStangs(Constants.VisionConstants.kLimelightFourFront);
-    private VisionStangs LL4Side = new VisionStangs(Constants.VisionConstants.kLimelightFourSide);
+    private VisionStangs Luma4Front = new VisionStangs(Constants.VisionConstants.kLimelightFourFront, new Transform3d(0,0,0, new Rotation3d(0, 0, 0)));
+    private VisionStangs Photon4Side = new VisionStangs(Constants.VisionConstants.kLimelightFourSide, new Transform3d(0,0,0, new Rotation3d(0, 0, 0)));
 
     private VisionStangs photonVisionRight = new VisionStangs(Constants.VisionConstants.kPhotonLL3Name,
             Constants.VisionConstants.kRobotToCamLL3);
@@ -307,8 +310,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         visionPoses.clear();
 
-        LL4Front.periodic();
-        LL4Side.periodic();
+        Luma4Front.periodic();
+        Photon4Side.periodic();
         if (RobotContainer.useFriday) {
             photonVisionRight.periodic();
             visionPoses.add(photonVisionRight);
@@ -319,8 +322,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         }
 
-        visionPoses.add(LL4Front);
-        visionPoses.add(LL4Side);
+        visionPoses.add(Luma4Front);
+        visionPoses.add(Photon4Side);
 
         setVisionPose(visionPoses);
 
