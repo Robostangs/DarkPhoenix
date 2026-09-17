@@ -433,7 +433,7 @@ public final class Constants {
                 private static final int kFrontRightDriveMotorId = 31;
                 private static final int kFrontRightSteerMotorId = 32;
                 private static final int kFrontRightEncoderId = 33;
-                private static final Angle kFrontRightEncoderOffset = Rotations.of(-0.31640625);
+                private static final Angle kFrontRightEncoderOffset = Rotations.of(-0.316162109375);
                 private static final boolean kFrontRightSteerMotorInverted = false;
                 private static final boolean kFrontRightEncoderInverted = false;
 

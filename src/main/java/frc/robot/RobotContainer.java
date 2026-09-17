@@ -72,7 +72,7 @@ public class RobotContainer {
         }
 
         public RobotContainer() {
-                configureTestBindings();
+                configureDrivingBinding();
                 configureManipBindings();
                 // configureTestBindings();
 
@@ -166,11 +166,8 @@ public class RobotContainer {
 
                 //tests
                 xDrive.povLeft().onTrue(RobotContainer.turn());
-                xDrive.y().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-                xDrive.b().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-
-                xDrive.x().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-                xDrive.a().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+                xDrive.povRight().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+                
         }
         public void configureManipBindings() {
                 
