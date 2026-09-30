@@ -379,7 +379,7 @@ public class Robot extends TimedRobotstangs {
         if (DriverStation.isFMSAttached()) {
             System.out.println("fms is attached");
             LimelightHelpers.triggerRewindCapture(Constants.VisionConstants.kLimelightFourSide, 30);
-            LimelightHelpers.triggerRewindCapture(Constants.VisionConstants.kLimelightFourFront, 30);
+            LimelightHelpers.triggerRewindCapture(Constants.VisionConstants.lumaName, 30);
         }
     }
 
@@ -482,7 +482,7 @@ public class Robot extends TimedRobotstangs {
         if (DriverStation.isFMSAttached()) {
             System.out.println("fms is attached");
             LimelightHelpers.triggerRewindCapture(Constants.VisionConstants.kLimelightFourSide, 165);
-            LimelightHelpers.triggerRewindCapture(Constants.VisionConstants.kLimelightFourFront, 165);
+            LimelightHelpers.triggerRewindCapture(Constants.VisionConstants.lumaName, 165);
         }
 
     }

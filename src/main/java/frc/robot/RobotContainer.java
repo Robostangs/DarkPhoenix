@@ -127,7 +127,7 @@ public class RobotContainer {
                 setDrivetrain();
 
                 xDrive.rightTrigger().whileTrue(
-                                (ShootFactory.DumbShoot()));
+                                (ShootFactory.SmartShoot()));
 
                 xDrive.leftBumper().whileTrue(new HomeIntake(false));
 
@@ -142,7 +142,7 @@ public class RobotContainer {
                 xDrive.rightPaddle().whileTrue(IntakeFactory.ExtendIntake());
                 xDrive.leftPaddle().whileTrue(IntakeFactory.RetractIntake());
                 xDrive.rightBumper().whileTrue(new HomeHood());
-                xDrive.povRight().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+             //   xDrive.povRight().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
                 // TODO Find ts pose
                 xDrive.povDown().onTrue(
                                 drivetrain.runOnce(() -> drivetrain.resetPose(
@@ -157,12 +157,12 @@ public class RobotContainer {
                 // xDrive.povRight().onTrue(new InstantCommand(
                 //                 (() -> useVision = !useVision)));
 
-              /*   xDrive.a().whileTrue(new AutoAlign(() -> xDrive.getLeftY(), () -> xDrive.getLeftX(),
+              xDrive.a().whileTrue(new AutoAlign(() -> xDrive.getLeftY(), () -> xDrive.getLeftX(),
                                 () -> xDrive.getLeftTriggerAxis() < 0.2)
                                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Auto Align"));
-                */
-                //xDrive.y().whileTrue(IntakeFactory.TrueSpit());
-                //xDrive.b().whileTrue(IntakeFactory.ballStuck());
+                
+                xDrive.y().whileTrue(IntakeFactory.TrueSpit());
+                xDrive.b().whileTrue(IntakeFactory.ballStuck());
 
                 //tests
                 xDrive.povLeft().onTrue(RobotContainer.turn());

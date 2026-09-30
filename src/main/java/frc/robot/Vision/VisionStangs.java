@@ -46,12 +46,11 @@ public class VisionStangs {
     }
 
     private void Photonperiodic() {
-
+        SmartDashboard.putNumber("Vision/" + camera.getName() + " tet", Math.random());
         bigAmbiguity = 0;
-
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
-
+            SmartDashboard.putNumber("Vision/" + camera.getName() + " posess", bigAmbiguity);
             visionEst = ppe.estimateCoprocMultiTagPose(result);
 
             for (var target : result.targets) {
@@ -62,17 +61,17 @@ public class VisionStangs {
 
             SmartDashboard.putNumber("Vision/" + camera.getName() + " biggest ambiguity", bigAmbiguity);
         }
-
-        if (bigAmbiguity < Constants.VisionConstants.kPhotonAmbiguityThres) {
-
+        //SmartDashboard.putNumber("Vision/" + camera.getName() + " Pose Estimator", visionEst.get().estimatedPose.getX());
+        if (bigAmbiguity < Constants.VisionConstants.kPhotonAmbiguityThres ) {
+            SmartDashboard.putBoolean("Vision/"+CameraName+"/isgoo", visionEst.isPresent());
             if (visionEst.isPresent()) {
+                    Robot.teleopField.getObject(camera.getName() + " Pose").setPose(visionEst.get().estimatedPose.toPose2d());
 
                 if (isPosegoo(visionEst.get())) {
                     var pose2d = visionEst.get().estimatedPose != null ? visionEst.get().estimatedPose.toPose2d()
                             : null;
 
                     timestampSeconds = visionEst.get().timestampSeconds;
-                    Robot.teleopField.getObject(camera.getName() + " Pose").setPose(pose2d);
                     currentPose = pose2d;
                 }
             } 
@@ -81,6 +80,8 @@ public class VisionStangs {
 
             }
 
+        }else{
+            SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason", "BAD");
         }
 
     }
