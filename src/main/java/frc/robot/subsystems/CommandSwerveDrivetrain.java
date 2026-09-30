@@ -322,10 +322,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         }
 
-        visionPoses.add(Luma4Front);
+      //  visionPoses.add(Luma4Front);
  //       visionPoses.add(Photon4Side);
 
-        setVisionPose(visionPoses);
+      //  setVisionPose(visionPoses);
 
         Robot.teleopField.setRobotPose(this.getState().Pose);
     }
@@ -344,15 +344,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         for (VisionStangs camera : visionMeasurements) {
             if (camera == null || camera.getPose() == null) {
-                continue;
+                return;
             }
+            this.addVisionMeasurement(
+                camera.getPose(),
+                camera.getTimeStamp());
+            //double ambiguity = camera.getAmbiguity();
 
-            double ambiguity = camera.getAmbiguity();
-
-            if (ambiguity > 0 && ambiguity < smallestAmbiguity) {
-                smallestAmbiguity = ambiguity;
-                bestCamera = camera;
-            }
+            // if (ambiguity > 0 && ambiguity < smallestAmbiguity) {
+            //     smallestAmbiguity = ambiguity;
+            //     bestCamera = camera;
+            // }
         }
 
         if (bestCamera == null) {
@@ -361,9 +363,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
         SmartDashboard.putString("Vision/Status", bestCamera.getName() + " is valid measurment");
 
-        this.addVisionMeasurement(
-                bestCamera.getPose(),
-                bestCamera.getTimeStamp());
+        
 
         isVisionGood = true;
 

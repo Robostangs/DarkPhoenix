@@ -129,7 +129,7 @@ public class RobotContainer {
                 xDrive.rightTrigger().whileTrue(
                                 (ShootFactory.SmartShoot()));
 
-                xDrive.leftBumper().whileTrue(new HomeIntake(false));
+                // xDrive.leftBumper().whileTrue(new HomeIntake(false));
 
                 // close shoot
 
@@ -187,7 +187,7 @@ public class RobotContainer {
 
                 xManip.a().whileTrue(ShootFactory.ClosePass())
                                 .onFalse(new setHoodPosition(() -> 0));
-                xManip.b().whileTrue(ShootFactory.MedPass())
+                xDrive.x().whileTrue(ShootFactory.MedPass())
                                 .onFalse(new setHoodPosition(() -> 0));
                 
                 xManip.y().whileTrue(ShootFactory.FarPass())
@@ -202,7 +202,7 @@ public class RobotContainer {
                 xManip.rightBumper().whileTrue(new HomeBlocker());
 
 
-                xManip.leftBumper().whileTrue(ShootFactory.SmartFeed());
+                xDrive.leftBumper().whileTrue(ShootFactory.SmartFeed());
 
                 xManip.leftPaddle().whileTrue(new HomeIntake(true));
 

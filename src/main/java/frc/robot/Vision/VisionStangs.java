@@ -2,6 +2,7 @@
 package frc.robot.Vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,11 +12,13 @@ import frc.robot.RobotContainer;
 import frc.robot.Stable.LimelightHelpers;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -26,13 +29,14 @@ public class VisionStangs {
     private double bigAmbiguity;
     private boolean isLL;
     private double timestampSeconds;
-
+    private Transform3d robotToCam;
     private String CameraName;
 
     public VisionStangs(String LLname, Transform3d robotToCam) {
         camera = new PhotonCamera(LLname);
         this.CameraName = LLname;
         ppe = new PhotonPoseEstimator(Constants.kAprilTagFieldLayout, robotToCam);
+        this.robotToCam=robotToCam;
         bigAmbiguity = -1;
         isLL = false;
     }
@@ -48,41 +52,50 @@ public class VisionStangs {
     private void Photonperiodic() {
         SmartDashboard.putNumber("Vision/" + camera.getName() + " tet", Math.random());
         bigAmbiguity = 0;
-        Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
-            SmartDashboard.putNumber("Vision/" + camera.getName() + " posess", bigAmbiguity);
-            visionEst = ppe.estimateCoprocMultiTagPose(result);
-
-            for (var target : result.targets) {
-                if (target.poseAmbiguity > bigAmbiguity) {
-                    bigAmbiguity = target.poseAmbiguity;
-                }
-            }
-
-            SmartDashboard.putNumber("Vision/" + camera.getName() + " biggest ambiguity", bigAmbiguity);
+        PhotonPipelineResult result = camera.getLatestResult();
+        var target = result.getBestTarget();
+        if (target!=null && Constants.kAprilTagFieldLayout.getTagPose(target.getFiducialId()).isPresent()) {
+            Pose3d robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), Constants.kAprilTagFieldLayout.getTagPose(target.getFiducialId()).get(), robotToCam);
+            Robot.teleopField.getObject(camera.getName() + " Pose").setPose(robotPose.toPose2d());
+            currentPose=robotPose.toPose2d();
+            timestampSeconds=result.getTimestampSeconds();
+            CommandSwerveDrivetrain.getInstance().addVisionMeasurement(currentPose, timestampSeconds);
         }
-        //SmartDashboard.putNumber("Vision/" + camera.getName() + " Pose Estimator", visionEst.get().estimatedPose.getX());
-        if (bigAmbiguity < Constants.VisionConstants.kPhotonAmbiguityThres ) {
-            SmartDashboard.putBoolean("Vision/"+CameraName+"/isgoo", visionEst.isPresent());
-            if (visionEst.isPresent()) {
-                    Robot.teleopField.getObject(camera.getName() + " Pose").setPose(visionEst.get().estimatedPose.toPose2d());
+                // Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        // for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
+        //     SmartDashboard.putNumber("Vision/" + camera.getName() + " posess", bigAmbiguity);
+        //     visionEst = ppe.estimateCoprocMultiTagPose(result);
 
-                if (isPosegoo(visionEst.get())) {
-                    var pose2d = visionEst.get().estimatedPose != null ? visionEst.get().estimatedPose.toPose2d()
-                            : null;
+        //     for (var target : result.targets) {
+        //         if (target.poseAmbiguity > bigAmbiguity) {
+        //             bigAmbiguity = target.poseAmbiguity;
+        //         }
+        //     }
 
-                    timestampSeconds = visionEst.get().timestampSeconds;
-                    currentPose = pose2d;
-                }
-            } 
-            else {
-                SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason", "Ts not present bro");
+        //     SmartDashboard.putNumber("Vision/" + camera.getName() + " biggest ambiguity", bigAmbiguity);
+        // }
+        // //SmartDashboard.putNumber("Vision/" + camera.getName() + " Pose Estimator", visionEst.get().estimatedPose.getX());
+        // if (bigAmbiguity < Constants.VisionConstants.kPhotonAmbiguityThres ) {
+        //     SmartDashboard.putBoolean("Vision/"+CameraName+"/isgoo", visionEst.isPresent());
+        //     if (visionEst.isPresent()) {
+        //             Robot.teleopField.getObject(camera.getName() + " Pose").setPose(visionEst.get().estimatedPose.toPose2d());
 
-            }
+        //         if (isPosegoo(visionEst.get())) {
+        //             var pose2d = visionEst.get().estimatedPose != null ? visionEst.get().estimatedPose.toPose2d()
+        //                     : null;
 
-        }else{
-            SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason", "BAD");
-        }
+        //             timestampSeconds = visionEst.get().timestampSeconds;
+        //             currentPose = pose2d;
+        //         }
+        //     } 
+        //     else {
+        //         SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason", "Ts not present bro");
+
+        //     }
+
+        // }else{
+        //     SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason", "BAD");
+        // }
 
     }
 
