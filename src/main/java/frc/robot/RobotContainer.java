@@ -36,6 +36,7 @@ import frc.robot.commands.IntakeCommands.HomeIntake;
 import frc.robot.commands.IntakeCommands.IntakeFactory;
 import frc.robot.commands.IntakeCommands.setKirbyWheels;
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.Rotate180;
 import frc.robot.commands.BlockerCommands.HomeBlocker;
 import frc.robot.commands.BlockerCommands.setBlockerPosition;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -161,6 +162,12 @@ public class RobotContainer {
                                 () -> xDrive.getLeftTriggerAxis() < 0.2)
                                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Auto Align"));
                 
+                // X (button 3): automatic 180 spin, driver keeps translating
+                xDrive.x().whileTrue(new Rotate180(
+                                () -> -xDrive.getLeftY() * MaxSpeed * (xDrive.leftTrigger().getAsBoolean() ? 0.25 : 1),
+                                () -> -xDrive.getLeftX() * MaxSpeed * (xDrive.leftTrigger().getAsBoolean() ? 0.25 : 1))
+                                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Rotate 180"));
+
                 xDrive.y().whileTrue(IntakeFactory.TrueSpit());
                 xDrive.b().whileTrue(IntakeFactory.ballStuck());
 
@@ -187,9 +194,7 @@ public class RobotContainer {
 
                 xManip.a().whileTrue(ShootFactory.ClosePass())
                                 .onFalse(new setHoodPosition(() -> 0));
-                xDrive.x().whileTrue(ShootFactory.MedPass())
-                                .onFalse(new setHoodPosition(() -> 0));
-                
+
                 xManip.y().whileTrue(ShootFactory.FarPass())
                                 .onFalse(new setHoodPosition(() -> 0));;
 
