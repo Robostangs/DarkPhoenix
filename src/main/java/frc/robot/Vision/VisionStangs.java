@@ -59,7 +59,9 @@ public class VisionStangs {
             Robot.teleopField.getObject(camera.getName() + " Pose").setPose(robotPose.toPose2d());
             currentPose=robotPose.toPose2d();
             timestampSeconds=result.getTimestampSeconds();
-            CommandSwerveDrivetrain.getInstance().addVisionMeasurement(currentPose, timestampSeconds);
+            if(RobotContainer.useVision){
+                CommandSwerveDrivetrain.getInstance().addVisionMeasurement(currentPose, timestampSeconds);
+            }
         }
                 // Optional<EstimatedRobotPose> visionEst = Optional.empty();
         // for (PhotonPipelineResult result : camera.getAllUnreadResults()) {

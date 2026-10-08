@@ -129,15 +129,15 @@ public class RobotContainer {
                 xDrive.rightTrigger().whileTrue(
                                 (ShootFactory.SmartShoot()));
 
-                // xDrive.leftBumper().whileTrue(new HomeIntake(false));
+                 xDrive.leftBumper().whileTrue(new HomeIntake(false));
 
                 // close shoot
 
                // xDrive.rm().whileTrue(new setKirbyWheels(() -> 1));
-              /*   xDrive.lm()
-                                .whileTrue(ShootFactory.DumbShoot())
-                                .onFalse(new setHoodPosition(() -> 0));
-                */
+                xDrive.lm()
+                        .whileTrue(ShootFactory.DumbShoot())
+                        .onFalse(new setHoodPosition(() -> 0));
+                
 
                 xDrive.rightPaddle().whileTrue(IntakeFactory.ExtendIntake());
                 xDrive.leftPaddle().whileTrue(IntakeFactory.RetractIntake());
@@ -154,8 +154,8 @@ public class RobotContainer {
                                 () -> drivetrain.seedFieldCentric()));
                 // setoperatorperspective???? huh tweakin
 
-                // xDrive.povRight().onTrue(new InstantCommand(
-                //                 (() -> useVision = !useVision)));
+                xDrive.povRight().onTrue(new InstantCommand(
+                                (() -> useVision = !useVision)));
 
               xDrive.a().whileTrue(new AutoAlign(() -> xDrive.getLeftY(), () -> xDrive.getLeftX(),
                                 () -> xDrive.getLeftTriggerAxis() < 0.2)
@@ -202,7 +202,7 @@ public class RobotContainer {
                 xManip.rightBumper().whileTrue(new HomeBlocker());
 
 
-                xDrive.leftBumper().whileTrue(ShootFactory.SmartFeed());
+              //  xDrive.leftBumper().whileTrue(ShootFactory.SmartFeed());
 
                 xManip.leftPaddle().whileTrue(new HomeIntake(true));
 
