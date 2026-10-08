@@ -56,6 +56,22 @@ public class RobotContainer {
                         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive
                                                                                  // motors
 
+        private static final double kIntakeSpeedScale = 0.5;
+
+        /** Manual speed multiplier: 0.5 while the intake button is held. */
+        private double intakeScale() {
+                return xDrive.rightPaddle().getAsBoolean() ? kIntakeSpeedScale : 1;
+        }
+
+        /** Translation speed multiplier: intake scale, or 0.25 while slow-mode trigger is held (lowest wins). */
+        private double translationScale() {
+                double scale = intakeScale();
+                if (xDrive.leftTrigger().getAsBoolean()) {
+                        scale = Math.min(scale, 0.25);
+                }
+                return scale;
+        }
+
         private final Telemetry logger = new Telemetry(MaxSpeed);
 
         private final ControllerStangs xDrive = new ControllerStangs(0);
@@ -164,8 +180,8 @@ public class RobotContainer {
                 
                 // X (button 3): automatic 180 spin, driver keeps translating
                 xDrive.x().whileTrue(new Rotate180(
-                                () -> -xDrive.getLeftY() * MaxSpeed * (xDrive.leftTrigger().getAsBoolean() ? 0.25 : 1),
-                                () -> -xDrive.getLeftX() * MaxSpeed * (xDrive.leftTrigger().getAsBoolean() ? 0.25 : 1))
+                                () -> -xDrive.getLeftY() * MaxSpeed * translationScale(),
+                                () -> -xDrive.getLeftX() * MaxSpeed * translationScale())
                                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Rotate 180"));
 
                 xDrive.y().whileTrue(IntakeFactory.TrueSpit());
@@ -275,14 +291,15 @@ public class RobotContainer {
                         drivetrain.setDefaultCommand(drivetrain.applyRequest(
                                         (() -> drive
                                                         .withVelocityX(-xDrive.getLeftY() * MaxSpeed
-                                                                        * leftBumper.getAsDouble())
+                                                                        * translationScale())
                                                         .withVelocityY(-xDrive.getLeftX() * MaxSpeed
-                                                                        * leftBumper.getAsDouble())
+                                                                        * translationScale())
                                                         .withRotationalRate(
                                                                         -xDrive.getRightX()
                                                                                         * MaxAngularRate
                                                                                         * (leftBumper.getAsDouble()
-                                                                                                        + .25)))));
+                                                                                                        + .25)
+                                                                                        * intakeScale()))));
 
                 }
         }
