@@ -409,8 +409,8 @@ public class Robot extends TimedRobotstangs {
 
             // Rumble only once on entry (when it first hits 30)
             if (gameTime > 29 && gameTime < 30) {
-                CommandScheduler.getInstance().schedule(RobotContainer.rumbleDriveController(40));
-                CommandScheduler.getInstance().schedule(RobotContainer.rumbleManipController(40));
+                CommandScheduler.getInstance().schedule(RobotContainer.rumbleDriveController(1));
+                CommandScheduler.getInstance().schedule(RobotContainer.rumbleManipController(1));
             }
 
             // transition 10 seconds
