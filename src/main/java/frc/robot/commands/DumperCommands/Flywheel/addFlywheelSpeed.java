@@ -23,7 +23,6 @@ public class addFlywheelSpeed extends Command {
   @Override
   public void execute() {
     flywheel.setFlywheelDC(currentSpeed.getAsDouble());
-    flywheel.postStatus("Setting flywheel duty cycle to " + currentSpeed.getAsDouble());
   }
 
   @Override
@@ -35,5 +34,4 @@ public class addFlywheelSpeed extends Command {
   public boolean isFinished() {
     return false;
   } 
-}
 }

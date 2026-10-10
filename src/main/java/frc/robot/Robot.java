@@ -288,6 +288,7 @@ public class Robot extends TimedRobotstangs {
         // autoChooser.addOption("Piss", "Piss");
         // autoChooser.addOption("DStart - DTrench - DIntake - DBump - DShoot", "DStart
         // - DTrench - DIntake - DBump - DShoot");
+        autoChooser.addOption("Depot Follow", "FollowDepot");
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 

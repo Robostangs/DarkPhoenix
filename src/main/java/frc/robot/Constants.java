@@ -100,7 +100,7 @@ public final class Constants {
                 public static final double feederExtenderKI = 0.1;
                 public static final double feederExtenderKD = 0;
                 public static final double feederExtenderKV = 0.13;
-                public static final double HopperExtenderCurrentLimit = 60;
+                public static final double HopperExtenderCurrentLimit = 40;
                 public static final double kFeederVelocityTolerance = 3;
                 public static final double feederExtenderKS = 0.33;
                 public static final double kFeedRPSSetpoint = 35.775;
@@ -137,7 +137,7 @@ public final class Constants {
         public static class KirbyConstants {
                 public static final int kirbyWheelsID = 56;
                 public static final double KirbyCurrentLimit = 60;
-                public static final double HopperExtenderCurrentLimit = 60;
+                public static final double HopperExtenderCurrentLimit = 40;
                 public static final int hopperExtenderID = 59;
                 public static final double kirbyIntakeSpeed = -1;
                 public static final double kirbyOuttakeSpeed = 0.5;
@@ -147,7 +147,7 @@ public final class Constants {
                 public static final double hopperExtenderKS = 15;
                 public static final double extenderSensorToMechanismRatio = 4.0 * 4 * 48 / 16;
                 public static final double kExtendSetpoint = 0.01;
-                public static final double kRetractSetpoint = 0.175;
+                public static final double kRetractSetpoint = 0.17;
                 // TODO: find this john
                 public static final double kHopperExtensionTolerance = 0.01;
                 public static final double IntakeWheelCurrentLimit = 100;
@@ -202,7 +202,7 @@ public final class Constants {
                 public static final double kShooterVelocityTolerance = 3;
                 public static final int kFlywheelMotorID = 9;
                 public static final int kFlywheelSlaveMotorID = 10;
-                public static final double kDumbShootRPS = 70;
+                public static final double kDumbShootRPS = 80;
                 public static final double kShooterSlaveMotorStatorCurrentLimit = 60;
                 public static final double kHalfSetpoint = 30;
                 public static final double kTrenchSetpoint = 0;

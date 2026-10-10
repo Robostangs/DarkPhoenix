@@ -158,6 +158,7 @@ public class RobotContainer {
 
                 xDrive.rightPaddle().whileTrue(IntakeFactory.ExtendIntake());
                 xDrive.leftPaddle().whileTrue(IntakeFactory.RetractIntake());
+
                 xDrive.rightBumper().whileTrue(new HomeHood());
              //   xDrive.povRight().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
                 // TODO Find ts pose
@@ -189,45 +190,37 @@ public class RobotContainer {
 
                 //tests
                 xDrive.povLeft().onTrue(RobotContainer.turn());
-                xDrive.povRight().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
                 
         }
         public void configureManipBindings() {
                 
-                xManip.rightBumper().onTrue(
-                                new InstantCommand(() -> Robot.toggleDefense()));
+                // xManip.rightBumper().onTrue(
+                //                 new InstantCommand(() -> Robot.toggleDefense()));
 
 
-                new Trigger(() -> Math.abs(xManip.getLeftY()) > 0.05).whileTrue(
-                                new RunCommand(
-                                                () -> Flywheel.getInstance().setAdj(xManip.getLeftY() * -5)))
-                                .onFalse(
-                                                new InstantCommand(
-                                                                () -> Flywheel.getInstance()
-                                                                                .setAdj(0)));
+                // new Trigger(() -> Math.abs(xManip.getLeftY()) > 0.05).whileTrue(
+                //                 new RunCommand(
+                //                                 () -> Flywheel.getInstance().setAdj(xManip.getLeftY() * -5)))
+                //                 .onFalse(
+                //                                 new InstantCommand(
+                //                                                 () -> Flywheel.getInstance()
+                //                                                                 .setAdj(0)));
 
                 xManip.x().whileTrue(new HomeHood());
 
-                xManip.a().whileTrue(ShootFactory.ClosePass())
-                                .onFalse(new setHoodPosition(() -> 0));
+                // xManip.a().whileTrue(ShootFactory.ClosePass())
+                //                 .onFalse(new setHoodPosition(() -> 0));
 
-                xManip.y().whileTrue(ShootFactory.FarPass())
-                                .onFalse(new setHoodPosition(() -> 0));;
-
-           
-                xManip.rightPaddle().whileTrue(new setBlockerPosition(Constants.BlockerConstants.kExtendSetpoint,false))
-                .whileFalse(new setBlockerPosition(Constants.BlockerConstants.kRetractSetpoint,true));
-
-                xManip.leftPaddle().whileTrue(new setBlockerPosition(Constants.BlockerConstants.kRetractSetpoint,true));
-
-                xManip.rightBumper().whileTrue(new HomeBlocker());
+                // xManip.y().whileTrue(ShootFactory.FarPass())
+                //                 .onFalse(new setHoodPosition(() -> 0));;
 
 
               //  xDrive.leftBumper().whileTrue(ShootFactory.SmartFeed());
 
                 xManip.leftPaddle().whileTrue(new HomeIntake(true));
 
-                xManip.leftTrigger().whileTrue(new addFlywheelSpeed(1.0));
+                // xManip.leftTrigger().whileTrue(new addFlywheelSpeed(() -> 1.0));
+                // xManip.rightTrigger().whileTrue(new addFlywheelSpeed(() -> -1.0));
 
 
         }
