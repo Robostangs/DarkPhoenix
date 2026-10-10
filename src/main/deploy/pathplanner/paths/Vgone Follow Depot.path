@@ -1,0 +1,87 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5291995614041944,
+        "y": 7.342982456141982
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.2791995614041944,
+        "y": 7.342982456131692
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.596951754385964,
+        "y": 7.448760964912281
+      },
+      "prevControl": {
+        "x": 8.537859241239303,
+        "y": 7.75899665893459
+      },
+      "nextControl": {
+        "x": 8.67388157894693,
+        "y": 7.044879385964169
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.384868421052632,
+        "y": 5.535131578947369
+      },
+      "prevControl": {
+        "x": 2.2753028558599206,
+        "y": 5.310419792598718
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.49056603773584917,
+      "rotationDegrees": 179.47457254688808
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Extend",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Extend"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1000.0,
+    "maxAcceleration": 100.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 1080.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -70.14478563067898
+  },
+  "reversed": false,
+  "folder": "Depot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 178.0694125589943
+  },
+  "useDefaultConstraints": true
+}
