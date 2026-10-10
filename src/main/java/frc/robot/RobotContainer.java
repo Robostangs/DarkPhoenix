@@ -227,7 +227,7 @@ public class RobotContainer {
 
                 xManip.leftPaddle().whileTrue(new HomeIntake(true));
 
-                xManip.leftTrigger().onTrue(new InstantCommand(() -> Robot.toggleDefense()));
+                xManip.leftTrigger().whileTrue(new addFlywheelSpeed(1.0));
 
 
         }

@@ -58,7 +58,7 @@ public class Hood extends SubsystemBase {
 
 
             // return -1.57+ (1.83*MetersfromTarget)-(0.674* Math.pow(MetersfromTarget, 2))+ (.0838 * Math.pow(MetersfromTarget, 3));
-            return 0.03;
+            return 0.05;
 
         
     }

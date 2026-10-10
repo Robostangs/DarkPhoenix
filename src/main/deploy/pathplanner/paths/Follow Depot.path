@@ -80,28 +80,28 @@
     },
     {
       "anchor": {
-        "x": 2.8656798245614037,
-        "y": 3.7997316636851517
+        "x": 3.086853070175439,
+        "y": 4.563892543859649
       },
       "prevControl": {
-        "x": 2.886441194524839,
-        "y": 4.048868103246372
+        "x": 3.107614440138874,
+        "y": 4.813028983420869
       },
       "nextControl": {
-        "x": 2.8449184545979684,
-        "y": 3.5505952241239314
+        "x": 3.0660917002120036,
+        "y": 4.314756104298429
       },
       "isLocked": false,
       "linkedName": "DepotFollowEnd"
     },
     {
       "anchor": {
-        "x": 2.8656798245614037,
-        "y": 3.7997316636851517
+        "x": 3.086853070175439,
+        "y": 4.563892543859649
       },
       "prevControl": {
-        "x": 0.3506364822655601,
-        "y": 2.5766740125892227
+        "x": 3.044141215252751,
+        "y": 4.317568169407864
       },
       "nextControl": null,
       "isLocked": false,
@@ -136,7 +136,7 @@
       "minWaypointRelativePos": 0.0,
       "maxWaypointRelativePos": 0.4406779661016941,
       "constraints": {
-        "maxVelocity": 0.5,
+        "maxVelocity": 0.75,
         "maxAcceleration": 7.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -182,7 +182,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 1.6846843178963444
+    "rotation": -30.650667957052992
   },
   "reversed": false,
   "folder": "Depot",
