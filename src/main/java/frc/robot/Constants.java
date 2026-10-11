@@ -197,7 +197,7 @@ public final class Constants {
                 public static final double kShooterMotorA = 0;
                 public static final double kShooterMotorV = 0.11;
                 public static final double kShooterMotorS = 0.38;
-                public static final double kShooterMotorStatorCurrentLimit = 120;
+                public static final double kShooterMotorStatorCurrentLimit = 90;
                 public static final double kVelocityAtOppositeAlliancePass = 80;
                 public static final double kShooterVelocityTolerance = 3;
                 public static final int kFlywheelMotorID = 9;
@@ -347,7 +347,7 @@ public final class Constants {
 
                 // The stator current at which the wheels start to slip;
                 // This needs to be tuned to your individual robot
-                private static final Current kSlipCurrent = Amps.of(120);
+                private static final Current kSlipCurrent = Amps.of(60);
 
                 // Initial configs for the drive and steer motors and the azimuth encoder; these
                 // cannot be null.

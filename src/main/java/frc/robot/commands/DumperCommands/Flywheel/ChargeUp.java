@@ -62,7 +62,7 @@ public class ChargeUp extends Command {
     public void end(boolean interrupted) {
         shooter.setVelocity(0);
         shooter.postStatus("Charged");
-        shooter.setnewCurrentLimit(120); 
+        shooter.setnewCurrentLimit(120);
 
     }
 
