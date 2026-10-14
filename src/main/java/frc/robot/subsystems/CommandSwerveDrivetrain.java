@@ -69,8 +69,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private VisionStangs Luma4Front = new VisionStangs(Constants.VisionConstants.lumaName,Constants.VisionConstants.kRobotToCamLuma);
   //  private VisionStangs Photon4Side = new VisionStangs(Constants.VisionConstants.thriftyName,Constants.VisionConstants.kRobotToCamThrifty);
 
-    private VisionStangs photonVisionRight = new VisionStangs(Constants.VisionConstants.kPhotonLL3Name,
-            Constants.VisionConstants.kRobotToCamLL3);
+    private VisionStangs photonVisionRight = new VisionStangs(Constants.VisionConstants.kThriftyName,
+            Constants.VisionConstants.kRobotToCamThrifty);
 
     private ArrayList<VisionStangs> visionPoses = new ArrayList<>();
 
@@ -311,16 +311,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         visionPoses.clear();
 
         Luma4Front.periodic();
+        photonVisionRight.periodic();
    //     Photon4Side.periodic();
-        if (RobotContainer.useFriday) {
-            photonVisionRight.periodic();
-            visionPoses.add(photonVisionRight);
-
-        }
-        else{
-                        SmartDashboard.putString("Vision" + photonVisionRight.getName() + "/Photon_RejectReason", "useFriday disabled");
-
-        }
+       
 
       //  visionPoses.add(Luma4Front);
  //       visionPoses.add(Photon4Side);

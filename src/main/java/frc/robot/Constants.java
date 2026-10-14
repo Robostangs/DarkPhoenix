@@ -277,8 +277,8 @@ public final class Constants {
                 // {1,12,6,7,17,28,22,23};
                 //
                 public static final double kLLAmbiguityThres = .7;
-                public static final String kPhotonLL3Name = "Friday";
-                public static final Transform3d kRobotToCamLL3 = new Transform3d(
+                public static final String kThriftyName = "Friday";
+                public static final Transform3d kRobotToCamThrifty = new Transform3d(
                                    Units.inchesToMeters(0.5),
                                 Units.inchesToMeters(12.25),
                                 Units.inchesToMeters(11.5),
@@ -289,10 +289,7 @@ public final class Constants {
                         Units.degreesToRadians(0), 
                         Units.degreesToRadians(90-61.5), 
                         Units.degreesToRadians(0)));
-                public static final String thriftyName = "Thrifty";
-                public static final Transform3d kRobotToCamThrifty = new Transform3d(0,0,0, new Rotation3d(
-                        Units.degreesToRadians(kLLAmbiguityThres), 
-                        Units.degreesToRadians(kLLAmbiguityThres), Units.degreesToRadians(kLLAmbiguityThres)));
+                
 
 
         }
