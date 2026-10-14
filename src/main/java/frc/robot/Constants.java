@@ -277,7 +277,7 @@ public final class Constants {
                 // {1,12,6,7,17,28,22,23};
                 //
                 public static final double kLLAmbiguityThres = .7;
-                public static final String kThriftyName = "Friday";
+                public static final String kThriftyName = "Thifty";
                 public static final Transform3d kRobotToCamThrifty = new Transform3d(
                                    Units.inchesToMeters(0.5),
                                 Units.inchesToMeters(12.25),
