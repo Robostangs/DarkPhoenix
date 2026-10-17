@@ -325,7 +325,7 @@ public class Robot extends TimedRobotstangs {
                         autoCommand = new PrintCommand("Pooping");
                     } else {
 
-                        autoCommand = new PathPlannerAuto(autoname, flip);
+                       autoCommand = new PathPlannerAuto("SitAndShit", flip);
 
                         drawCurrentAuto(autoCommand.getName());
 

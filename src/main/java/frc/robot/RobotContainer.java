@@ -34,6 +34,7 @@ import frc.robot.commands.DumperCommands.Hood.setHoodPosition;
 import frc.robot.commands.HopperCommands.RunHopper;
 import frc.robot.commands.IntakeCommands.HomeIntake;
 import frc.robot.commands.IntakeCommands.IntakeFactory;
+import frc.robot.commands.IntakeCommands.setIntakePosition;
 import frc.robot.commands.IntakeCommands.setKirbyWheels;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.Rotate180;
@@ -144,7 +145,7 @@ public class RobotContainer {
                 setDrivetrain();
 
                 xDrive.rightTrigger().whileTrue(
-                                (ShootFactory.SmartShoot()));
+                                (ShootFactory.SmartShoot())).onFalse(new setIntakePosition(Constants.KirbyConstants.kExtendSetpoint));
 
                  xDrive.leftBumper().whileTrue(new HomeIntake(false));
 
@@ -171,7 +172,7 @@ public class RobotContainer {
                 xDrive.povUp().onTrue(drivetrain.runOnce(
                                 () -> drivetrain.seedFieldCentric()));
                 // setoperatorperspective???? huh tweakin
-
+                xDrive.povLeft().onTrue(IntakeFactory.OscillateIntake());
                 xDrive.povRight().onTrue(new InstantCommand(
                                 (() -> useVision = !useVision)));
 

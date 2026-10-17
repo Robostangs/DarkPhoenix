@@ -37,7 +37,7 @@ public class AutoAlign extends Command {
         this.babyOnBoard = babyOnBoard;
         this.isAuto = false;
 
-        PhoenixPIDController tunePID = new PhoenixPIDController(7.5, 0.5, 0.75);
+        PhoenixPIDController tunePID = new PhoenixPIDController(5.5, 0.5, 0.75);
         tunePID.enableContinuousInput(-Math.PI, Math.PI);
 
         tunePID.setTolerance(0.01);

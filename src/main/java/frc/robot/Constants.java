@@ -147,7 +147,7 @@ public final class Constants {
                 public static final double hopperExtenderKS = 15;
                 public static final double extenderSensorToMechanismRatio = 4.0 * 4 * 48 / 16;
                 public static final double kExtendSetpoint = 0.01;
-                public static final double kRetractSetpoint = 0.17;
+                public static final double kRetractSetpoint = 0.19;
                 // TODO: find this john
                 public static final double kHopperExtensionTolerance = 0.01;
                 public static final double IntakeWheelCurrentLimit = 100;
@@ -156,7 +156,7 @@ public final class Constants {
                 public static final double kHomePosition = 0.2;
                 public static final double extenderPositionTolerance = 0.015;
                 public static final double IntakeWheelsStatorLimit = 100;
-                public static final double IntakePivotOscillateUpPos = 0.4;
+                public static final double IntakePivotOscillateUpPos = 0.15;
                 public static final double kIntakePivotBump = .15;
         }
 
@@ -283,16 +283,17 @@ public final class Constants {
                                 Units.inchesToMeters(12.25),
                                 Units.inchesToMeters(11.5),
                                 new Rotation3d(0, Units.degreesToRadians(34-90), Units.degreesToRadians(90)));
-                public static final String lumaName = "OV9281";
+                public static final String lumaName = "THELuma";
 
                 public static final Transform3d kRobotToCamLuma = new Transform3d(0.323,-0.208,0.186, new Rotation3d(
                         Units.degreesToRadians(0), 
                         Units.degreesToRadians(90-61.5), 
                         Units.degreesToRadians(0)));
                 public static final String thriftyName = "Thrifty";
-                public static final Transform3d kRobotToCamThrifty = new Transform3d(0,0,0, new Rotation3d(
-                        Units.degreesToRadians(kLLAmbiguityThres), 
-                        Units.degreesToRadians(kLLAmbiguityThres), Units.degreesToRadians(kLLAmbiguityThres)));
+                public static final Transform3d kRobotToCamThrifty = new Transform3d(-Units.inchesToMeters(14.25-13.5),Units.inchesToMeters(26.25-13.5),Units.inchesToMeters(11.25), new Rotation3d(
+                        Units.degreesToRadians(0), 
+                        Units.degreesToRadians(90-66.4), 
+                        Units.degreesToRadians(-90)));
 
 
         }

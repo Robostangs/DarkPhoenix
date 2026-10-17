@@ -1,9 +1,11 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.FeederCommands.setFeederSpeed;
 import frc.robot.commands.HopperCommands.RunHopper;
+import frc.robot.subsystems.Intake.IntakePivot;
 
 public class IntakeFactory {
 
@@ -33,10 +35,10 @@ public class IntakeFactory {
     }
 
     public static Command OscillateIntake() {
-        return (new setIntakePosition(0.118)
-                // .andThen(new WaitCommand(0.25))
-                .andThen(new setIntakePosition(.204))
-        // .andThen(new WaitCommand(0.25))
+        return (new setIntakePosition(Constants.KirbyConstants.kExtendSetpoint)
+                .andThen(new WaitCommand(0.1))
+                .andThen(new setIntakePosition(Constants.KirbyConstants.kRetractSetpoint))
+                .andThen(new WaitCommand(0.1))
         )
                 .repeatedly()
                 .withName("Oscillate Intake Command");

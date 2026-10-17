@@ -69,8 +69,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private VisionStangs Luma4Front = new VisionStangs(Constants.VisionConstants.lumaName,Constants.VisionConstants.kRobotToCamLuma);
   //  private VisionStangs Photon4Side = new VisionStangs(Constants.VisionConstants.thriftyName,Constants.VisionConstants.kRobotToCamThrifty);
 
-    private VisionStangs photonVisionRight = new VisionStangs(Constants.VisionConstants.kPhotonLL3Name,
-            Constants.VisionConstants.kRobotToCamLL3);
+    private VisionStangs photonVisionRight = new VisionStangs(Constants.VisionConstants.thriftyName,
+            Constants.VisionConstants.kRobotToCamThrifty);
 
     private ArrayList<VisionStangs> visionPoses = new ArrayList<>();
 
@@ -312,9 +312,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         Luma4Front.periodic();
    //     Photon4Side.periodic();
+        photonVisionRight.periodic();
+
         if (RobotContainer.useFriday) {
-            photonVisionRight.periodic();
-            visionPoses.add(photonVisionRight);
 
         }
         else{
@@ -322,10 +322,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         }
 
-      //  visionPoses.add(Luma4Front);
- //       visionPoses.add(Photon4Side);
+      visionPoses.add(Luma4Front);
+        visionPoses.add(photonVisionRight);
 
-      //  setVisionPose(visionPoses);
+        setVisionPose(visionPoses);
 
         Robot.teleopField.setRobotPose(this.getState().Pose);
     }
@@ -340,21 +340,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
 
         VisionStangs bestCamera = null;
-        double smallestAmbiguity = Constants.VisionConstants.kLLAmbiguityThres;
+        double smallestAmbiguity = 1000;
 
         for (VisionStangs camera : visionMeasurements) {
             if (camera == null || camera.getPose() == null) {
                 return;
             }
-            this.addVisionMeasurement(
-                camera.getPose(),
-                camera.getTimeStamp());
-            //double ambiguity = camera.getAmbiguity();
+            
+            double ambiguity = camera.getAmbiguity();
 
-            // if (ambiguity > 0 && ambiguity < smallestAmbiguity) {
-            //     smallestAmbiguity = ambiguity;
-            //     bestCamera = camera;
-            // }
+            if (ambiguity > 0 && ambiguity < smallestAmbiguity) {
+                smallestAmbiguity = ambiguity;
+                bestCamera = camera;
+            }
         }
 
         if (bestCamera == null) {
@@ -364,7 +362,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putString("Vision/Status", bestCamera.getName() + " is valid measurment");
 
         
-
+        this.addVisionMeasurement(
+                bestCamera.getPose(),
+                bestCamera.getTimeStamp());
         isVisionGood = true;
 
         SmartDashboard.putString("Vision/Best Camera", bestCamera.getName());

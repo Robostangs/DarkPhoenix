@@ -14,6 +14,7 @@ import frc.robot.FeederCommands.setFeederSpeed;
 import frc.robot.commands.DumperCommands.Flywheel.ChargeUp;
 import frc.robot.commands.DumperCommands.Hood.setHoodPosition;
 import frc.robot.commands.HopperCommands.RunHopper;
+import frc.robot.commands.IntakeCommands.IntakeFactory;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Dumper.Flywheel;
@@ -52,7 +53,9 @@ public class ShootFactory {
                                 .alongWith(
                                                 new setHoodPosition(() -> 0.1))
                                 .alongWith(
-                                                SmartFeed())
+                                                (SmartFeed()
+                                               )
+                                                ).alongWith( IntakeFactory.OscillateIntake())
                                 .withName("Regression Shoot Command");
         }
 
@@ -62,7 +65,7 @@ public class ShootFactory {
                                 .alongWith(
                                                 new setHoodPosition(() -> 0.1))
                                 .alongWith(
-                                                SmartFeed())
+                                                SmartFeed().andThen(IntakeFactory.OscillateIntake()))
                                 .withName("Regression Shoot Command");
         }
 
