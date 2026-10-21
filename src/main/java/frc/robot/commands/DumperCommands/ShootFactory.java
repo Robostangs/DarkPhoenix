@@ -1,8 +1,10 @@
 package frc.robot.commands.DumperCommands;
 
+import java.lang.reflect.InaccessibleObjectException;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -15,6 +17,8 @@ import frc.robot.commands.DumperCommands.Flywheel.ChargeUp;
 import frc.robot.commands.DumperCommands.Hood.setHoodPosition;
 import frc.robot.commands.HopperCommands.RunHopper;
 import frc.robot.commands.IntakeCommands.IntakeFactory;
+import frc.robot.commands.IntakeCommands.setIntakePosition;
+import frc.robot.commands.IntakeCommands.setKirbyWheels;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Dumper.Flywheel;
@@ -38,7 +42,8 @@ public class ShootFactory {
                                                                 .withTimeout(0.3)
 
                                                                 .andThen(new RunHopper(
-                                                                                () -> Constants.HopperConstants.kRollerDC)));
+                                                                                () -> Constants.HopperConstants.kRollerDC))
+                                                                );
                                                                                 
 
         }
@@ -51,21 +56,26 @@ public class ShootFactory {
 
                 return new ChargeUp(false)
                                 .alongWith(
-                                                new setHoodPosition(() -> 0.1))
+                                                new setHoodPosition(() -> SmartDashboard.getNumber("Regression Hood Setpoint", 0)))
                                 .alongWith(
                                                 (SmartFeed()
                                                )
-                                                ).alongWith( IntakeFactory.OscillateIntake())
+                                                )
+                                .alongWith( IntakeFactory.OscillateIntake())
                                 .withName("Regression Shoot Command");
         }
-
+        public static Command EndShoot(){
+                return new setIntakePosition(Constants.KirbyConstants.kExtendSetpoint)
+                        .alongWith(new setKirbyWheels(() -> 0));
+        }
         public static Command DumbShoot() {
 
                 return new ChargeUp(() -> Constants.FlywheelConstants.kDumbShootRPS, false)
                                 .alongWith(
                                                 new setHoodPosition(() -> 0.1))
                                 .alongWith(
-                                                SmartFeed().andThen(IntakeFactory.OscillateIntake()))
+                                                SmartFeed())
+                                .alongWith( IntakeFactory.OscillateIntake())
                                 .withName("Regression Shoot Command");
         }
 
@@ -126,14 +136,7 @@ public class ShootFactory {
                                 .withName("Pass Close Command");
         }
         
-        public static Command ElectroShoot() {
-                return new ChargeUp(() -> Constants.FlywheelConstants.kDumbShootRPS,false)
-                                .alongWith(
-                                                new setHoodPosition(() -> Constants.HoodConstants.kDumbShootHoodPos))
-                                .alongWith(
-                                                SmartFeed())
-                                .withName("Regression Shoot Command");
-        }
+       
 
         public static Command SmartShoot() {
 

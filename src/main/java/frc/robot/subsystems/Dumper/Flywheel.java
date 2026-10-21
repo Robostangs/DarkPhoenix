@@ -8,6 +8,7 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -21,13 +22,21 @@ public class Flywheel extends SubsystemBase {
     private Follower slaveControl;
     private double adjValue = 0;
     TalonFXConfiguration flywheelConfig;
-
+    public double flywheelRegressionTarget;
     public Flywheel() {
         mainShooterMotor = new TalonFX(Constants.FlywheelConstants.kFlywheelMotorID);
         slaveShooterMotor = new TalonFX(Constants.FlywheelConstants.kFlywheelSlaveMotorID);
-
+        SmartDashboard.putNumber("FlywheelRegressionTarget", 0);
         slaveControl = new Follower(Constants.FlywheelConstants.kFlywheelMotorID, MotorAlignmentValue.Opposed);
+        SmartDashboard.putNumber("Flywheel/P", Constants.FlywheelConstants.kShooterMotorP);
+        SmartDashboard.putNumber("Flywheel/I", Constants.FlywheelConstants.kShooterMotorI);
+        SmartDashboard.putNumber("Flywheel/D", Constants.FlywheelConstants.kShooterMotorD);
 
+        ApplyConfigs();
+        SmartDashboard.putData("Apply Flywheel Pid",new InstantCommand(() -> {ApplyConfigs();}));
+        
+    }
+    private void ApplyConfigs(){
         flywheelConfig = new TalonFXConfiguration();
 
         flywheelConfig.CurrentLimits.SupplyCurrentLimit = Constants.DumperConstants.kShooterSupplyCurrentLimit;
@@ -35,9 +44,15 @@ public class Flywheel extends SubsystemBase {
 
         flywheelConfig.CurrentLimits.SupplyCurrentLowerTime = 2;
 
-        flywheelConfig.Slot0.kP = Constants.FlywheelConstants.kShooterMotorP;
-        flywheelConfig.Slot0.kI = Constants.FlywheelConstants.kShooterMotorI;
-        flywheelConfig.Slot0.kD = Constants.FlywheelConstants.kShooterMotorD;
+        // flywheelConfig.Slot0.kP = Constants.FlywheelConstants.kShooterMotorP;
+        // flywheelConfig.Slot0.kI = Constants.FlywheelConstants.kShooterMotorI;
+        // flywheelConfig.Slot0.kD = Constants.FlywheelConstants.kShooterMotorD;
+        flywheelConfig.Slot0.kP = SmartDashboard.getNumber("Flywheel/P", Constants.FlywheelConstants.kShooterMotorP);
+        
+        flywheelConfig.Slot0.kI = SmartDashboard.getNumber("Flywheel/I", Constants.FlywheelConstants.kShooterMotorI);
+        
+        flywheelConfig.Slot0.kD = SmartDashboard.getNumber("Flywheel/D", Constants.FlywheelConstants.kShooterMotorD);
+
         flywheelConfig.Slot0.kA = Constants.FlywheelConstants.kShooterMotorA;
         flywheelConfig.Slot0.kV = Constants.FlywheelConstants.kShooterMotorV;
         flywheelConfig.Slot0.kS = Constants.FlywheelConstants.kShooterMotorS;
@@ -51,7 +66,6 @@ public class Flywheel extends SubsystemBase {
         configureFlywheelMotors();
 
     }
-
     private void configureFlywheelMotors() {
 
         mainShooterMotor.getConfigurator().apply(flywheelConfig);
@@ -73,11 +87,11 @@ public class Flywheel extends SubsystemBase {
     public double getFlywheelTargetVelocity() {
 
         double x = (Robot.getMetersFromTarget());
-        double fudge = 2;
+        double fudge = 4.9;
 
         // double regressionValue = fudge+0.596 + 23*MetersfromTarget-
         // 6.46*Math.pow(MetersfromTarget, 2)+0.627*Math.pow(MetersfromTarget, 3);;
-        double regressionValue = fudge + 24.4 - .469 * x + 0.69 * Math.pow(x, 2);
+        double regressionValue =   -0.00475578*Math.pow(x, 2)+1.0572*x+23.00014+fudge;
         
 
         if (regressionValue < 0) {
@@ -105,7 +119,9 @@ public class Flywheel extends SubsystemBase {
     public void setAdj(double av) {
         adjValue = av;
     }
+    public void UpdatePid(){
 
+    }
     public void setVelocity(double target) {
         flywheelTargetVelocity.Velocity = target + adjValue;
 
@@ -126,7 +142,7 @@ public class Flywheel extends SubsystemBase {
 
         SmartDashboard.putNumber("Flywheel/Main Velocity", mainShooterMotor.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber("Flywheel/Slave Velocity", slaveShooterMotor.getVelocity().getValueAsDouble());
-
+        flywheelRegressionTarget=SmartDashboard.getNumber("FlywheelRegressionTarget", 0);
         SmartDashboard.putNumber("Flywheel/Target Velocity", flywheelTargetVelocity.Velocity);
 
     }

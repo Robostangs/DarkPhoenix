@@ -312,7 +312,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         Luma4Front.periodic();
    //     Photon4Side.periodic();
-        photonVisionRight.periodic();
+      //  photonVisionRight.periodic();
 
         if (RobotContainer.useFriday) {
 
@@ -323,7 +323,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
 
       visionPoses.add(Luma4Front);
-        visionPoses.add(photonVisionRight);
+       // visionPoses.add(photonVisionRight);
 
         setVisionPose(visionPoses);
 

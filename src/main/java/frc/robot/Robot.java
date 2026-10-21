@@ -273,7 +273,7 @@ public class Robot extends TimedRobotstangs {
     @Override
     public void disabledInit() {
         delay = 0;
-
+        SmartDashboard.putNumber("Regression Hood Setpoint", 0.14);
         SmartDashboard.putNumber("Auto Delay", delay);
 
         flipChooser.setDefaultOption("N", Boolean.valueOf(false));
@@ -325,7 +325,7 @@ public class Robot extends TimedRobotstangs {
                         autoCommand = new PrintCommand("Pooping");
                     } else {
 
-                       autoCommand = new PathPlannerAuto("SitAndShit", flip);
+                       autoCommand = new PathPlannerAuto(autoname, flip);
 
                         drawCurrentAuto(autoCommand.getName());
 
@@ -576,18 +576,16 @@ public class Robot extends TimedRobotstangs {
 
                 new AutoAlign(() -> 0d, () -> 0d, () -> false)
                         .raceWith(
-                                new SequentialCommandGroup(
-                                        new SequentialCommandGroup(
-                                                new WaitCommand(1),
-                                                new ParallelRaceGroup(
-                                                        ShootFactory.RegressionShoot(),
-                                                        new WaitCommand(3))))
+                               
+                            new SequentialCommandGroup(
+                                    new WaitCommand(1),
+                                    new ParallelRaceGroup(
+                                            ShootFactory.RegressionShoot(),
+                                            new WaitCommand(3))))
 
-                                        .andThen(new SequentialCommandGroup(
-                                                new WaitCommand(1.5),
-                                                IntakeFactory.RetractIntake()))
+                                      
 
-                        ));
+                        );
 
     }
 

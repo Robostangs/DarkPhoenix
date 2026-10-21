@@ -145,7 +145,7 @@ public class RobotContainer {
                 setDrivetrain();
 
                 xDrive.rightTrigger().whileTrue(
-                                (ShootFactory.SmartShoot())).onFalse(new setIntakePosition(Constants.KirbyConstants.kExtendSetpoint));
+                                (ShootFactory.SmartShoot())).onFalse(ShootFactory.EndShoot());
 
                  xDrive.leftBumper().whileTrue(new HomeIntake(false));
 
@@ -154,7 +154,7 @@ public class RobotContainer {
                // xDrive.rm().whileTrue(new setKirbyWheels(() -> 1));
                 xDrive.lm()
                         .whileTrue(ShootFactory.DumbShoot())
-                        .onFalse(new setHoodPosition(() -> 0));
+                        .onFalse(ShootFactory.EndShoot());
                 
 
                 xDrive.rightPaddle().whileTrue(IntakeFactory.ExtendIntake());
