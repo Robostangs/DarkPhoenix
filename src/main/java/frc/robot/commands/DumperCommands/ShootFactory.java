@@ -30,7 +30,7 @@ public class ShootFactory {
 
                 return new WaitUntilCommand(
                                 () -> Flywheel.getInstance().shooterAtTargetVelocity())
-                                .withTimeout(0.5)
+                                .withTimeout(1)
                                 // .andThen(new WaitCommand(0.5))
                                 .andThen(new Feed(
                                                 () -> Constants.FeederConstants.kFeedRPSSetpoint))
@@ -39,7 +39,7 @@ public class ShootFactory {
                                                 new WaitUntilCommand(() -> Feeder
                                                                 .getInstance()
                                                                 .feederAtTargetVelocity())
-                                                                .withTimeout(0.3)
+                                                                .withTimeout(0.5)
 
                                                                 .andThen(new RunHopper(
                                                                                 () -> Constants.HopperConstants.kRollerDC))

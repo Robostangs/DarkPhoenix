@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -86,8 +87,8 @@ public class Flywheel extends SubsystemBase {
 
     public double getFlywheelTargetVelocity() {
 
-        double x = (Robot.getMetersFromTarget());
-        double fudge = 4.9;
+        double x = Units.metersToFeet(Robot.getMetersFromTarget());
+        double fudge =0;
 
         // double regressionValue = fudge+0.596 + 23*MetersfromTarget-
         // 6.46*Math.pow(MetersfromTarget, 2)+0.627*Math.pow(MetersfromTarget, 3);;

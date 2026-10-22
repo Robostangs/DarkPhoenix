@@ -349,7 +349,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             
             double ambiguity = camera.getAmbiguity();
 
-            if (ambiguity > 0 && ambiguity < smallestAmbiguity) {
+            if (ambiguity > 0 &&ambiguity<0.6&&camera.getDist()<4& ambiguity < smallestAmbiguity) {
                 smallestAmbiguity = ambiguity;
                 bestCamera = camera;
             }

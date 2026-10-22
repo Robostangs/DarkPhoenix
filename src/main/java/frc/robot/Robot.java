@@ -321,15 +321,15 @@ public class Robot extends TimedRobotstangs {
                 if (autoname != null) {
 
                     autoAlert.set(false);
-                    if (autoname.equals("SitAndShit")) {
+                    //if (autoname.equals("SitAndShit")) {
                         autoCommand = new PrintCommand("Pooping");
-                    } else {
+                    // } else {
 
-                       autoCommand = new PathPlannerAuto(autoname, flip);
+                    //    autoCommand = new PathPlannerAuto(autoname, flip);
 
-                        drawCurrentAuto(autoCommand.getName());
+                    //     drawCurrentAuto(autoCommand.getName());
 
-                    }
+                    // }
 
                 } else {
                     autoCommand = new PrintCommand("Auto not Autoing....");
@@ -579,10 +579,10 @@ public class Robot extends TimedRobotstangs {
                                
                             new SequentialCommandGroup(
                                     new WaitCommand(1),
-                                    new ParallelRaceGroup(
-                                            ShootFactory.RegressionShoot(),
-                                            new WaitCommand(3))))
-
+                                            ShootFactory.RegressionShoot().withTimeout(4),
+                                            ShootFactory.EndShoot()
+                                            ))
+                                            
                                       
 
                         );
