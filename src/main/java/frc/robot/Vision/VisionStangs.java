@@ -51,7 +51,7 @@ public class VisionStangs {
     }
 
     private void Photonperiodic() {
-        SmartDashboard.putNumber("Vision/" + camera.getName() + " tet", Math.random());
+        SmartDashboard.putNumber("Vision/" + camera.getName() + "/rando", Math.random());
         bigAmbiguity = 0;
         PhotonPipelineResult result = camera.getLatestResult();
         var target = result.getBestTarget();
@@ -65,6 +65,10 @@ public class VisionStangs {
               //  CommandSwerveDrivetrain.getInstance().addVisionMeasurement(currentPose, timestampSeconds);
             }
             distance=getavgDisPhoton(target);
+            SmartDashboard.putNumber("Vision/" + camera.getName() + "/distanceFromTag", distance);
+            SmartDashboard.putNumber("Vision/" + camera.getName() + "/ambiguity", bigAmbiguity);
+
+
         }
                 // Optional<EstimatedRobotPose> visionEst = Optional.empty();
         // for (PhotonPipelineResult result : camera.getAllUnreadResults()) {

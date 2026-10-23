@@ -322,12 +322,12 @@ public class Robot extends TimedRobotstangs {
 
                     autoAlert.set(false);
                     //if (autoname.equals("SitAndShit")) {
-                        autoCommand = new PrintCommand("Pooping");
+                     //   autoCommand = new PrintCommand("Pooping");
                     // } else {
 
-                    //    autoCommand = new PathPlannerAuto(autoname, flip);
+                       autoCommand = new PathPlannerAuto(autoname, flip);
 
-                    //     drawCurrentAuto(autoCommand.getName());
+                        drawCurrentAuto(autoCommand.getName(),flip);
 
                     // }
 
@@ -353,7 +353,7 @@ public class Robot extends TimedRobotstangs {
 
     @Override
     public void disabledExit() {
-        drawCurrentAuto(null);
+        drawCurrentAuto(null,false);
 
     }
 
@@ -659,7 +659,7 @@ public class Robot extends TimedRobotstangs {
         return shooterIsDumb;
     }
 
-    public void drawCurrentAuto(String autoName) {
+    public void drawCurrentAuto(String autoName,boolean flip) {
         List<Pose2d> poses = new ArrayList<>();
         poses.clear();
         if (autoName != null && !autoName.equals("")) {
@@ -669,6 +669,9 @@ public class Robot extends TimedRobotstangs {
                     for (Pose2d pose : path.getPathPoses()) {
                         if (Robot.isRed()) {
                             pose = FlippingUtil.flipFieldPose(pose);
+                        }
+                        if(flip){
+                            pose= new Pose2d(pose.getX(),Constants.kAprilTagFieldLayout.getFieldWidth()-pose.getY(),new Rotation2d());
                         }
                         poses.add(pose);
                     }
