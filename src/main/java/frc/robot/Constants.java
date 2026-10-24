@@ -68,7 +68,7 @@ public final class Constants {
         public static class HopperConstants {
 
                 public static final int kRollerID = 17;
-                public static final double kRollerDC = 0.5;
+                public static final double kRollerDC = 1;
 
         }
 
@@ -215,8 +215,8 @@ public final class Constants {
         public class AutoConstants {
                 public static final PIDConstants translationPID = new PIDConstants(1.4, 0, 0);
                 public static final PIDConstants rotationPID = new PIDConstants(2, 0, 0);
-                private final static MomentOfInertia kRobotMomentOfInertia = KilogramSquareMeters.of(0.01);
-                private final static double robotWeight = 69;
+                private final static MomentOfInertia kRobotMomentOfInertia = KilogramSquareMeters.of(0.1);
+                private final static double robotWeight =  68;
                 private final static double wheelCOF = 1; // typical carpet COF for             colson/nitrile wheels
                 private final static ModuleConfig kModuleConfig = new ModuleConfig(
                                 Constants.TunerConstants.kWheelRadius,
@@ -376,7 +376,7 @@ public final class Constants {
 
                 // Theoretical free speed (m/s) at 12 V applied output;
                 // This needs to be tuned to your individual robot
-                public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(5.12);
+                public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(7);
 
                 public static final double kAngularRateAt12Volts = RotationsPerSecond.of(1.5).in(RadiansPerSecond);
 
