@@ -13,6 +13,7 @@ public class ChargeUp extends Command {
     DoubleSupplier targetRPS;
     boolean smort;
     boolean Gentle;
+    DoubleSupplier meters;
 
     public ChargeUp(boolean Gentle) {
         shooter = Flywheel.getInstance();
@@ -25,6 +26,16 @@ public class ChargeUp extends Command {
     public ChargeUp(DoubleSupplier targetRPS, boolean Gentle) {
         shooter = Flywheel.getInstance();
         this.targetRPS = targetRPS;
+        smort = false;
+        this.Gentle = false;
+        addRequirements(shooter);
+
+    }
+
+    public ChargeUp(DoubleSupplier meters) {
+        shooter = Flywheel.getInstance();
+        this.meters = meters;
+        this.targetRPS=null;
         smort = false;
         this.Gentle = false;
         addRequirements(shooter);
@@ -47,7 +58,11 @@ public class ChargeUp extends Command {
         if (smort) {
             currentTarget = shooter.getFlywheelTargetVelocity();
         } else {
-            currentTarget = targetRPS.getAsDouble();
+            if(targetRPS != null){
+                currentTarget = targetRPS.getAsDouble();
+            } else {
+                currentTarget = Flywheel.getInstance().getFlywheelTargetVelocity(meters.getAsDouble());
+            }
         }
 
         shooter.setVelocity(currentTarget);

@@ -81,6 +81,7 @@ public final class Constants {
                 // THIS IS IN FEET
                 public static final double maxRegressionDistance = 30;
 
+                public static final double dummyshootMeters = 3.1613;
                 // TODO find these john
                 public static final Pose2d ShootPoseDepot = new Pose2d();
                 public static final Pose2d ShootPoseOutpost = new Pose2d();

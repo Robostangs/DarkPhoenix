@@ -70,13 +70,13 @@ public class ShootFactory {
         }
         public static Command DumbShoot() {
 
-                return new ChargeUp(() -> Constants.FlywheelConstants.kDumbShootRPS, false)
+                return new ChargeUp(() -> Constants.FieldConstants.dummyshootMeters)
                                 .alongWith(
-                                                new setHoodPosition(() -> 0.1))
+                                                new setHoodPosition(() -> 0.14))
                                 .alongWith(
                                                 SmartFeed())
                                 .alongWith( IntakeFactory.OscillateIntake())
-                                .withName("Regression Shoot Command");
+                                .withName("Regression Shoot Dummy Command");
         }
 
         public static Command FarPass() {

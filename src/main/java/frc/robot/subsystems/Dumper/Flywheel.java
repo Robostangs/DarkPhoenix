@@ -84,10 +84,13 @@ public class Flywheel extends SubsystemBase {
 
         slaveShooterMotor.getConfigurator().apply(flywheelConfignew);
     }
-
+    
     public double getFlywheelTargetVelocity() {
+        return getFlywheelTargetVelocity(Robot.getMetersFromTarget());
+    }
+    public double getFlywheelTargetVelocity(double meters) {
 
-        double x = Units.metersToFeet(Robot.getMetersFromTarget());
+        double x = Units.metersToFeet(meters);
         double fudge =0;
 
         // double regressionValue = fudge+0.596 + 23*MetersfromTarget-

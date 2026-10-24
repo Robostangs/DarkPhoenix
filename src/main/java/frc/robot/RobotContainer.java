@@ -39,6 +39,8 @@ import frc.robot.commands.IntakeCommands.setKirbyWheels;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.Rotate180;
 import frc.robot.commands.BlockerCommands.HomeBlocker;
+import frc.robot.commands.DumperCommands.Flywheel.ChargeUp;
+
 import frc.robot.commands.BlockerCommands.setBlockerPosition;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Dumper.Flywheel;
@@ -180,11 +182,11 @@ public class RobotContainer {
                                 () -> xDrive.getLeftTriggerAxis() < 0.2)
                                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Auto Align"));
                 
-                // X (button 3): automatic 180 spin, driver keeps translating
-                xDrive.x().whileTrue(new Rotate180(
-                                () -> -xDrive.getLeftY() * MaxSpeed * translationScale(),
-                                () -> -xDrive.getLeftX() * MaxSpeed * translationScale())
-                                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Rotate 180"));
+                // // X (button 3): automatic 180 spin, driver keeps translating
+                // xDrive.x().whileTrue(new Rotate180(
+                //                 () -> -xDrive.getLeftY() * MaxSpeed * translationScale(),
+                //                 () -> -xDrive.getLeftX() * MaxSpeed * translationScale())
+                //                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Rotate 180"));
 
                 xDrive.y().whileTrue(IntakeFactory.TrueSpit());
                 xDrive.b().whileTrue(IntakeFactory.ballStuck());
@@ -216,10 +218,10 @@ public class RobotContainer {
                                 .onFalse(new setHoodPosition(() -> 0));;
 
 
-               xDrive.leftBumper().whileTrue(ShootFactory.SmartFeed());
+               //xDrive.leftBumper().whileTrue(ShootFactory.SmartFeed());
 
                 xManip.leftPaddle().whileTrue(new HomeIntake(true));
-
+                xManip.rightPaddle().whileTrue(new ChargeUp(false));
                 // xManip.leftTrigger().whileTrue(new addFlywheelSpeed(() -> 1.0));
                 // xManip.rightTrigger().whileTrue(new addFlywheelSpeed(() -> -1.0));
 
