@@ -561,7 +561,7 @@ public class Robot extends TimedRobotstangs {
 
     public void loadNamedCommands() {
 
-        NamedCommands.registerCommand("Extend", IntakeFactory.ExtendIntake());
+        NamedCommands.registerCommand("Extend", IntakeFactory.ExtendIntake().withTimeout(11));
 
         NamedCommands.registerCommand("Retract", IntakeFactory.RetractIntake());
 
@@ -573,19 +573,20 @@ public class Robot extends TimedRobotstangs {
         NamedCommands.registerCommand("BumpTake", new setIntakePosition(Constants.KirbyConstants.kIntakePivotBump));
 
         NamedCommands.registerCommand("FullShoot",
-
-                new AutoAlign(() -> 0d, () -> 0d, () -> false)
+                new SequentialCommandGroup(
+                (new AutoAlign(() -> 0d, () -> 0d, () -> false)
                         .raceWith(
                                
                             new SequentialCommandGroup(
                                     new WaitCommand(1),
-                                            ShootFactory.RegressionShoot().withTimeout(4),
-                                            ShootFactory.EndShoot()
+                                            ShootFactory.RegressionShoot().withTimeout(4)
                                             ))
                                             
                                       
 
-                        );
+                        ).withTimeout(4.5),                                            
+                        ShootFactory.EndShoot()
+));
 
     }
 

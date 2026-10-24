@@ -216,9 +216,10 @@ public class RobotContainer {
 
                 xManip.y().whileTrue(ShootFactory.FarPass())
                                 .onFalse(new setHoodPosition(() -> 0));;
+                xManip.b().whileTrue(ShootFactory.MedPass())
+                                .onFalse(new setHoodPosition(() -> 0));
 
-
-               //xDrive.leftBumper().whileTrue(ShootFactory.SmartFeed());
+               xDrive.leftBumper().whileTrue(ShootFactory.SmartFeed());
 
                 xManip.leftPaddle().whileTrue(new HomeIntake(true));
                 xManip.rightPaddle().whileTrue(new ChargeUp(false));
