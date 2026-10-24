@@ -199,24 +199,24 @@ public class RobotContainer {
                 //                 new InstantCommand(() -> Robot.toggleDefense()));
 
 
-                // new Trigger(() -> Math.abs(xManip.getLeftY()) > 0.05).whileTrue(
-                //                 new RunCommand(
-                //                                 () -> Flywheel.getInstance().setAdj(xManip.getLeftY() * -5)))
-                //                 .onFalse(
-                //                                 new InstantCommand(
-                //                                                 () -> Flywheel.getInstance()
-                //                                                                 .setAdj(0)));
+                new Trigger(() -> Math.abs(xManip.getLeftY()) > 0.05).whileTrue(
+                                new RunCommand(
+                                                () -> Flywheel.getInstance().setAdj(xManip.getLeftY() * -5)))
+                                .onFalse(
+                                                new InstantCommand(
+                                                                () -> Flywheel.getInstance()
+                                                                                .setAdj(0)));
 
                 xManip.x().whileTrue(new HomeHood());
 
-                // xManip.a().whileTrue(ShootFactory.ClosePass())
-                //                 .onFalse(new setHoodPosition(() -> 0));
+                xManip.a().whileTrue(ShootFactory.ClosePass())
+                                .onFalse(new setHoodPosition(() -> 0));
 
-                // xManip.y().whileTrue(ShootFactory.FarPass())
-                //                 .onFalse(new setHoodPosition(() -> 0));;
+                xManip.y().whileTrue(ShootFactory.FarPass())
+                                .onFalse(new setHoodPosition(() -> 0));;
 
 
-              //  xDrive.leftBumper().whileTrue(ShootFactory.SmartFeed());
+               xDrive.leftBumper().whileTrue(ShootFactory.SmartFeed());
 
                 xManip.leftPaddle().whileTrue(new HomeIntake(true));
 
