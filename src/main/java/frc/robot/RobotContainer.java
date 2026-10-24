@@ -59,7 +59,7 @@ public class RobotContainer {
                         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive
                                                                                  // motors
 
-        private static final double kIntakeSpeedScale = 0.5;
+        private static final double kIntakeSpeedScale = 1;
 
         /** Manual speed multiplier: 0.5 while the intake button is held. */
         private double intakeScale() {
@@ -219,7 +219,7 @@ public class RobotContainer {
                 xManip.b().whileTrue(ShootFactory.MedPass())
                                 .onFalse(new setHoodPosition(() -> 0));
 
-               xDrive.leftBumper().whileTrue(ShootFactory.SmartFeed());
+               xManip.leftBumper().whileTrue(ShootFactory.SmartFeed());
 
                 xManip.leftPaddle().whileTrue(new HomeIntake(true));
                 xManip.rightPaddle().whileTrue(new ChargeUp(false));
