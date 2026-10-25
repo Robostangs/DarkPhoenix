@@ -174,7 +174,7 @@ public class RobotContainer {
                 xDrive.povUp().onTrue(drivetrain.runOnce(
                                 () -> drivetrain.seedFieldCentric()));
                 // setoperatorperspective???? huh tweakin
-                xDrive.povLeft().onTrue(IntakeFactory.OscillateIntake());
+               // xDrive.povLeft().onTrue(IntakeFactory.OscillateIntake());
                 xDrive.povRight().onTrue(new InstantCommand(
                                 (() -> useVision = !useVision)));
 
