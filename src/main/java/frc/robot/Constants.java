@@ -148,6 +148,8 @@ public final class Constants {
                 public static final double hopperExtenderKS = 15;
                 public static final double extenderSensorToMechanismRatio = 4.0 * 4 * 48 / 16;
                 public static final double kExtendSetpoint = 0.01;
+                public static final double kDepotSetpoint = 0.01+0.0045;
+
                 public static final double kRetractSetpoint = 0.19;
                 // TODO: find this john
                 public static final double kHopperExtensionTolerance = 0.01;
@@ -159,6 +161,7 @@ public final class Constants {
                 public static final double IntakeWheelsStatorLimit = 100;
                 public static final double IntakePivotOscillateUpPos = 0.15;
                 public static final double kIntakePivotBump = .15;
+
         }
 
         public static class HoodConstants {
@@ -215,12 +218,12 @@ public final class Constants {
         public class AutoConstants {
                 public static final PIDConstants translationPID = new PIDConstants(1.4, 0, 0);
                 public static final PIDConstants rotationPID = new PIDConstants(2, 0, 0);
-                private final static MomentOfInertia kRobotMomentOfInertia = KilogramSquareMeters.of(0.1);
+                private final static MomentOfInertia kRobotMomentOfInertia = KilogramSquareMeters.of(0.01);
                 private final static double robotWeight =  68;
                 private final static double wheelCOF = 1; // typical carpet COF for             colson/nitrile wheels
                 private final static ModuleConfig kModuleConfig = new ModuleConfig(
                                 Constants.TunerConstants.kWheelRadius,
-                                Constants.TunerConstants.kSpeedAt12Volts,
+                                MetersPerSecond.of(5.12),
                                 wheelCOF,
                                 DCMotor.getKrakenX60Foc(1).withReduction(Constants.TunerConstants.kDriveGearRatio),
                                 // TODO find this john

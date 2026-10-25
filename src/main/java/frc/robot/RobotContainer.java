@@ -153,7 +153,7 @@ public class RobotContainer {
 
                 // close shoot
 
-               // xDrive.rm().whileTrue(new setKirbyWheels(() -> 1));
+                xDrive.rm().whileTrue(new setKirbyWheels(() -> 1));
                 xDrive.lm()
                         .whileTrue(ShootFactory.DumbShoot())
                         .onFalse(ShootFactory.EndShoot());
@@ -219,7 +219,7 @@ public class RobotContainer {
                 xManip.b().whileTrue(ShootFactory.MedPass())
                                 .onFalse(new setHoodPosition(() -> 0));
 
-               xManip.leftBumper().whileTrue(ShootFactory.SmartFeed());
+               xManip.leftBumper().whileTrue(ShootFactory.SmartFeed(0.5));
 
                 xManip.leftPaddle().whileTrue(new HomeIntake(true));
                 xManip.rightPaddle().whileTrue(new ChargeUp(false));

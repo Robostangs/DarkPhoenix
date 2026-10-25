@@ -586,8 +586,23 @@ public class Robot extends TimedRobotstangs {
 
                         ).withTimeout(4.5),                                            
                         ShootFactory.EndShoot()
+        
 ));
+NamedCommands.registerCommand("FullShootPrecise",
+                new SequentialCommandGroup(
+                (new AutoAlign(() -> 0d, () -> 0d, () -> false)
+                        .raceWith(
+                               
+                            new SequentialCommandGroup(
+                                    new WaitCommand(1),
+                                            ShootFactory.RegressionShoot(1.5).withTimeout(10)
+                                            ))
+                                            
+                                      
 
+                        ).withTimeout(10),                                            
+                        ShootFactory.EndShoot()
+                ));
     }
 
     public static double getMetersFromTarget() {

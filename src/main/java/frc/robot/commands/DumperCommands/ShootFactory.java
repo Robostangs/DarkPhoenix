@@ -26,12 +26,12 @@ import frc.robot.subsystems.Dumper.Hood;
 
 public class ShootFactory {
 
-        public static Command SmartFeed() {
+        public static Command SmartFeed(double waitTime) {
 
                 return new WaitUntilCommand(
                                 () -> Flywheel.getInstance().shooterAtTargetVelocity())
                                 .withTimeout(1)
-                                .andThen(new WaitCommand(0.5))
+                                .andThen(new WaitCommand(waitTime))
                                 .andThen(new Feed(
                                                 () -> Constants.FeederConstants.kFeedRPSSetpoint))
                                 .alongWith(
@@ -53,12 +53,15 @@ public class ShootFactory {
 
         }
         public static Command RegressionShoot() {
+                return RegressionShoot(1);
+        }
+        public static Command RegressionShoot(double waitUntilFeed) {
 
                 return new ChargeUp(false)
                                 .alongWith(
                                                 new setHoodPosition(() -> SmartDashboard.getNumber("Regression Hood Setpoint", 0)))
                                 .alongWith(
-                                                (SmartFeed()
+                                                (SmartFeed(waitUntilFeed)
                                                )
                                                 )
                                 .alongWith( IntakeFactory.OscillateIntake())
@@ -74,7 +77,7 @@ public class ShootFactory {
                                 .alongWith(
                                                 new setHoodPosition(() -> 0.14))
                                 .alongWith(
-                                                SmartFeed())
+                                                SmartFeed(1))
                                 .alongWith( IntakeFactory.OscillateIntake())
                                 .withName("Regression Shoot Dummy Command");
         }
@@ -93,7 +96,7 @@ public class ShootFactory {
                                                 () -> Constants.HoodConstants.kPosAtOppositeAlliancePass))
                                 .alongWith(
                                                 new WaitUntilCommand(leftBumper)
-                                                                .andThen(SmartFeed()))
+                                                                .andThen(SmartFeed(0.5)))
                                 .withName("Pass Far Command");
         }
 
@@ -112,7 +115,7 @@ public class ShootFactory {
                                 .alongWith(
 
                                                 new WaitUntilCommand(leftBumper)
-                                                                .andThen(SmartFeed()))
+                                                                .andThen(SmartFeed(0.5)))
                                 .withName("Pass Med Command");
         }
 
@@ -131,7 +134,7 @@ public class ShootFactory {
                                                 () -> Constants.HoodConstants.kPosAtOppositeAlliancePass)
                                                 )
                                 
-                                .alongWith(SmartFeed()).onlyWhile(leftBumper)
+                                .alongWith(SmartFeed(0.5)).onlyWhile(leftBumper)
                                                                 
                                 .withName("Pass Close Command");
         }
