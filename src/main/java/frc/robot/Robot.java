@@ -7,6 +7,7 @@ package frc.robot;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +28,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -38,6 +41,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
+import edu.wpi.first.wpilibj.simulation.SimHooks;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -162,40 +166,68 @@ public class Robot extends TimedRobotstangs {
         //CommandScheduler.getInstance().schedule(new InstantCommand(() -> FollowPathCommand.warmupCommand()));
     }
 
-    void matchSim()
+    //run sim for a duration at max CPU speed
+    void simWait(double durationSeconds)
     {
-        try{
+        SimHooks.pauseTiming();
+        double startTime = Timer.getTimestamp();
+        while(Timer.getTimestamp()<(startTime+durationSeconds))
+        {
+            SimHooks.stepTiming(0.02);
+        }
+        SimHooks.resumeTiming();
+    }
+
+
+    void matchSequence()
+    {
+        simWait(10);
         DriverStationSim.setAllianceStationId(AllianceStationID.Blue1);
         DriverStationSim.setFmsAttached(true);
         DriverStationSim.notifyNewData();
-        Thread.sleep(10000);
+        simWait(10);
         DriverStationSim.setAutonomous(true);
         DriverStationSim.setEnabled(true);
         DriverStationSim.notifyNewData();
-        Thread.sleep(15000);
+        simWait(15);
         DriverStationSim.setEnabled(false);
         DriverStationSim.notifyNewData();
-        Thread.sleep(3000);
+        simWait(3);
         DriverStationSim.setGameSpecificMessage("R");
         DriverStationSim.setAutonomous(false);
         DriverStationSim.setEnabled(true);
         DriverStationSim.notifyNewData();
-        Thread.sleep(140000);
+        simWait(140);
         DriverStationSim.setEnabled(false);
-        System.exit(0);
+    }
+
+    void matchSim()
+    {   
+        String auton = System.getProperty("auton", "normal");
+        simWait(10);
+        if("normal".equals(auton))
+        {
+            System.out.println("::notice:: Running match with default auto"); 
         }
-        catch(InterruptedException e)
-        {}
+        else
+        {
+            System.out.println("::notice:: Running match with "+auton+" auto");
+            autoChooser.setDefaultOption(auton,auton);
+        }
+        matchSequence();
 
-
-
+        System.exit(0);
 
     }
     
     @Override
     public void simulationInit()
-    {
-        new Thread(this::matchSim).run();
+    {  
+        String simMode = System.getProperty("simMode", "normal");
+        if ("matchSim".equalsIgnoreCase(simMode)) {
+            System.out.println("::notice:: Running match simulation");
+            new Thread(this::matchSim, "match-sim-thread").start();
+        }
     }
 
     void setupAutoPitTest() {
@@ -322,7 +354,7 @@ public class Robot extends TimedRobotstangs {
             autoChooser.addOption(name, name);
         }
 
-        autoChooser.setDefaultOption("Depot DD", "Depot DD");
+        autoChooser.setDefaultOption("Sit and Shit", "SitAndShit");
         // autoChooser.addOption("Piss", "Piss");
         // autoChooser.addOption("DStart - DTrench - DIntake - DBump - DShoot", "DStart
         // - DTrench - DIntake - DBump - DShoot");

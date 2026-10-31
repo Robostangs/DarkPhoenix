@@ -27,6 +27,8 @@ jobs:
     - name: Compile and run tests on robot code
       run: ./gradlew build
 
-    # Runs a single command using the runners shell
-    # - name: Compile and run tests on robot code
-    #   run: ./gradlew simulateJava
+    - name: Run default auto
+      run: ./gradlew simulateJava -PsimMode='matchSim'
+
+    - name: Run Depot DD auto
+      run: ./gradlew simulateJava -PsimMode='matchSim' -Pauton='Depot DD'

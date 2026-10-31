@@ -102,6 +102,7 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
+
 // Configure jar and deploy tasks
 deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
@@ -110,4 +111,8 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
+}
+tasks.withType(JavaExec).configureEach {
+    systemProperty 'simMode', project.findProperty('simMode') ?: 'normal' //matchSim is the alternate option
+    systemProperty 'auton', project.findProperty('auton') ?: 'normal'
 }
