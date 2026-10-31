@@ -25,10 +25,10 @@ jobs:
       run: chmod +x gradlew
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
-      run: ./gradlew build
+      run: bash .github/scripts/gradle-with-errors.sh build
 
     - name: Run default auto
-      run: ./gradlew simulateJava -PsimMode='matchSim'
+      run: bash .github/scripts/gradle-with-errors.sh simulateJava -PsimMode='matchSim'
 
     - name: Run Depot DD auto
-      run: ./gradlew simulateJava -PsimMode='matchSim' -Pauton='Depot DD'
+      run: bash .github/scripts/gradle-with-errors.sh simulateJava -PsimMode='matchSim' -Pauton='Depot DD'
