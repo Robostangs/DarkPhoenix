@@ -21,6 +21,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 
+import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -36,6 +37,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -158,6 +160,42 @@ public class Robot extends TimedRobotstangs {
         Hopper.getInstance().setDefaultCommand(new RunHopper(() -> 0d));
 
         //CommandScheduler.getInstance().schedule(new InstantCommand(() -> FollowPathCommand.warmupCommand()));
+    }
+
+    void matchSim()
+    {
+        try{
+        DriverStationSim.setAllianceStationId(AllianceStationID.Blue1);
+        DriverStationSim.setFmsAttached(true);
+        DriverStationSim.notifyNewData();
+        Thread.sleep(10000);
+        DriverStationSim.setAutonomous(true);
+        DriverStationSim.setEnabled(true);
+        DriverStationSim.notifyNewData();
+        Thread.sleep(15000);
+        DriverStationSim.setEnabled(false);
+        DriverStationSim.notifyNewData();
+        Thread.sleep(3000);
+        DriverStationSim.setGameSpecificMessage("R");
+        DriverStationSim.setAutonomous(false);
+        DriverStationSim.setEnabled(true);
+        DriverStationSim.notifyNewData();
+        Thread.sleep(140000);
+        DriverStationSim.setEnabled(false);
+        System.exit(0);
+        }
+        catch(InterruptedException e)
+        {}
+
+
+
+
+    }
+    
+    @Override
+    public void simulationInit()
+    {
+        new Thread(this::matchSim).run();
     }
 
     void setupAutoPitTest() {
@@ -284,7 +322,7 @@ public class Robot extends TimedRobotstangs {
             autoChooser.addOption(name, name);
         }
 
-        autoChooser.setDefaultOption("Sit and Shit", "SitAndShit");
+        autoChooser.setDefaultOption("Depot DD", "Depot DD");
         // autoChooser.addOption("Piss", "Piss");
         // autoChooser.addOption("DStart - DTrench - DIntake - DBump - DShoot", "DStart
         // - DTrench - DIntake - DBump - DShoot");
