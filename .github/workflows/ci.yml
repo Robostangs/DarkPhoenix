@@ -20,12 +20,6 @@ jobs:
     - name: Add repository to git safe directories
       run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v6
-      with:
-          cache-read-only: false
-          add-job-summary: 'on-failure'
-
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -34,7 +28,7 @@ jobs:
     - name: Compile and run tests on robot code
       run: |
           bash .github/scripts/gradle-with-errors.sh build
-          echo build/reports/problems/problems-report.html >> $GITHUB_STEP_SUMMARY
+          cat build/reports/problems/problems-report.html >> $GITHUB_STEP_SUMMARY
 
     - name: Run default auto
       run: bash .github/scripts/gradle-with-errors.sh simulateJava -PsimMode='matchSim'
