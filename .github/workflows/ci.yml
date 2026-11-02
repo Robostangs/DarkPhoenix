@@ -28,7 +28,7 @@ jobs:
     - name: Compile and run tests on robot code
       run: |
           bash .github/scripts/gradle-with-errors.sh build
-          cat build/reports/problems/problems-report.html >> $GITHUB_STEP_SUMMARY
+    # cat build/reports/problems/problems-report.html >> $GITHUB_STEP_SUMMARY
 
     - name: Run default auto
       run: bash .github/scripts/gradle-with-errors.sh simulateJava -PsimMode='matchSim'
