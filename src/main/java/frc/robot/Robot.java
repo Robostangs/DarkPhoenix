@@ -193,7 +193,7 @@ public class Robot extends TimedRobotstangs {
         DriverStationSim.setEnabled(false);
         DriverStationSim.notifyNewData();
         simWait(3);
-        DriverStationSim.setGameSpecificMessage("R");
+        DriverStationSim.setGameSpecificMessage("B");
         DriverStationSim.setAutonomous(false);
         DriverStationSim.setEnabled(true);
         DriverStationSim.notifyNewData();
