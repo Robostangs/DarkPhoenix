@@ -89,7 +89,7 @@ test {
 }
 
 // Simulation configuration (e.g. environment variables).
-wpi.sim.addGui().defaultEnabled = true
+//see end of file
 wpi.sim.addDriverstation()
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
@@ -112,7 +112,18 @@ wpi.java.configureTestTasks(test)
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
+
+def simMode = project.findProperty('simMode') ?: 'normal' //matchSim is the alternate option
 tasks.withType(JavaExec).configureEach {
-    systemProperty 'simMode', project.findProperty('simMode') ?: 'normal' //matchSim is the alternate option
+    systemProperty 'simMode', simMode
     systemProperty 'auton', project.findProperty('auton') ?: 'normal'
+}
+
+if(simMode.equals('matchSim'))
+{
+    wpi.sim.addGui().defaultEnabled = false
+}
+else
+{
+    wpi.sim.addGui().defaultEnabled = true  
 }

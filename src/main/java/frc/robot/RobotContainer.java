@@ -91,12 +91,12 @@ public class RobotContainer {
                 return mInstance;
         }
 
-        public RobotContainer() {
+        private RobotContainer() {
                 configureDrivingBinding();
                 configureManipBindings();
                 // configureTestBindings();
 
-                if (Robot.isSimulation()) {
+                if (Robot.isSimulation() && !Robot.isMatchSim()) {
                         configureSimBinds();
 
                 }
@@ -251,7 +251,7 @@ public class RobotContainer {
                 BooleanSupplier isMoving = () -> (!((Math.abs(xDrive.getLeftX()) > 0.1
                                 || Math.abs(xDrive.getLeftY()) > 0.1
                                 || Math.abs(xDrive.getRightX()) > 0.1)));
-                if (Robot.isSimulation()) {
+                if (Robot.isSimulation() && !Robot.isMatchSim()) {
                         drivetrain.setDefaultCommand(
                                         drivetrain.applyRequest(
 

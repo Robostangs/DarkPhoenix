@@ -42,6 +42,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj.simulation.SimHooks;
+import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -53,6 +54,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ElasticConstants.whoCanScore;
 import frc.robot.FeederCommands.setFeederSpeed;
 import frc.robot.Stable.LimelightHelpers;
@@ -121,7 +123,7 @@ public class Robot extends TimedRobotstangs {
     static boolean isPassing = false;
 
     public Robot() {
-        m_robotContainer = new RobotContainer();
+        m_robotContainer = RobotContainer.getInstance();
     }
 
     void postPitTestStatus(String status) {
@@ -167,7 +169,7 @@ public class Robot extends TimedRobotstangs {
     }
 
     //run sim for a duration at max CPU speed
-    void simWait(double durationSeconds)
+    void runSimForSeconds(double durationSeconds)
     {
         SimHooks.pauseTiming();
         double startTime = Timer.getTimestamp();
@@ -178,33 +180,48 @@ public class Robot extends TimedRobotstangs {
         SimHooks.resumeTiming();
     }
 
-
-    void matchSequence()
+    void simWait(double durationSeconds)
     {
-        simWait(10);
+        double startTime = Timer.getTimestamp();
+        while(Timer.getTimestamp()<(startTime+durationSeconds));
+    }
+
+
+    void matchSequence(Runnable teleopRunnable)
+    {
+        runSimForSeconds(10);
         DriverStationSim.setAllianceStationId(AllianceStationID.Blue1);
         DriverStationSim.setFmsAttached(true);
         DriverStationSim.notifyNewData();
-        simWait(10);
+        runSimForSeconds(10);
         DriverStationSim.setAutonomous(true);
         DriverStationSim.setEnabled(true);
         DriverStationSim.notifyNewData();
-        simWait(15);
+        System.out.println("~~~~~~~~~~~~~~~DsSim Starting Auton~~~~~~~~~~~~~~~");
+        runSimForSeconds(15);
         DriverStationSim.setEnabled(false);
         DriverStationSim.notifyNewData();
-        simWait(3);
+        System.out.println("~~~~~~~~~~~~~~~DsSim Ending Auton~~~~~~~~~~~~~~~");
+        runSimForSeconds(3);
         DriverStationSim.setGameSpecificMessage("B");
         DriverStationSim.setAutonomous(false);
         DriverStationSim.setEnabled(true);
         DriverStationSim.notifyNewData();
-        simWait(140);
+        System.out.println("~~~~~~~~~~~~~~~DsSim Starting Teleop~~~~~~~~~~~~~~~");
+        new Thread(teleopRunnable, "teleop-runnable").start();
+        runSimForSeconds(140);
         DriverStationSim.setEnabled(false);
+        System.out.println("~~~~~~~~~~~~~~~DsSim Ending Teleop~~~~~~~~~~~~~~~");
     }
 
     void matchSim()
-    {   
+    {
+        XboxControllerSim simDriver = new XboxControllerSim(0);
+        XboxControllerSim simManip = new XboxControllerSim(1);
+        DriverStationSim.notifyNewData();//same as calling from controller
+        
         String auton = System.getProperty("auton", "normal");
-        simWait(10);
+        runSimForSeconds(10);
         if("normal".equals(auton))
         {
             System.out.println("::notice:: Running match with default auto"); 
@@ -214,17 +231,38 @@ public class Robot extends TimedRobotstangs {
             System.out.println("::notice:: Running match with "+auton+" auto");
             autoChooser.setDefaultOption(auton,auton);
         }
-        matchSequence();
+
+        Runnable teleopRunnable = ()->
+        {
+            //drive and intake
+            simDriver.setLeftY(0.5);
+            simDriver.setRightStickButton(true);
+            DriverStationSim.notifyNewData();
+            simWait(5);
+            simDriver.setRightStickButton(false);
+            DriverStationSim.notifyNewData();
+            simWait(5);
+            simDriver.setRightTriggerAxis(1);
+            DriverStationSim.notifyNewData();
+            simWait(5);
+            simDriver.setRightTriggerAxis(0);
+            DriverStationSim.notifyNewData();
+        };
+        matchSequence(teleopRunnable);
 
         System.exit(0);
 
     }
     
+    public static boolean isMatchSim(){
+        return "matchSim".equalsIgnoreCase(System.getProperty("simMode", "normal"));
+    }
+
+
     @Override
     public void simulationInit()
     {  
-        String simMode = System.getProperty("simMode", "normal");
-        if ("matchSim".equalsIgnoreCase(simMode)) {
+        if (isMatchSim()) {
             System.out.println("::notice:: Running match simulation");
             new Thread(this::matchSim, "match-sim-thread").start();
         }
