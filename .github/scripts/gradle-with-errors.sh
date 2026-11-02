@@ -5,7 +5,7 @@ set -o pipefail
 log_file="$(mktemp)"
 trap 'rm -f "$log_file"' EXIT
 
-./gradlew "$@" 2>&1 | tee "$log_file"
+./gradlew "$@" --build-cache 2>&1 | tee "$log_file"
 gradle_status="${PIPESTATUS[0]}"
 
 runtime_error=false
