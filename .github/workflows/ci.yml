@@ -19,9 +19,10 @@ jobs:
     # Declares the repository safe and not under dubious ownership.
     - name: Add repository to git safe directories
       run: git config --global --add safe.directory $GITHUB_WORKSPACE
-    # Grant execute permission for gradlew
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
       run: bash .github/scripts/gradle-with-errors.sh build
@@ -30,4 +31,5 @@ jobs:
       run: bash .github/scripts/gradle-with-errors.sh simulateJava -PsimMode='matchSim'
 
     - name: Run Depot DD auto
+      if: ${{!cancelled()}}
       run: bash .github/scripts/gradle-with-errors.sh simulateJava -PsimMode='matchSim' -Pauton='Depot DD'

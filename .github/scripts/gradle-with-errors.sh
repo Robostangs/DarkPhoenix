@@ -12,7 +12,9 @@ runtime_error=false
 while IFS= read -r line; do
   if [[ "$line" == *"Error at "* || "$line" == *"The robot program quit unexpectedly"* ]]; then
     printf '::error::%s\n' "$line"
-    runtime_error=true
+    if [[ "$line" == *"The robot program quit unexpectedly"* ]]; then
+      runtime_error=true
+    fi
   fi
 done < "$log_file"
 
