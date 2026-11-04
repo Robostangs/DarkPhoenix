@@ -89,7 +89,7 @@ test {
 }
 
 // Simulation configuration (e.g. environment variables).
-wpi.sim.addGui().defaultEnabled = true
+//see end of file
 wpi.sim.addDriverstation()
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
@@ -102,6 +102,7 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
+
 // Configure jar and deploy tasks
 deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
@@ -110,4 +111,19 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
+}
+
+def simMode = project.findProperty('simMode') ?: 'normal' //matchSim is the alternate option
+tasks.withType(JavaExec).configureEach {
+    systemProperty 'simMode', simMode
+    systemProperty 'auton', project.findProperty('auton') ?: 'normal'
+}
+
+if(simMode.equals('matchSim'))
+{
+    wpi.sim.addGui().defaultEnabled = false
+}
+else
+{
+    wpi.sim.addGui().defaultEnabled = true  
 }

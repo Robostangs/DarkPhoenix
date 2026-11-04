@@ -19,11 +19,14 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
+import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class VisionStangs {
     private PhotonCamera camera;
+    private PhotonCameraSim cameraSim;
     PhotonPoseEstimator ppe;
     private Pose2d currentPose;
     private double bigAmbiguity;
@@ -40,6 +43,10 @@ public class VisionStangs {
         bigAmbiguity = -1;
         distance=100;
         isLL = false;
+        if(Robot.isSimulation()){
+            SimCameraProperties cameraProp = new SimCameraProperties();
+            cameraSim = new PhotonCameraSim(camera, cameraProp);
+        }
     }
 
     public VisionStangs(String LLname) {

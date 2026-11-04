@@ -7,6 +7,7 @@ package frc.robot;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,21 +22,27 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 
+import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.simulation.DriverStationSim;
+import edu.wpi.first.wpilibj.simulation.SimHooks;
+import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -47,6 +54,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ElasticConstants.whoCanScore;
 import frc.robot.FeederCommands.setFeederSpeed;
 import frc.robot.Stable.LimelightHelpers;
@@ -115,7 +123,7 @@ public class Robot extends TimedRobotstangs {
     static boolean isPassing = false;
 
     public Robot() {
-        m_robotContainer = new RobotContainer();
+        m_robotContainer = RobotContainer.getInstance();
     }
 
     void postPitTestStatus(String status) {
@@ -158,6 +166,106 @@ public class Robot extends TimedRobotstangs {
         Hopper.getInstance().setDefaultCommand(new RunHopper(() -> 0d));
 
         //CommandScheduler.getInstance().schedule(new InstantCommand(() -> FollowPathCommand.warmupCommand()));
+    }
+
+    //run sim for a duration at max CPU speed
+    void runSimForSeconds(double durationSeconds)
+    {
+        SimHooks.pauseTiming();
+        double startTime = Timer.getTimestamp();
+        while(Timer.getTimestamp()<(startTime+durationSeconds))
+        {
+            SimHooks.stepTiming(0.02);
+        }
+        SimHooks.resumeTiming();
+    }
+
+    void simWait(double durationSeconds)
+    {
+        double startTime = Timer.getTimestamp();
+        while(Timer.getTimestamp()<(startTime+durationSeconds));
+    }
+
+
+    void matchSequence(Runnable teleopRunnable)
+    {
+        runSimForSeconds(10);
+        DriverStationSim.setAllianceStationId(AllianceStationID.Blue1);
+        DriverStationSim.setFmsAttached(true);
+        DriverStationSim.notifyNewData();
+        runSimForSeconds(10);
+        DriverStationSim.setAutonomous(true);
+        DriverStationSim.setEnabled(true);
+        DriverStationSim.notifyNewData();
+        System.out.println("~~~~~~~~~~~~~~~DsSim Starting Auton~~~~~~~~~~~~~~~");
+        runSimForSeconds(15);
+        DriverStationSim.setEnabled(false);
+        DriverStationSim.notifyNewData();
+        System.out.println("~~~~~~~~~~~~~~~DsSim Ending Auton~~~~~~~~~~~~~~~");
+        runSimForSeconds(3);
+        DriverStationSim.setGameSpecificMessage("B");
+        DriverStationSim.setAutonomous(false);
+        DriverStationSim.setEnabled(true);
+        DriverStationSim.notifyNewData();
+        System.out.println("~~~~~~~~~~~~~~~DsSim Starting Teleop~~~~~~~~~~~~~~~");
+        new Thread(teleopRunnable, "teleop-runnable").start();
+        runSimForSeconds(140);
+        DriverStationSim.setEnabled(false);
+        System.out.println("~~~~~~~~~~~~~~~DsSim Ending Teleop~~~~~~~~~~~~~~~");
+    }
+
+    void matchSim()
+    {
+        XboxControllerSim simDriver = new XboxControllerSim(0);
+        XboxControllerSim simManip = new XboxControllerSim(1);
+        DriverStationSim.notifyNewData();//same as calling from controller
+        
+        String auton = System.getProperty("auton", "normal");
+        runSimForSeconds(10);
+        if("normal".equals(auton))
+        {
+            System.out.println("::notice:: Running match with default auto"); 
+        }
+        else
+        {
+            System.out.println("::notice:: Running match with "+auton+" auto");
+            autoChooser.setDefaultOption(auton,auton);
+        }
+
+        Runnable teleopRunnable = ()->
+        {
+            //drive and intake
+            simDriver.setLeftY(0.5);
+            simDriver.setRightStickButton(true);
+            DriverStationSim.notifyNewData();
+            simWait(5);
+            simDriver.setRightStickButton(false);
+            DriverStationSim.notifyNewData();
+            simWait(5);
+            simDriver.setRightTriggerAxis(1);
+            DriverStationSim.notifyNewData();
+            simWait(5);
+            simDriver.setRightTriggerAxis(0);
+            DriverStationSim.notifyNewData();
+        };
+        matchSequence(teleopRunnable);
+
+        System.exit(0);
+
+    }
+    
+    public static boolean isMatchSim(){
+        return "matchSim".equalsIgnoreCase(System.getProperty("simMode", "normal"));
+    }
+
+
+    @Override
+    public void simulationInit()
+    {  
+        if (isMatchSim()) {
+            System.out.println("::notice:: Running match simulation");
+            new Thread(this::matchSim, "match-sim-thread").start();
+        }
     }
 
     void setupAutoPitTest() {
