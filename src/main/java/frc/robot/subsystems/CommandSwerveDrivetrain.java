@@ -11,6 +11,7 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TorqueCurrentConfigs;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
@@ -403,32 +404,45 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putString("Drivetrain/ Status", status);
     }
 
-    public void setDriveMotorCurrentLimit(double currentLimit) {
+    private double lastAppliedSlipCurrentAmps = -1;
 
-        TalonFXConfiguration config = new TalonFXConfiguration();
-
-        for (int c = 0; c < getModules().length; c++) {
-
-            if (c == 0) {
-                config = TunerConstants.FrontLeft.DriveMotorInitialConfigs.clone();
-
-            } else if (c == 1) {
-                config = TunerConstants.FrontRight.DriveMotorInitialConfigs.clone();
-
-            } else if (c == 2) {
-                config = TunerConstants.BackLeft.DriveMotorInitialConfigs.clone();
-
-            } else if (c == 3) {
-                config = TunerConstants.BackRight.DriveMotorInitialConfigs.clone();
-            }
-
-            config.CurrentLimits.StatorCurrentLimit = currentLimit;
-
-            getModule(c).getDriveMotor().getConfigurator().apply(config, 0);
-
+    private void setDriveSlipCurrentAmps(double amps) {
+        if (amps == lastAppliedSlipCurrentAmps) {
+            return;
         }
 
+        CurrentLimitsConfigs statorLimit = new CurrentLimitsConfigs()
+                .withStatorCurrentLimit(amps)
+                .withStatorCurrentLimitEnable(true);
+        TorqueCurrentConfigs torqueLimit = new TorqueCurrentConfigs()
+                .withPeakForwardTorqueCurrent(amps)
+                .withPeakReverseTorqueCurrent(-amps);
+
+        for (int c = 0; c < getModules().length; c++) {
+            var driveMotor = getModule(c).getDriveMotor();
+            driveMotor.getConfigurator().apply(statorLimit);
+            driveMotor.getConfigurator().apply(torqueLimit);
+        }
+
+        lastAppliedSlipCurrentAmps = amps;
     }
+
+    public void updateDynamicCurrentLimits() {
+        double totalCurrent = Robot.pdh.getTotalCurrent();
+        double batteryVoltage = Robot.pdh.getVoltage();
+
+        boolean brownoutRisk = totalCurrent > TunerConstants.kDriveBrownoutTotalCurrentThreshold
+                && batteryVoltage < TunerConstants.kDriveBrownoutVoltageThreshold;
+
+        setDriveSlipCurrentAmps(brownoutRisk
+                ? TunerConstants.kDriveReducedSlipCurrentAmps
+                : TunerConstants.kDriveSlipCurrentAmps);
+
+        SmartDashboard.putString("Drivetrain/Current Limit Status",
+                brownoutRisk ? "Reduced to " + TunerConstants.kDriveReducedSlipCurrentAmps + "A"
+                        : "Normal " + TunerConstants.kDriveSlipCurrentAmps + "A");
+    }
+
 
     @Override
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {

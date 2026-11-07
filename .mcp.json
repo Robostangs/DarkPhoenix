@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "wpilog-analyzer": {
+      "command": "/Users/sanjanasingh/wpilib/2026/jdk/bin/java",
+      "args": [
+        "-Xmx4g",
+        "-jar",
+        "/Users/sanjanasingh/wpilib/2026/vscode/code-portable-data/user-data/User/globalStorage/triplehelixprogramming.wpilog-analyzer/server/wpilog-mcp-all.jar",
+        "start",
+        "default",
+        "--config",
+        "/Users/sanjanasingh/wpilib/2026/vscode/code-portable-data/user-data/User/globalStorage/triplehelixprogramming.wpilog-analyzer/projects/488015e89ffe0fb6.json"
+      ]
+    }
+  }
+}

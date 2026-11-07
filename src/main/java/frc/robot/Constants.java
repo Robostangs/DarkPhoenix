@@ -352,7 +352,11 @@ public final class Constants {
 
                 // The stator current at which the wheels start to slip;
                 // This needs to be tuned to your individual robot
-                private static final Current kSlipCurrent = Amps.of(120);
+                public static final double kDriveSlipCurrentAmps = 120;
+                public static final double kDriveReducedSlipCurrentAmps = 80;
+                public static final double kDriveBrownoutTotalCurrentThreshold = 100; // PDH total current, A
+                public static final double kDriveBrownoutVoltageThreshold = 9; // battery voltage, V
+                private static final Current kSlipCurrent = Amps.of(kDriveSlipCurrentAmps);
 
                 // Initial configs for the drive and steer motors and the azimuth encoder; these
                 // cannot be null.

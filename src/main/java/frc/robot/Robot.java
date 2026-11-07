@@ -95,7 +95,7 @@ public class Robot extends TimedRobotstangs {
     private SendableChooser<String> autoChooser = new SendableChooser<>();
     private SendableChooser<Boolean> flipChooser = new SendableChooser<>();
 
-    public PowerDistribution pdh = new PowerDistribution(Constants.ElasticConstants.kPdhCanId, ModuleType.kRev);
+    public static PowerDistribution pdh = new PowerDistribution(Constants.ElasticConstants.kPdhCanId, ModuleType.kRev);
 
     public static boolean robotDefense = false;
     public static boolean shooterIsDumb = false;
