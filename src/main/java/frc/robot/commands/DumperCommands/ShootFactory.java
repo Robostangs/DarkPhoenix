@@ -4,11 +4,11 @@ import java.lang.reflect.InaccessibleObjectException;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.command2.Command;
+import org.wpilib.command2.DeferredCommand;
+import org.wpilib.command2.WaitCommand;
+import org.wpilib.command2.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.FeederCommands.Feed;

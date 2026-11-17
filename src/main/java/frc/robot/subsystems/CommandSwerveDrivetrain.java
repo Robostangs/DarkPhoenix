@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.*;
+import static org.wpilib.units.Units.*;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -18,23 +18,27 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import org.wpilib.math.linalg.Matrix;
+import org.wpilib.math.geometry.Pose2d;
+import org.wpilib.math.geometry.Rotation2d;
+import org.wpilib.math.geometry.Rotation3d;
+import org.wpilib.math.geometry.Transform3d;
+import org.wpilib.math.geometry.Translation3d;
+import org.wpilib.math.numbers.N1;
+import org.wpilib.math.numbers.N3;
+import org.wpilib.driverstation.MatchState;
+import org.wpilib.driverstation.RobotState;
+import org.wpilib.driverstation.Alliance;
+import org.wpilib.driverstation.MatchType;
+import org.wpilib.driverstation.DriverStationErrors;
+import org.wpilib.driverstation.Alliance;
+import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.system.Notifier;
+import org.wpilib.system.RobotController;
+import org.wpilib.command2.Command;
+import org.wpilib.command2.Subsystem;
+import org.wpilib.command2.button.CommandXboxController;
+import org.wpilib.command2.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
@@ -268,13 +272,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             SmartDashboard.putString("Drive command", this.getCurrentCommand().getName());
 
         }
-        SmartDashboard.putNumber("Drivetrain/Vely", this.getState().Speeds.vyMetersPerSecond);
-        SmartDashboard.putNumber("Drivetrain/Velx", this.getState().Speeds.vxMetersPerSecond);
+        SmartDashboard.putNumber("Drivetrain/Vely", this.getState().Speeds.vy);
+        SmartDashboard.putNumber("Drivetrain/Velx", this.getState().Speeds.vx);
 
-        if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
-            DriverStation.getAlliance().ifPresent(allianceColor -> {
+        if (!m_hasAppliedOperatorPerspective || RobotState.isDisabled()) {
+            MatchState.getAlliance().ifPresent(allianceColor -> {
                 setOperatorPerspectiveForward(
-                        allianceColor == Alliance.Red
+                        allianceColor == Alliance.RED
                                 ? kRedAlliancePerspectiveRotation
                                 : kBlueAlliancePerspectiveRotation);
                 m_hasAppliedOperatorPerspective = true;
@@ -287,8 +291,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         SmartDashboard.putNumber("Drivetrain/current speed", Math.sqrt(
 
-                Math.pow(this.getState().Speeds.vxMetersPerSecond, 2) +
-                        Math.pow(this.getState().Speeds.vyMetersPerSecond, 2)));
+                Math.pow(this.getState().Speeds.vx, 2) +
+                        Math.pow(this.getState().Speeds.vy, 2)));
 
         SmartDashboard.putNumber("Drivetrain/current X acceleration",
                 this.getPigeon2().getAccelerationX().getValueAsDouble());

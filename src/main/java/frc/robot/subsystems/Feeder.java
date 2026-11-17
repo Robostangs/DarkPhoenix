@@ -6,9 +6,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.wpilib.command2.SubsystemBase;
+import org.wpilib.hardware.discrete.DigitalInput;
+import org.wpilib.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {

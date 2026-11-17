@@ -1,11 +1,15 @@
 
 package frc.robot.Vision;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.wpilib.math.geometry.Pose2d;
+import org.wpilib.math.geometry.Pose3d;
+import org.wpilib.math.geometry.Transform3d;
+import org.wpilib.driverstation.MatchState;
+import org.wpilib.driverstation.RobotState;
+import org.wpilib.driverstation.Alliance;
+import org.wpilib.driverstation.MatchType;
+import org.wpilib.driverstation.DriverStationErrors;
+import org.wpilib.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
@@ -167,7 +171,7 @@ public class VisionStangs {
     //      * internal imu with mode 2
     //      */
 
-    //     boolean isDisabled = DriverStation.isDisabled();
+    //     boolean isDisabled = RobotState.isDisabled();
     //     CommandSwerveDrivetrain drivetrain = CommandSwerveDrivetrain.getInstance();
 
     //     if (isDisabled) {
@@ -255,49 +259,49 @@ public class VisionStangs {
         return isLL;
     }
 
-    private boolean isPosegoo(LimelightHelpers.PoseEstimate yoPoseEsti) {
+    // private boolean isPosegoo(LimelightHelpers.PoseEstimate yoPoseEsti) {
 
-        if (Robot.isSimulation()) {
-            SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "Simulation mode");
-            return false;
-        }
-        if (yoPoseEsti == null) {
-            SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "Pose null");
-            return false;
-        }
-        if (yoPoseEsti.tagCount < 2) {
-            SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason",
-                    "Not enough tags: " + yoPoseEsti.tagCount);
-            return false;
-        }
-        if (yoPoseEsti.avgTagDist > Constants.VisionConstants.kLLDisThres) {
-            SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "Too far: " + yoPoseEsti.avgTagDist);
-            return false;
-        }
-        SmartDashboard.putNumber("Vision/" + CameraName + " avg dis", yoPoseEsti.avgTagDist);
+    //     if (Robot.isSimulation()) {
+    //         SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "Simulation mode");
+    //         return false;
+    //     }
+    //     if (yoPoseEsti == null) {
+    //         SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "Pose null");
+    //         return false;
+    //     }
+    //     if (yoPoseEsti.tagCount < 2) {
+    //         SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason",
+    //                 "Not enough tags: " + yoPoseEsti.tagCount);
+    //         return false;
+    //     }
+    //     if (yoPoseEsti.avgTagDist > Constants.VisionConstants.kLLDisThres) {
+    //         SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "Too far: " + yoPoseEsti.avgTagDist);
+    //         return false;
+    //     }
+    //     SmartDashboard.putNumber("Vision/" + CameraName + " avg dis", yoPoseEsti.avgTagDist);
 
-        double maxAmbiguity = 0;
-        for (LimelightHelpers.RawFiducial fiducial : yoPoseEsti.rawFiducials) {
-            if (fiducial.ambiguity > maxAmbiguity) {
-                maxAmbiguity = fiducial.ambiguity;
-            }
-        }
-        bigAmbiguity = maxAmbiguity;
-        SmartDashboard.putNumber("Vision/" + CameraName + "/Biggest Ambiguity", bigAmbiguity);
+    //     double maxAmbiguity = 0;
+    //     for (LimelightHelpers.RawFiducial fiducial : yoPoseEsti.rawFiducials) {
+    //         if (fiducial.ambiguity > maxAmbiguity) {
+    //             maxAmbiguity = fiducial.ambiguity;
+    //         }
+    //     }
+    //     bigAmbiguity = maxAmbiguity;
+    //     SmartDashboard.putNumber("Vision/" + CameraName + "/Biggest Ambiguity", bigAmbiguity);
 
-        if (bigAmbiguity > Constants.VisionConstants.kLLAmbiguityThres) {
-            SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "High ambiguity: " + bigAmbiguity);
-            return false;
-        }
+    //     if (bigAmbiguity > Constants.VisionConstants.kLLAmbiguityThres) {
+    //         SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "High ambiguity: " + bigAmbiguity);
+    //         return false;
+    //     }
 
-        if (!RobotContainer.useVision) {
-            SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "useVision disabled");
-            return false;
-        }
+    //     if (!RobotContainer.useVision) {
+    //         SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "useVision disabled");
+    //         return false;
+    //     }
 
-        SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "Accepted");
-        return true;
-    }
+    //     SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "Accepted");
+    //     return true;
+    // }
 
     public void periodic() {
         currentPose = null;

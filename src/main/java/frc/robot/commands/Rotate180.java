@@ -5,9 +5,9 @@ import java.util.function.DoubleSupplier;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj2.command.Command;
+import org.wpilib.math.util.MathUtil;
+import org.wpilib.math.filter.SlewRateLimiter;
+import org.wpilib.command2.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -57,7 +57,7 @@ public class Rotate180 extends Command {
                 var state = drivetrain.getState();
                 lastHeading = state.Pose.getRotation().getRadians();
                 traveled = 0;
-                omegaMeasured = state.Speeds.omegaRadiansPerSecond;
+                omegaMeasured = state.Speeds.omega;
                 // If already spinning, keep going the same way rather than reversing.
                 double dir = Math.abs(omegaMeasured) > kAlreadySpinning ? Math.signum(omegaMeasured) : 1;
                 goal = dir * Math.PI;
@@ -70,7 +70,7 @@ public class Rotate180 extends Command {
                 double heading = state.Pose.getRotation().getRadians();
                 traveled += MathUtil.angleModulus(heading - lastHeading);
                 lastHeading = heading;
-                omegaMeasured = state.Speeds.omegaRadiansPerSecond;
+                omegaMeasured = state.Speeds.omega;
 
                 double err = goal - traveled;
                 double speed = Math.min(kP * Math.abs(err), Math.sqrt(2 * kBrakeDecel * Math.abs(err)));

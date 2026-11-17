@@ -7,10 +7,7 @@ package frc.robot.Stable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.wpilib.driverstation.DriverStationErrors;
 
 /**
  * A class for keeping track of how much time it takes for different parts of code to execute. This
@@ -21,12 +18,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * which parts of an operation consumed the most time.
  */
 public class Tracerstangs {
-  private static final long kMinPrintPeriod = 1000000; // microseconds
+  private static final long MIN_PRINT_PERIOD = 1_000_000_000; // nanoseconds
 
-  private long m_lastEpochsPrintTime; // microseconds
-  private long m_startTime; // microseconds
+  private long m_lastEpochsPrintTime; // nanoseconds
+  private long m_startTime; // nanoseconds
 
-  private final Map<String, Long> m_epochs = new HashMap<>(); // microseconds
+  private final Map<String, Long> m_epochs = new HashMap<>(); // nanoseconds
 
   /** Tracer constructor. */
   public Tracerstangs() {
@@ -41,7 +38,7 @@ public class Tracerstangs {
 
   /** Restarts the epoch timer. */
   public final void resetTimer() {
-    m_startTime = RobotController.getFPGATime();
+    m_startTime = RobotController.getMonotonicTime();
   }
 
   /**
@@ -56,14 +53,14 @@ public class Tracerstangs {
    * @param epochName The name to associate with the epoch.
    */
   public void addEpoch(String epochName) {
-    long currentTime = RobotController.getFPGATime();
+    long currentTime = RobotController.getMonotonicTime();
     m_epochs.put(epochName, currentTime - m_startTime);
     m_startTime = currentTime;
   }
 
   /** Prints list of epochs added so far and their times to the DriverStation. */
   public void printEpochs() {
-    printEpochs(out -> DriverStation.reportWarning(out, false));
+    printEpochs(out -> DriverStationErrors.reportWarning(out, false));
   }
 
   /**
@@ -74,12 +71,12 @@ public class Tracerstangs {
    * @param output the stream that the output is sent to
    */
   public void printEpochs(Consumer<String> output) {
-    long now = RobotController.getFPGATime();
-    if (now - m_lastEpochsPrintTime > kMinPrintPeriod) {
+    long now = RobotController.getMonotonicTime();
+    if (now - m_lastEpochsPrintTime > MIN_PRINT_PERIOD) {
       StringBuilder sb = new StringBuilder();
       m_lastEpochsPrintTime = now;
       m_epochs.forEach(
-          (key, value) -> sb.append(String.format("\t%s: %.6fs\n", key, value / 1.0e6)));
+          (key, value) -> sb.append(String.format("\t%s: %.6fs\n", key, value / 1.0e9)));
       if (sb.length() > 0) {
         output.accept(sb.toString());
       }
@@ -87,6 +84,6 @@ public class Tracerstangs {
   }
 
   public void putToSmartDashboard() {
-    m_epochs.forEach((key, value) -> SmartDashboard.putNumber("Loop Times/"+key,value / 1.0e6));
+    m_epochs.forEach((key, value) -> SmartDashboard.putNumber("Loop Times/"+key,value / 1.0e9));
   }
 }

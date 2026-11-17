@@ -2,16 +2,16 @@
 // AlignToHub.java
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import org.wpilib.math.geometry.*;
+import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.command2.Command;
+import org.wpilib.command2.DeferredCommand;
+import org.wpilib.command2.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
+import static org.wpilib.units.Units.MetersPerSecond;
 
 import java.util.*;
 

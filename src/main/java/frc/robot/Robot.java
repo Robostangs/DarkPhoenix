@@ -22,39 +22,41 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 
-import edu.wpi.first.hal.AllianceStationID;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.Alert.AlertType;
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.simulation.DriverStationSim;
-import edu.wpi.first.wpilibj.simulation.SimHooks;
-import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import org.wpilib.hardware.hal.AllianceStationID;
+import org.wpilib.math.geometry.Pose2d;
+import org.wpilib.math.geometry.Rotation2d;
+import org.wpilib.math.geometry.Translation2d;
+import org.wpilib.math.kinematics.ChassisVelocities;
+import org.wpilib.networktables.NetworkTableEntry;
+import org.wpilib.networktables.NetworkTableInstance;
+import org.wpilib.util.Alert;
+import org.wpilib.driverstation.MatchState;
+import org.wpilib.driverstation.RobotState;
+import org.wpilib.driverstation.Alliance;
+import org.wpilib.driverstation.MatchType;
+import org.wpilib.driverstation.DriverStationErrors;
+import org.wpilib.hardware.power.PowerDistribution;
+import org.wpilib.system.RobotController;
+import org.wpilib.system.Timer;
+import org.wpilib.hardware.power.PowerDistribution.ModuleType;
+import org.wpilib.util.Alert.Level;
+import org.wpilib.system.DataLogManager;
+import org.wpilib.driverstation.Alliance;
+import org.wpilib.simulation.DriverStationSim;
+import org.wpilib.simulation.SimHooks;
+import org.wpilib.simulation.XboxControllerSim;
+import org.wpilib.smartdashboard.Field2d;
+import org.wpilib.smartdashboard.SendableChooser;
+import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.util.Color;
+import org.wpilib.command2.Command;
+import org.wpilib.command2.CommandScheduler;
+import org.wpilib.command2.InstantCommand;
+import org.wpilib.command2.ParallelRaceGroup;
+import org.wpilib.command2.PrintCommand;
+import org.wpilib.command2.SequentialCommandGroup;
+import org.wpilib.command2.WaitCommand;
+import org.wpilib.command2.button.CommandXboxController;
 import frc.robot.Constants.ElasticConstants.whoCanScore;
 import frc.robot.FeederCommands.setFeederSpeed;
 import frc.robot.Stable.LimelightHelpers;
@@ -84,9 +86,9 @@ public class Robot extends TimedRobotstangs {
     private static GcStatsCollector gscollect = new GcStatsCollector();
     private int lastMatchSecond = -1;
 
-    public static Alert gcAlert = new Alert("MEMORY TWEAKING LOOK INTO TS RN", AlertType.kError);
-    public static Alert shiftAlert = new Alert("Alliance shift may not be accurate", AlertType.kWarning);
-    public static Alert autoAlert = new Alert("Auto couldnt load", AlertType.kError);
+    public static Alert gcAlert = new Alert("MEMORY TWEAKING LOOK INTO TS RN", Level.HIGH);
+    public static Alert shiftAlert = new Alert("Alliance shift may not be accurate", Level.MEDIUM);
+    public static Alert autoAlert = new Alert("Auto couldnt load", Level.HIGH);
 
     public static Constants.ElasticConstants.whoCanScore canBlueScore;
 
@@ -485,7 +487,7 @@ public class Robot extends TimedRobotstangs {
     public void autonomousExit() {
         CommandScheduler.getInstance().cancelAll();
 
-        if (DriverStation.isFMSAttached()) {
+        if (RobotState.isFMSAttached()) {
             System.out.println("fms is attached");
             LimelightHelpers.triggerRewindCapture(Constants.VisionConstants.kLimelightFourSide, 30);
             LimelightHelpers.triggerRewindCapture(Constants.VisionConstants.lumaName, 30);
@@ -496,7 +498,7 @@ public class Robot extends TimedRobotstangs {
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
 
-        lastMatchSecond = (int) DriverStation.getMatchTime();
+        lastMatchSecond = (int) MatchState.getMatchTime();
 
     }
 
@@ -506,9 +508,9 @@ public class Robot extends TimedRobotstangs {
         SmartDashboard.putBoolean("is Defense", robotDefense);
         SmartDashboard.putBoolean("Is dumb", isShooterDumb());
         shiftAlert.set(canBlueScore == whoCanScore.error);
-        String gameData = DriverStation.getGameSpecificMessage();
-        int gameTimeInt = (int) DriverStation.getMatchTime();
-        double gameTime = DriverStation.getMatchTime();
+        String gameData = MatchState.getGameData();
+        int gameTimeInt = (int) MatchState.getMatchTime();
+        double gameTime = MatchState.getMatchTime();
         double shiftTimeLeft = 0;
 
         // endgame
@@ -588,7 +590,7 @@ public class Robot extends TimedRobotstangs {
     @Override
     public void teleopExit() {
         System.out.println("Teleop Exited");
-        if (DriverStation.isFMSAttached()) {
+        if (RobotState.isFMSAttached()) {
             System.out.println("fms is attached");
             LimelightHelpers.triggerRewindCapture(Constants.VisionConstants.kLimelightFourSide, 165);
             LimelightHelpers.triggerRewindCapture(Constants.VisionConstants.lumaName, 165);
@@ -597,7 +599,7 @@ public class Robot extends TimedRobotstangs {
     }
 
     @Override
-    public void testInit() {
+    public void utilityInit() {
 
         CommandScheduler.getInstance().cancelAll();
         // setupPitTestDashboard();
@@ -616,21 +618,21 @@ public class Robot extends TimedRobotstangs {
     }
 
     @Override
-    public void testPeriodic() {
+    public void utilityPeriodic() {
 
     }
 
     @Override
-    public void testExit() {
+    public void utilityExit() {
 
     }
 
     public static boolean isRed() {
         try {
-            if (DriverStation.getAlliance().get() == null) {
+            if (MatchState.getAlliance().get() == null) {
                 return false;
             }
-            if (DriverStation.getAlliance().get() == (Alliance.Red)) {
+            if (MatchState.getAlliance().get() == (Alliance.RED)) {
                 return true;
             } else {
                 return false;
@@ -727,7 +729,7 @@ NamedCommands.registerCommand("FullShootPrecise",
 
     public static void setTargetPose() {
 
-        ChassisSpeeds robotSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(
+        ChassisVelocities robotSpeeds = ChassisVelocities.fromRobotRelativeSpeeds(
                 CommandSwerveDrivetrain.getInstance().getState().Speeds,
                 CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation());
 
@@ -738,11 +740,11 @@ NamedCommands.registerCommand("FullShootPrecise",
                 CommandSwerveDrivetrain.getInstance().getState().Pose.getTranslation().getDistance(
                         hubPose));
 
-        double vx = Math.abs(robotSpeeds.vxMetersPerSecond) > 0.1 && Math.abs(robotSpeeds.vxMetersPerSecond) < 3
-                ? robotSpeeds.vxMetersPerSecond
+        double vx = Math.abs(robotSpeeds.vx) > 0.1 && Math.abs(robotSpeeds.vx) < 3
+                ? robotSpeeds.vx
                 : 0;
-        double vy = Math.abs(robotSpeeds.vyMetersPerSecond) > 0.1
-                && Math.abs(robotSpeeds.vyMetersPerSecond) < 3 ? robotSpeeds.vyMetersPerSecond : 0;
+        double vy = Math.abs(robotSpeeds.vy) > 0.1
+                && Math.abs(robotSpeeds.vy) < 3 ? robotSpeeds.vy : 0;
 
         Translation2d targetHubPose = hubPose.minus(
                 new Translation2d(
