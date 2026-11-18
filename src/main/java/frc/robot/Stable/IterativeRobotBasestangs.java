@@ -4,17 +4,21 @@
 
 package frc.robot.Stable;
 
-import edu.wpi.first.hal.DriverStationJNI;
-import edu.wpi.first.hal.FRCNetComm.tInstances;
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
-import edu.wpi.first.hal.HAL;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DSControlWord;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.wpilib.hardware.hal.DriverStationJNI;
+import org.wpilib.hardware.hal.FRCNetComm.tInstances;
+import org.wpilib.hardware.hal.FRCNetComm.tResourceType;
+import org.wpilib.hardware.hal.HAL;
+import org.wpilib.networktables.NetworkTableInstance;
+import org.wpilib.driverstation.DSControlWord;
+import org.wpilib.driverstation.MatchState;
+import org.wpilib.driverstation.RobotState;
+import org.wpilib.driverstation.Alliance;
+import org.wpilib.driverstation.MatchType;
+import org.wpilib.driverstation.DriverStationErrors;
+import org.wpilib.framework.RobotBase;
+import org.wpilib.livewindow.LiveWindow;
+import org.wpilib.shuffleboard.Shuffleboard;
+import org.wpilib.smartdashboard.SmartDashboard;
 import java.util.ConcurrentModificationException;
 
 /**
@@ -38,7 +42,7 @@ import java.util.ConcurrentModificationException;
  *   <li>disabledInit() -- called each and every time disabled is entered from another mode
  *   <li>autonomousInit() -- called each and every time autonomous is entered from another mode
  *   <li>teleopInit() -- called each and every time teleop is entered from another mode
- *   <li>testInit() -- called each and every time test is entered from another mode
+ *   <li>utilityInit() -- called each and every time test is entered from another mode
  * </ul>
  *
  * <p>periodic() functions -- each of these functions is called on an interval:
@@ -48,7 +52,7 @@ import java.util.ConcurrentModificationException;
  *   <li>disabledPeriodic()
  *   <li>autonomousPeriodic()
  *   <li>teleopPeriodic()
- *   <li>testPeriodic()
+ *   <li>utilityPeriodic()
  * </ul>
  *
  * <p>exit() functions -- each of the following functions is called once when the appropriate mode
@@ -58,7 +62,7 @@ import java.util.ConcurrentModificationException;
  *   <li>disabledExit() -- called each and every time disabled is exited
  *   <li>autonomousExit() -- called each and every time autonomous is exited
  *   <li>teleopExit() -- called each and every time teleop is exited
- *   <li>testExit() -- called each and every time test is exited
+ *   <li>utilityExit() -- called each and every time test is exited
  * </ul>
  */
 public abstract class IterativeRobotBasestangs extends RobotBase {
@@ -152,7 +156,7 @@ public abstract class IterativeRobotBasestangs extends RobotBase {
    * <p>Users should override this method for initialization code which will be called each time the
    * robot enters test mode.
    */
-  public void testInit() {}
+  public void utilityInit() {}
 
   /* ----------- Overridable periodic code ----------------- */
 
@@ -213,9 +217,9 @@ public abstract class IterativeRobotBasestangs extends RobotBase {
   private boolean m_tmpFirstRun = true;
 
   /** Periodic code for test mode should go here. */
-  public void testPeriodic() {
+  public void utilityPeriodic() {
     if (m_tmpFirstRun) {
-      System.out.println("Default testPeriodic() method... Override me!");
+      System.out.println("Default utilityPeriodic() method... Override me!");
       m_tmpFirstRun = false;
     }
   }
@@ -250,7 +254,7 @@ public abstract class IterativeRobotBasestangs extends RobotBase {
    * <p>Users should override this method for code which will be called each time the robot exits
    * test mode.
    */
-  public void testExit() {}
+  public void utilityExit() {}
 
   /**
    * Enables or disables flushing NetworkTables every loop iteration. By default, this is enabled.
@@ -336,7 +340,7 @@ public abstract class IterativeRobotBasestangs extends RobotBase {
             LiveWindow.setEnabled(false);
             Shuffleboard.disableActuatorWidgets();
           }
-          testExit();
+          utilityExit();
         }
         default -> {
           // NOP
@@ -362,8 +366,8 @@ public abstract class IterativeRobotBasestangs extends RobotBase {
             LiveWindow.setEnabled(true);
             Shuffleboard.enableActuatorWidgets();
           }
-          testInit();
-          m_watchdog.addEpoch("testInit()");
+          utilityInit();
+          m_watchdog.addEpoch("utilityInit()");
         }
         default -> {
           // NOP
@@ -392,8 +396,8 @@ public abstract class IterativeRobotBasestangs extends RobotBase {
       }
       case kTest -> {
         DriverStationJNI.observeUserProgramTest();
-        testPeriodic();
-        m_watchdog.addEpoch("testPeriodic()");
+        utilityPeriodic();
+        m_watchdog.addEpoch("utilityPeriodic()");
       }
       default -> {
         // NOP
@@ -437,6 +441,6 @@ public abstract class IterativeRobotBasestangs extends RobotBase {
   }
 
   private void printLoopOverrunMessage() {
-    DriverStation.reportWarning("Loop time of " + m_period + "s overrun\n", false);
+    DriverStationErrors.reportWarning("Loop time of " + m_period + "s overrun\n", false);
   }
 }

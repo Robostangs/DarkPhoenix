@@ -1,11 +1,15 @@
 
 package frc.robot.Vision;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.wpilib.math.geometry.Pose2d;
+import org.wpilib.math.geometry.Pose3d;
+import org.wpilib.math.geometry.Transform3d;
+import org.wpilib.driverstation.MatchState;
+import org.wpilib.driverstation.RobotState;
+import org.wpilib.driverstation.Alliance;
+import org.wpilib.driverstation.MatchType;
+import org.wpilib.driverstation.DriverStationErrors;
+import org.wpilib.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
@@ -160,7 +164,7 @@ public class VisionStangs {
     //      * internal imu with mode 2
     //      */
 
-    //     boolean isDisabled = DriverStation.isDisabled();
+    //     boolean isDisabled = RobotState.isDisabled();
     //     CommandSwerveDrivetrain drivetrain = CommandSwerveDrivetrain.getInstance();
 
     //     if (isDisabled) {

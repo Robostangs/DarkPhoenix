@@ -4,16 +4,16 @@
 
 package frc.robot.Stable;
 
-import static edu.wpi.first.units.Units.Seconds;
+import static org.wpilib.units.Units.Seconds;
 
-import edu.wpi.first.hal.DriverStationJNI;
-import edu.wpi.first.hal.FRCNetComm.tInstances;
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
-import edu.wpi.first.hal.HAL;
-import edu.wpi.first.hal.NotifierJNI;
-import edu.wpi.first.units.measure.Frequency;
-import edu.wpi.first.units.measure.Time;
-import edu.wpi.first.wpilibj.RobotController;
+import org.wpilib.hardware.hal.DriverStationJNI;
+import org.wpilib.hardware.hal.FRCNetComm.tInstances;
+import org.wpilib.hardware.hal.FRCNetComm.tResourceType;
+import org.wpilib.hardware.hal.HAL;
+import org.wpilib.hardware.hal.NotifierJNI;
+import org.wpilib.units.measure.Frequency;
+import org.wpilib.units.measure.Time;
+import org.wpilib.system.RobotController;
 
 import java.util.PriorityQueue;
 
@@ -184,7 +184,7 @@ public class TimedRobotstangs extends IterativeRobotBasestangs {
   }
   /**
    * Return the system clock time in micrseconds for the start of the current periodic loop. This is
-   * in the same time base as Timer.getFPGATimestamp(), but is stable through a loop. It is updated
+   * in the same time base as Timer.getTimestamp(), but is stable through a loop. It is updated
    * at the beginning of every periodic callback (including the normal periodic loop).
    *
    * @return Robot running time in microseconds, as of the start of the current periodic function.

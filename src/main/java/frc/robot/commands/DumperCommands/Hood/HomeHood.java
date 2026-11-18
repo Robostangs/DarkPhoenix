@@ -1,7 +1,7 @@
 package frc.robot.commands.DumperCommands.Hood;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
+import org.wpilib.system.Timer;
+import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.command2.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Dumper.Hood;
 

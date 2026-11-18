@@ -1,6 +1,6 @@
 package frc.robot.commands.BlockerCommands;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import org.wpilib.command2.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Blocker;
 import frc.robot.subsystems.Intake.IntakePivot;

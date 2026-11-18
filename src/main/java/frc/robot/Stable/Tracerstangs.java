@@ -8,9 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.wpilib.driverstation.MatchState;
+import org.wpilib.driverstation.RobotState;
+import org.wpilib.driverstation.Alliance;
+import org.wpilib.driverstation.MatchType;
+import org.wpilib.driverstation.DriverStationErrors;
+import org.wpilib.system.RobotController;
+import org.wpilib.smartdashboard.SmartDashboard;
 
 /**
  * A class for keeping track of how much time it takes for different parts of code to execute. This
@@ -63,7 +67,7 @@ public class Tracerstangs {
 
   /** Prints list of epochs added so far and their times to the DriverStation. */
   public void printEpochs() {
-    printEpochs(out -> DriverStation.reportWarning(out, false));
+    printEpochs(out -> DriverStationErrors.reportWarning(out, false));
   }
 
   /**

@@ -3,11 +3,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Alert.AlertType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.wpilib.util.Alert;
+import org.wpilib.hardware.discrete.DigitalInput;
+import org.wpilib.util.Alert.Level;
+import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.command2.SubsystemBase;
 import frc.robot.Constants;
 
 public class Hopper extends SubsystemBase {
@@ -16,7 +16,7 @@ public class Hopper extends SubsystemBase {
 
     public static Hopper mInstance;
 
-    Alert hopperAlert = new Alert("Hopper roller motor is HOT", AlertType.kError);
+    Alert hopperAlert = new Alert("Hopper roller motor is HOT", Level.HIGH);
 
     public Hopper() {
 

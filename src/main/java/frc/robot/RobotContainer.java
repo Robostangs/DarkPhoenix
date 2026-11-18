@@ -1,6 +1,6 @@
 package frc.robot;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
+import static org.wpilib.units.Units.MetersPerSecond;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -14,18 +14,18 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.util.FlippingUtil;
 
-import edu.wpi.first.math.filter.Debouncer.DebounceType;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import org.wpilib.math.filter.Debouncer.DebounceType;
+import org.wpilib.driverstation.GenericHID;
+import org.wpilib.command2.Command;
+import org.wpilib.command2.CommandScheduler;
+import org.wpilib.command2.InstantCommand;
+import org.wpilib.command2.RunCommand;
+import org.wpilib.command2.StartEndCommand;
+import org.wpilib.command2.WaitCommand;
+import org.wpilib.command2.Command.InterruptionBehavior;
+import org.wpilib.command2.button.CommandXboxController;
+import org.wpilib.command2.button.Trigger;
+import org.wpilib.command2.sysid.SysIdRoutine;
 import frc.robot.Stable.ControllerStangs;
 import frc.robot.commands.DumperCommands.ShootFactory;
 import frc.robot.commands.DumperCommands.Hood.HomeHood;

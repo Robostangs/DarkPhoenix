@@ -4,16 +4,20 @@
 
 package frc.robot.Stable;
 
-import static edu.wpi.first.units.Units.Seconds;
+import static org.wpilib.units.Units.Seconds;
 
 import java.io.Closeable;
 import java.util.PriorityQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
-import edu.wpi.first.hal.NotifierJNI;
-import edu.wpi.first.units.measure.Time;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
+import org.wpilib.hardware.hal.NotifierJNI;
+import org.wpilib.units.measure.Time;
+import org.wpilib.driverstation.MatchState;
+import org.wpilib.driverstation.RobotState;
+import org.wpilib.driverstation.Alliance;
+import org.wpilib.driverstation.MatchType;
+import org.wpilib.driverstation.DriverStationErrors;
+import org.wpilib.system.Timer;
 
 /**
  * A class that's a wrapper around a watchdog timer.
@@ -103,7 +107,7 @@ public class Watchdogstangs implements Closeable, Comparable<Watchdogstangs> {
    */
   public double getTime() {
     // This takes the system clock time and subtracts the start time to get the duration
-    return Timer.getFPGATimestamp() - m_startTimeSeconds;
+    return Timer.getTimestamp() - m_startTimeSeconds;
   }
 
   /**
@@ -112,7 +116,7 @@ public class Watchdogstangs implements Closeable, Comparable<Watchdogstangs> {
    * @param timeoutSeconds The watchdog's timeout in seconds with microsecond resolution.
    */
   public void setTimeout(double timeoutSeconds) {
-    m_startTimeSeconds = Timer.getFPGATimestamp();
+    m_startTimeSeconds = Timer.getTimestamp();
     m_tracer.clearEpochs();
 
     m_queueMutex.lock();
@@ -187,7 +191,7 @@ public class Watchdogstangs implements Closeable, Comparable<Watchdogstangs> {
 
   /** Enables the watchdog timer. */
   public void enable() {
-    m_startTimeSeconds = Timer.getFPGATimestamp();
+    m_startTimeSeconds = Timer.getTimestamp();
     m_tracer.clearEpochs();
 
     m_queueMutex.lock();
@@ -263,7 +267,7 @@ public class Watchdogstangs implements Closeable, Comparable<Watchdogstangs> {
         if (now - watchdog.m_lastTimeoutPrintSeconds > kMinPrintPeriodMicroS) {
           watchdog.m_lastTimeoutPrintSeconds = now;
           if (!watchdog.m_suppressTimeoutMessage) {
-            DriverStation.reportWarning(
+            DriverStationErrors.reportWarning(
                 String.format("Watchdog not fed within %.6fs\n", watchdog.m_timeoutSeconds), false);
           }
         }

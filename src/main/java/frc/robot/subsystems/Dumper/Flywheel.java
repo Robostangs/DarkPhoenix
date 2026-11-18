@@ -6,11 +6,11 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.wpilib.math.geometry.Pose2d;
+import org.wpilib.math.util.Units;
+import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.command2.InstantCommand;
+import org.wpilib.command2.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
