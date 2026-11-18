@@ -15,6 +15,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.util.FlippingUtil;
 
 import org.wpilib.math.filter.Debouncer.DebounceType;
+import org.wpilib.simulation.GenericHIDSim;
 import org.wpilib.driverstation.GenericHID;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.CommandScheduler;
@@ -80,7 +81,7 @@ public class RobotContainer {
         private final ControllerStangs xDrive = new ControllerStangs(0);
         private final ControllerStangs xManip = new ControllerStangs(1);
         private final ControllerStangs xTest = new ControllerStangs(3);
-        private final GenericHID xSim = new GenericHID(2);
+        private final GenericHIDSim xSim = new GenericHIDSim(2);
         private static RobotContainer mInstance;
         public final CommandSwerveDrivetrain drivetrain = CommandSwerveDrivetrain.getInstance();
 
@@ -106,7 +107,7 @@ public class RobotContainer {
 
         private Command rumbleController(double secs, CommandXboxController controller) {
                 return new StartEndCommand(() -> {
-                        controller.setRumble(GenericHID.RumbleType.kRightRumble, 1d);
+                        controller.setRumble(GenericHIDSim.RumbleType.kRightRumble, 1d);
                         controller.setRumble(GenericHID.RumbleType.kLeftRumble, 1d);
                 }, () -> {
                         controller.setRumble(GenericHID.RumbleType.kRightRumble, 0);
@@ -121,18 +122,8 @@ public class RobotContainer {
         public static Command rumbleManipController(double secs) {
                 return RobotContainer.getInstance().rumbleController(secs, RobotContainer.getInstance().xManip);
         }
-        public static void doJohn(){
-                                TalonFX fe = new TalonFX(21);
-
-                CommandScheduler.getInstance().cancelAll();
-                TalonFX f = new TalonFX(22);
-                fe.setControl(new MusicTone(550));
-                f.set(1);
-
-        }
-        public static Command turn() {
-                return new InstantCommand(() -> doJohn(),CommandSwerveDrivetrain.getInstance());
-        }
+        
+       
 
         /**
          * TODO:
@@ -163,19 +154,19 @@ public class RobotContainer {
                 xDrive.leftPaddle().whileTrue(IntakeFactory.RetractIntake());
 
                 xDrive.rightBumper().whileTrue(new HomeHood());
-             //   xDrive.povRight().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+             //   xDrive.dpadRight().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
                 // TODO Find ts pose
-                xDrive.povDown().onTrue(
+                xDrive.dpadDown().onTrue(
                                 drivetrain.runOnce(() -> drivetrain.resetPose(
                                                 !Robot.isRed() ? Constants.FieldConstants.resetPose
                                                                 : FlippingUtil.flipFieldPose(
                                                                                 Constants.FieldConstants.resetPose))));
 
-                xDrive.povUp().onTrue(drivetrain.runOnce(
+                xDrive.dpadUp().onTrue(drivetrain.runOnce(
                                 () -> drivetrain.seedFieldCentric()));
                 // setoperatorperspective???? huh tweakin
-               // xDrive.povLeft().onTrue(IntakeFactory.OscillateIntake());
-                xDrive.povRight().onTrue(new InstantCommand(
+               // xDrive.dpadLeft().onTrue(IntakeFactory.OscillateIntake());
+                xDrive.dpadRight().onTrue(new InstantCommand(
                                 (() -> useVision = !useVision)));
 
               xDrive.a().whileTrue(new AutoAlign(() -> xDrive.getLeftY(), () -> xDrive.getLeftX(),
@@ -192,7 +183,7 @@ public class RobotContainer {
                 xDrive.b().whileTrue(IntakeFactory.ballStuck());
 
                 //tests
-                xDrive.povLeft().onTrue(RobotContainer.turn());
+                xDrive.dpadLeft().onTrue(RobotContainer.turn());
                 
         }
         public void configureManipBindings() {
@@ -235,7 +226,7 @@ public class RobotContainer {
                 xTest.rightPaddle().whileTrue(new HomeIntake(false));
                 xTest.leftPaddle().whileTrue(new HomeIntake(true));
                 xTest.a().whileTrue(new HomeHood());
-                xDrive.povLeft().onTrue(RobotContainer.turn());
+                xDrive.dpadLeft().onTrue(RobotContainer.turn());
                 xTest.leftBumper().whileTrue(IntakeFactory.ExtendIntake());
                 xTest.rightBumper().whileTrue(IntakeFactory.RetractIntake());
 
