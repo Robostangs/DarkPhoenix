@@ -1,8 +1,8 @@
 package frc.robot.commands.DumperCommands.Flywheel;
 
 import java.util.function.DoubleSupplier;
+import org.wpilib.telemetry.*;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -67,7 +67,7 @@ public class ChargeUp extends Command {
 
         shooter.setVelocity(currentTarget);
 
-        SmartDashboard.putNumber("Flywheel/Meters", Robot.getMetersFromTarget());
+        Telemetry.log("Flywheel/Meters", Robot.getMetersFromTarget());
 
         shooter.postStatus("Charging to " + currentTarget + " rps");
 

@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import java.util.function.Supplier;
+import org.wpilib.telemetry.*;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
@@ -9,7 +10,6 @@ import com.pathplanner.lib.util.FlippingUtil;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.util.Units;
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -76,7 +76,7 @@ public class AutoAlign extends Command {
     public void initialize() {
 
         driveRequest.HeadingController.reset();
-        SmartDashboard.putData("Auto Align PID", driveRequest.HeadingController);
+        // SmartDashboard.putData("Auto Align PID", driveRequest.HeadingController);
         drivetrain.postStatus("Auto Aligning");
 
         driveRequest.Deadband = Constants.TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.05;
@@ -100,7 +100,7 @@ public class AutoAlign extends Command {
                                 currentPose.getY() - targetPose.getY(),
                                 currentPose.getX() - targetPose.getX())))
 
-                        .minus(!Robot.isRed() ? Rotation2d.k180deg : Rotation2d.kZero);
+                        .minus(!Robot.isRed() ? Rotation2d.k180deg : Rotation2d.ZERO);
 
             };
 
@@ -113,7 +113,7 @@ public class AutoAlign extends Command {
                                 currentPose.getY() - flipTargetPose.getY(),
                                 currentPose.getX() - flipTargetPose.getX())))
 
-                        .minus(!Robot.isRed() ? Rotation2d.k180deg : Rotation2d.kZero);
+                        .minus(!Robot.isRed() ? Rotation2d.k180deg : Rotation2d.ZERO);
 
             };
 
@@ -122,20 +122,20 @@ public class AutoAlign extends Command {
 
         driveRequest.TargetDirection = getTargetRotation.get();
 
-        SmartDashboard.putNumber("Drive Target theta",
+        Telemetry.log("Drive Target theta",
 
                 driveRequest.HeadingController.getSetpoint()
 
         );
 
-        SmartDashboard.putNumber("Drive Target theta Degrees",
+        Telemetry.log("Drive Target theta Degrees",
 
                 Units.radiansToDegrees(
                         driveRequest.HeadingController.getSetpoint())
 
         );
 
-        SmartDashboard.putNumber("Drive Current theta",
+        Telemetry.log("Drive Current theta",
                 (driveRequest.TargetDirection.getRadians()));
 
         driveRequest
@@ -149,7 +149,7 @@ public class AutoAlign extends Command {
         drivetrain.setControl(driveRequest);
         drivetrain.postStatus("Currently aligning");
 
-        SmartDashboard.putBoolean("Is pid at setpoint", driveRequest.HeadingController.atSetpoint());
+        Telemetry.log("Is pid at setpoint", driveRequest.HeadingController.atSetpoint());
 
     }
 

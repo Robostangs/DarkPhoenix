@@ -2,6 +2,7 @@ package frc.robot.Stable;
 
 import org.wpilib.command2.button.CommandXboxController;
 import org.wpilib.command2.button.Trigger;
+import org.wpilib.telemetry.*;
 
 public class ControllerStangs extends CommandXboxController {
     public ControllerStangs(int port) {
@@ -16,9 +17,9 @@ public class ControllerStangs extends CommandXboxController {
         return this.rightStick();
     }
     public Trigger lm(){
-        return this.back();
+        return this.view();
     }
     public Trigger rm(){
-        return this.start();
+        return this.menu();
     }
 }

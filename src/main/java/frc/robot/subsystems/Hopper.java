@@ -6,21 +6,20 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import org.wpilib.util.Alert;
 import org.wpilib.hardware.discrete.DigitalInput;
 import org.wpilib.util.Alert.Level;
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
 import frc.robot.Constants;
-
+import org.wpilib.telemetry.*;;
 public class Hopper extends SubsystemBase {
     public TalonFX roller;
     private DigitalInput photosensor;
 
     public static Hopper mInstance;
 
-    Alert hopperAlert = new Alert("Hopper roller motor is HOT", Level.HIGH);
+    Alert hopperAlert = new Alert("hotHopp","Hopper roller motor is HOT", Level.HIGH);
 
     public Hopper() {
 
-        roller = new TalonFX(Constants.HopperConstants.kRollerID);
+        roller = new TalonFX(Constants.HopperConstants.kRollerID,Constants.rioCAN);
         photosensor = new DigitalInput(1);
 
     }
@@ -37,7 +36,7 @@ public class Hopper extends SubsystemBase {
 
     
     public void setRollerDutyCycle(double dutyCycle) {
-        roller.set(dutyCycle);
+        roller.setThrottle(dutyCycle);
     }
 
     public boolean getPhotoSensor(){
@@ -46,7 +45,7 @@ public class Hopper extends SubsystemBase {
     }
 
     public void postRollerStatus(String status) {
-        SmartDashboard.putString("Hopper/rollerStatus", status);
+        Telemetry.log("Hopper/rollerStatus", status);
     }
 
     public static Hopper getInstance() {
@@ -65,6 +64,6 @@ public class Hopper extends SubsystemBase {
             hopperAlert.set(false);
         }
 
-        SmartDashboard.putBoolean("Hopper/photoelectric", photosensor.get());
+        Telemetry.log("Hopper/photoelectric", photosensor.get());
     }
 }

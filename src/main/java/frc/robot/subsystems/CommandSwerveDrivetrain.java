@@ -17,7 +17,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
+import org.wpilib.telemetry.*;
 import org.wpilib.math.linalg.Matrix;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
@@ -32,9 +32,9 @@ import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.MatchType;
 import org.wpilib.driverstation.DriverStationErrors;
 import org.wpilib.driverstation.Alliance;
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.system.Notifier;
 import org.wpilib.system.RobotController;
+import org.wpilib.tunable.Tunable;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.Subsystem;
 import org.wpilib.command2.button.CommandXboxController;
@@ -59,7 +59,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private double m_lastSimTime;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
-    private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
+    private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.ZERO;
     /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
     private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.k180deg;
     /* Keep track if we've ever applied the operator perspective before or not */
@@ -78,7 +78,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     private ArrayList<VisionStangs> visionPoses = new ArrayList<>();
 
-    private final SwerveRequest.ApplyRobotSpeeds AutoDrive = new SwerveRequest.ApplyRobotSpeeds();
+    private final SwerveRequest.ApplyRobotVelocity AutoDrive = new SwerveRequest.ApplyRobotVelocity();
     private boolean isVisionGood = false;
 
     /*
@@ -269,15 +269,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     @Override
     public void periodic() {
         if (this.getCurrentCommand() != null) {
-            SmartDashboard.putString("Drive command", this.getCurrentCommand().getName());
+            Telemetry.log("Drive command", this.getCurrentCommand().getName());
 
         }
-        SmartDashboard.putNumber("Drivetrain/Vely", this.getState().Speeds.vy);
-        SmartDashboard.putNumber("Drivetrain/Velx", this.getState().Speeds.vx);
+        Telemetry.log("Drivetrain/Vely", this.getState().Velocity.vy);
+        Telemetry.log("Drivetrain/Velx", this.getState().Velocity.vx);
 
         if (!m_hasAppliedOperatorPerspective || RobotState.isDisabled()) {
             MatchState.getAlliance().ifPresent(allianceColor -> {
-                setOperatorPerspectiveForward(
+                setOperatorForwardDirection(
                         allianceColor == Alliance.RED
                                 ? kRedAlliancePerspectiveRotation
                                 : kBlueAlliancePerspectiveRotation);
@@ -285,31 +285,31 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        SmartDashboard.putNumber("Angular john",
+        Telemetry.log("Angular john",
                 getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
-        SmartDashboard.putBoolean("Vision/UseVision", RobotContainer.useVision);
+        Telemetry.log("Vision/UseVision", RobotContainer.useVision);
 
-        SmartDashboard.putNumber("Drivetrain/current speed", Math.sqrt(
+        Telemetry.log("Drivetrain/current speed", Math.sqrt(
 
-                Math.pow(this.getState().Speeds.vx, 2) +
-                        Math.pow(this.getState().Speeds.vy, 2)));
+                Math.pow(this.getState().Velocity.vx, 2) +
+                        Math.pow(this.getState().Velocity.vy, 2)));
 
-        SmartDashboard.putNumber("Drivetrain/current X acceleration",
+        Telemetry.log("Drivetrain/current X acceleration",
                 this.getPigeon2().getAccelerationX().getValueAsDouble());
 
-        SmartDashboard.putNumber("Drivetrain/current X acceleration",
+        Telemetry.log("Drivetrain/current X acceleration",
                 this.getPigeon2().getAccelerationY().getValueAsDouble());
 
-        SmartDashboard.putNumber("KINGPIN/module " + "0",
+        Telemetry.log("KINGPIN/module " + "0",
                 getModule(0).getDriveMotor().getDeviceID());
 
-        SmartDashboard.putNumber("KINGPIN/module " + "1",
+        Telemetry.log("KINGPIN/module " + "1",
                 getModule(1).getDriveMotor().getDeviceID());
 
-        SmartDashboard.putNumber("KINGPIN/module " + "2",
+        Telemetry.log("KINGPIN/module " + "2",
                 getModule(2).getDriveMotor().getDeviceID());
 
-        SmartDashboard.putNumber("KINGPIN/module " + "3",
+        Telemetry.log("KINGPIN/module " + "3",
                 getModule(3).getDriveMotor().getDeviceID());
 
         visionPoses.clear();
@@ -322,7 +322,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         }
         else{
-                        SmartDashboard.putString("Vision" + photonVisionRight.getName() + "/Photon_RejectReason", "useFriday disabled");
+                        Telemetry.log("Vision" + photonVisionRight.getName() + "/Photon_RejectReason", "useFriday disabled");
 
         }
 
@@ -338,7 +338,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         isVisionGood = false;
 
         if (!RobotContainer.useVision) {
-            SmartDashboard.putString("Vision/Status", "Vision switch reject");
+            Telemetry.log("Vision/Status", "Vision switch reject");
 
             return;
         }
@@ -360,10 +360,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
 
         if (bestCamera == null) {
-            SmartDashboard.putString("Vision/Status", "No valid measurement");
+            Telemetry.log("Vision/Status", "No valid measurement");
             return;
         }
-        SmartDashboard.putString("Vision/Status", bestCamera.getName() + " is valid measurment");
+        Telemetry.log("Vision/Status", bestCamera.getName() + " is valid measurment");
 
         
         this.addVisionMeasurement(
@@ -371,8 +371,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 bestCamera.getTimeStamp());
         isVisionGood = true;
 
-        SmartDashboard.putString("Vision/Best Camera", bestCamera.getName());
-        SmartDashboard.putNumber("Vision/Best Ambiguity", bestCamera.getAmbiguity());
+        Telemetry.log("Vision/Best Camera", bestCamera.getName());
+        Telemetry.log("Vision/Best Ambiguity", bestCamera.getAmbiguity());
 
     }
 
@@ -393,7 +393,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public void setCoastMode(boolean isCoast) {
         for (var module : getModules()) {
-            module.getSteerMotor().setNeutralMode(isCoast ? NeutralModeValue.Coast : NeutralModeValue.Brake);
+            module.getSteerMotor().configNeutralMode(isCoast ? NeutralModeValue.Coast : NeutralModeValue.Brake);
         }
     }
 
@@ -404,7 +404,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void postStatus(String status) {
-        SmartDashboard.putString("Drivetrain/ Status", status);
+        Telemetry.log("Drivetrain/ Status", status);
     }
 
     public void setDriveMotorCurrentLimit(double currentLimit) {
@@ -437,7 +437,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     @Override
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
 
-        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
+        super.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
     }
 
     /**
@@ -464,7 +464,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             double timestampSeconds,
             Matrix<N3, N1> visionMeasurementStdDevs) {
 
-        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds),
+        super.addVisionMeasurement(visionRobotPoseMeters, (timestampSeconds),
                 visionMeasurementStdDevs);
     }
 
@@ -472,10 +472,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         AutoBuilder.configure(
                 () -> this.getState().Pose,
                 this::resetPose,
-                () -> this.getState().Speeds,
+                () -> this.getState().Velocity,
                 (speed, feedforward) -> this.setControl(
                         AutoDrive
-                                .withSpeeds(speed.times(4))
+                                .withVelocity(speed.times(4))
                                 .withWheelForceFeedforwardsX(feedforward.robotRelativeForcesX())
                                 .withWheelForceFeedforwardsY(feedforward.robotRelativeForcesY())),
                 new PPHolonomicDriveController((Constants.AutoConstants.translationPID),
@@ -493,7 +493,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
      */
     @Override
     public Optional<Pose2d> samplePoseAt(double timestampSeconds) {
-        return super.samplePoseAt(Utils.fpgaToCurrentTime(timestampSeconds));
+        return super.samplePoseAt((timestampSeconds));
     }
 
     private static CommandSwerveDrivetrain mDrivetrain;

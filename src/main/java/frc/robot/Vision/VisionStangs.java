@@ -9,13 +9,11 @@ import org.wpilib.driverstation.RobotState;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.MatchType;
 import org.wpilib.driverstation.DriverStationErrors;
-import org.wpilib.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.Stable.LimelightHelpers;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-
+import org.wpilib.telemetry.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,45 +56,44 @@ public class VisionStangs {
         bigAmbiguity = -1;
         isLL = true;
 
-        LimelightHelpers.SetFiducialIDFiltersOverride(LLname, Constants.VisionConstants.goodIDS);
     }
 
     private void Photonperiodic() {
-        SmartDashboard.putNumber("Vision/" + camera.getName() + "/rando", Math.random());
-        bigAmbiguity = 0;
-        PhotonPipelineResult result = camera.getLatestResult();
-        var target = result.getBestTarget();
-        if (target!=null && Constants.kAprilTagFieldLayout.getTagPose(target.getFiducialId()).isPresent()) {
-            Pose3d robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), Constants.kAprilTagFieldLayout.getTagPose(target.getFiducialId()).get(), robotToCam);
-            Robot.teleopField.getObject(camera.getName() + " Pose").setPose(robotPose.toPose2d());
-            currentPose=robotPose.toPose2d();
-            timestampSeconds=result.getTimestampSeconds();
-            bigAmbiguity=target.poseAmbiguity;
-            if(RobotContainer.useVision){
-              //  CommandSwerveDrivetrain.getInstance().addVisionMeasurement(currentPose, timestampSeconds);
-            }
-            distance=getavgDisPhoton(target);
-            SmartDashboard.putNumber("Vision/" + camera.getName() + "/distanceFromTag", distance);
-            SmartDashboard.putNumber("Vision/" + camera.getName() + "/ambiguity", bigAmbiguity);
+        // Telemetry.log("Vision/" + camera.getName() + "/rando", Math.random());
+        // bigAmbiguity = 0;
+        // PhotonPipelineResult result = camera.getLatestResult();
+        // var target = result.getBestTarget();
+        // if (target!=null && Constants.kAprilTagFieldLayout.getTagPose(target.getFiducialId()).isPresent()) {
+        //     Pose3d robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), Constants.kAprilTagFieldLayout.getTagPose(target.getFiducialId()).get(), robotToCam);
+        //     Robot.teleopField.getObject(camera.getName() + " Pose").setPose(robotPose.toPose2d());
+        //     currentPose=robotPose.toPose2d();
+        //     timestampSeconds=result.getTimestampSeconds();
+        //     bigAmbiguity=target.poseAmbiguity;
+        //     if(RobotContainer.useVision){
+        //       //  CommandSwerveDrivetrain.getInstance().addVisionMeasurement(currentPose, timestampSeconds);
+        //     }
+        //     distance=getavgDisPhoton(target);
+        //     Telemetry.log("Vision/" + camera.getName() + "/distanceFromTag", distance);
+        //     Telemetry.log("Vision/" + camera.getName() + "/ambiguity", bigAmbiguity);
 
 
-        }
-                // Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        // for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
-        //     SmartDashboard.putNumber("Vision/" + camera.getName() + " posess", bigAmbiguity);
-        //     visionEst = ppe.estimateCoprocMultiTagPose(result);
+        // }
+        //         // Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        // // for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
+        // //     Telemetry.log("Vision/" + camera.getName() + " posess", bigAmbiguity);
+        // //     visionEst = ppe.estimateCoprocMultiTagPose(result);
 
-        //     for (var target : result.targets) {
+        // //     for (var target : result.targets) {
         //         if (target.poseAmbiguity > bigAmbiguity) {
         //             bigAmbiguity = target.poseAmbiguity;
         //         }
         //     }
 
-        //     SmartDashboard.putNumber("Vision/" + camera.getName() + " biggest ambiguity", bigAmbiguity);
+        //     Telemetry.log("Vision/" + camera.getName() + " biggest ambiguity", bigAmbiguity);
         // }
-        // //SmartDashboard.putNumber("Vision/" + camera.getName() + " Pose Estimator", visionEst.get().estimatedPose.getX());
+        // //Telemetry.log("Vision/" + camera.getName() + " Pose Estimator", visionEst.get().estimatedPose.getX());
         // if (bigAmbiguity < Constants.VisionConstants.kPhotonAmbiguityThres ) {
-        //     SmartDashboard.putBoolean("Vision/"+CameraName+"/isgoo", visionEst.isPresent());
+        //     Telemetry.log("Vision/"+CameraName+"/isgoo", visionEst.isPresent());
         //     if (visionEst.isPresent()) {
         //             Robot.teleopField.getObject(camera.getName() + " Pose").setPose(visionEst.get().estimatedPose.toPose2d());
 
@@ -109,12 +106,12 @@ public class VisionStangs {
         //         }
         //     } 
         //     else {
-        //         SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason", "Ts not present bro");
+        //         Telemetry.log("Vision" + CameraName + "/Photon_RejectReason", "Ts not present bro");
 
         //     }
 
         // }else{
-        //     SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason", "BAD");
+        //     Telemetry.log("Vision" + CameraName + "/Photon_RejectReason", "BAD");
         // }
 
     }
@@ -128,37 +125,37 @@ public class VisionStangs {
     // private boolean isPosegoo(EstimatedRobotPose yoPoseEsti) {
 
     //     if (Robot.isSimulation()) {
-    //         SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason", "Simulation mode");
+    //         Telemetry.log("Vision" + CameraName + "/Photon_RejectReason", "Simulation mode");
     //         return false;
     //     }
     //     if (yoPoseEsti == null) {
-    //         SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason", "Pose null");
+    //         Telemetry.log("Vision" + CameraName + "/Photon_RejectReason", "Pose null");
     //         return false;
     //     }
     //     if (yoPoseEsti.targetsUsed.size() < 2) {
-    //         SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason",
+    //         Telemetry.log("Vision" + CameraName + "/Photon_RejectReason",
     //                 "Not enough tags: " + yoPoseEsti.targetsUsed.size());
     //         return false;
     //     }
 
     //     if (getavgDisPhoton(yoPoseEsti) > Constants.VisionConstants.kLLDisThres) {
-    //         SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason",
+    //         Telemetry.log("Vision" + CameraName + "/Photon_RejectReason",
     //                 "Too far: " + getavgDisPhoton(yoPoseEsti));
     //         return false;
     //     }
-    //     SmartDashboard.putNumber("Vision/" + CameraName + " avg dis", getavgDisPhoton(yoPoseEsti));
+    //     Telemetry.log("Vision/" + CameraName + " avg dis", getavgDisPhoton(yoPoseEsti));
 
     //     if (bigAmbiguity > Constants.VisionConstants.kLLAmbiguityThres) {
-    //         SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason", "High ambiguity: " + bigAmbiguity);
+    //         Telemetry.log("Vision" + CameraName + "/Photon_RejectReason", "High ambiguity: " + bigAmbiguity);
     //         return false;
     //     }
 
     //     if (!RobotContainer.useVision) {
-    //         SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason", "useVision disabled");
+    //         Telemetry.log("Vision" + CameraName + "/Photon_RejectReason", "useVision disabled");
     //         return false;
     //     }
 
-    //     SmartDashboard.putString("Vision" + CameraName + "/Photon_RejectReason", "Accepted");
+    //     Telemetry.log("Vision" + CameraName + "/Photon_RejectReason", "Accepted");
     //     return true;
     // }
 
@@ -213,9 +210,9 @@ public class VisionStangs {
     //         }
 
     //         if (fourPoseEsti != null) {
-    //             SmartDashboard.putString("Vision/" + CameraName + "/MT Mode ", mtLabel);
+    //             Telemetry.log("Vision/" + CameraName + "/MT Mode ", mtLabel);
     //             Robot.teleopField.getObject("Raw " + CameraName).setPose(fourPoseEsti.pose);
-    //             SmartDashboard.putNumber("Tag count " + CameraName, fourPoseEsti.tagCount);
+    //             Telemetry.log("Tag count " + CameraName, fourPoseEsti.tagCount);
 
     //         }
 
@@ -229,7 +226,7 @@ public class VisionStangs {
     //                     bigAmbiguity = fiducial.ambiguity;
     //                 }
     //             }
-    //             SmartDashboard.putNumber("Vision/" + CameraName + "/Biggest Ambiguity", bigAmbiguity);
+    //             Telemetry.log("Vision/" + CameraName + "/Biggest Ambiguity", bigAmbiguity);
     //         } else {
     //             this.currentPose = null;
     //         }
@@ -262,23 +259,23 @@ public class VisionStangs {
     // private boolean isPosegoo(LimelightHelpers.PoseEstimate yoPoseEsti) {
 
     //     if (Robot.isSimulation()) {
-    //         SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "Simulation mode");
+    //         Telemetry.log("Vision" + CameraName + "/LL_RejectReason", "Simulation mode");
     //         return false;
     //     }
     //     if (yoPoseEsti == null) {
-    //         SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "Pose null");
+    //         Telemetry.log("Vision" + CameraName + "/LL_RejectReason", "Pose null");
     //         return false;
     //     }
     //     if (yoPoseEsti.tagCount < 2) {
-    //         SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason",
+    //         Telemetry.log("Vision" + CameraName + "/LL_RejectReason",
     //                 "Not enough tags: " + yoPoseEsti.tagCount);
     //         return false;
     //     }
     //     if (yoPoseEsti.avgTagDist > Constants.VisionConstants.kLLDisThres) {
-    //         SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "Too far: " + yoPoseEsti.avgTagDist);
+    //         Telemetry.log("Vision" + CameraName + "/LL_RejectReason", "Too far: " + yoPoseEsti.avgTagDist);
     //         return false;
     //     }
-    //     SmartDashboard.putNumber("Vision/" + CameraName + " avg dis", yoPoseEsti.avgTagDist);
+    //     Telemetry.log("Vision/" + CameraName + " avg dis", yoPoseEsti.avgTagDist);
 
     //     double maxAmbiguity = 0;
     //     for (LimelightHelpers.RawFiducial fiducial : yoPoseEsti.rawFiducials) {
@@ -287,19 +284,19 @@ public class VisionStangs {
     //         }
     //     }
     //     bigAmbiguity = maxAmbiguity;
-    //     SmartDashboard.putNumber("Vision/" + CameraName + "/Biggest Ambiguity", bigAmbiguity);
+    //     Telemetry.log("Vision/" + CameraName + "/Biggest Ambiguity", bigAmbiguity);
 
     //     if (bigAmbiguity > Constants.VisionConstants.kLLAmbiguityThres) {
-    //         SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "High ambiguity: " + bigAmbiguity);
+    //         Telemetry.log("Vision" + CameraName + "/LL_RejectReason", "High ambiguity: " + bigAmbiguity);
     //         return false;
     //     }
 
     //     if (!RobotContainer.useVision) {
-    //         SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "useVision disabled");
+    //         Telemetry.log("Vision" + CameraName + "/LL_RejectReason", "useVision disabled");
     //         return false;
     //     }
 
-    //     SmartDashboard.putString("Vision" + CameraName + "/LL_RejectReason", "Accepted");
+    //     Telemetry.log("Vision" + CameraName + "/LL_RejectReason", "Accepted");
     //     return true;
     // }
 

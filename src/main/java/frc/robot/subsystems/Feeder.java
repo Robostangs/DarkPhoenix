@@ -8,7 +8,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import org.wpilib.command2.SubsystemBase;
 import org.wpilib.hardware.discrete.DigitalInput;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.telemetry.Telemetry;
+
 import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {
@@ -22,7 +23,7 @@ public class Feeder extends SubsystemBase {
     private static Feeder instance;
 
     public Feeder() {
-        feederMotor = new TalonFX(Constants.FeederConstants.feederMotorID);
+        feederMotor = new TalonFX(Constants.FeederConstants.feederMotorID,Constants.rioCAN);
         fuelSensor = new DigitalInput(Constants.FeederConstants.fuelSensorID);
 
         feederTargetVelocity = new VelocityVoltage(0d);
@@ -47,7 +48,7 @@ public class Feeder extends SubsystemBase {
     }
 
     public void setDutyCycle(double dutyCycle) {
-        feederMotor.set(dutyCycle);
+        feederMotor.setThrottle(dutyCycle);
     }
 
     public void getTargetVelocity() {
@@ -75,11 +76,11 @@ public class Feeder extends SubsystemBase {
     }
 
     public void setFeederMode(NeutralModeValue mode) {
-        feederMotor.setNeutralMode(mode);
+        feederMotor.configNeutralMode(mode);
     }
 
     public void postStatus(String status) {
-        SmartDashboard.putString("Feeder/status", status);
+        Telemetry.log("Feeder/status", status);
     }
 
     public static Feeder getInstance() {
@@ -95,9 +96,9 @@ public class Feeder extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Feeder/Duty Cycle", feederMotor.getDutyCycle().getValueAsDouble());
-        SmartDashboard.putNumber("Feeder/Velocity ", feederMotor.getVelocity().getValueAsDouble());
-        SmartDashboard.putNumber("Feeder/Torque Current ", feederMotor.getTorqueCurrent().getValueAsDouble());
+        Telemetry.log("Feeder/Duty Cycle", feederMotor.getDutyCycle().getValueAsDouble());
+        Telemetry.log("Feeder/Velocity ", feederMotor.getVelocity().getValueAsDouble());
+        Telemetry.log("Feeder/Torque Current ", feederMotor.getTorqueCurrent().getValueAsDouble());
 
     }
 }

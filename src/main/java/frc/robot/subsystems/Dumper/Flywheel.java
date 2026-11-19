@@ -8,7 +8,7 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.util.Units;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.telemetry.Telemetry;
 import org.wpilib.command2.InstantCommand;
 import org.wpilib.command2.SubsystemBase;
 import frc.robot.Constants;
@@ -25,13 +25,13 @@ public class Flywheel extends SubsystemBase {
     TalonFXConfiguration flywheelConfig;
     public double flywheelRegressionTarget;
     public Flywheel() {
-        mainShooterMotor = new TalonFX(Constants.FlywheelConstants.kFlywheelMotorID);
-        slaveShooterMotor = new TalonFX(Constants.FlywheelConstants.kFlywheelSlaveMotorID);
-        SmartDashboard.putNumber("FlywheelRegressionTarget", 0);
+        mainShooterMotor = new TalonFX(Constants.FlywheelConstants.kFlywheelMotorID,Constants.rioCAN);
+        slaveShooterMotor = new TalonFX(Constants.FlywheelConstants.kFlywheelSlaveMotorID,Constants.rioCAN);
+        Telemetry.log("FlywheelRegressionTarget", 0);
         slaveControl = new Follower(Constants.FlywheelConstants.kFlywheelMotorID, MotorAlignmentValue.Opposed);
-        SmartDashboard.putNumber("Flywheel/P", Constants.FlywheelConstants.kShooterMotorP);
-        SmartDashboard.putNumber("Flywheel/I", Constants.FlywheelConstants.kShooterMotorI);
-        SmartDashboard.putNumber("Flywheel/D", Constants.FlywheelConstants.kShooterMotorD);
+        Telemetry.log("Flywheel/P", Constants.FlywheelConstants.kShooterMotorP);
+        Telemetry.log("Flywheel/I", Constants.FlywheelConstants.kShooterMotorI);
+        Telemetry.log("Flywheel/D", Constants.FlywheelConstants.kShooterMotorD);
 
         ApplyConfigs();
         SmartDashboard.putData("Apply Flywheel Pid",new InstantCommand(() -> {ApplyConfigs();}));
@@ -109,8 +109,8 @@ public class Flywheel extends SubsystemBase {
     }
 
     public void setFlywheelDC(double dc) {
-        mainShooterMotor.set(dc);
-        slaveShooterMotor.set(0);
+        mainShooterMotor.setThrottle(dc);
+        slaveShooterMotor.setThrottle(0);
     }
 
     public static Flywheel getInstance() {
@@ -144,15 +144,15 @@ public class Flywheel extends SubsystemBase {
     @Override
     public void periodic() {
 
-        SmartDashboard.putNumber("Flywheel/Main Velocity", mainShooterMotor.getVelocity().getValueAsDouble());
-        SmartDashboard.putNumber("Flywheel/Slave Velocity", slaveShooterMotor.getVelocity().getValueAsDouble());
+        Telemetry.log("Flywheel/Main Velocity", mainShooterMotor.getVelocity().getValueAsDouble());
+        Telemetry.log("Flywheel/Slave Velocity", slaveShooterMotor.getVelocity().getValueAsDouble());
         flywheelRegressionTarget=SmartDashboard.getNumber("FlywheelRegressionTarget", 0);
-        SmartDashboard.putNumber("Flywheel/Target Velocity", flywheelTargetVelocity.Velocity);
+        Telemetry.log("Flywheel/Target Velocity", flywheelTargetVelocity.Velocity);
 
     }
 
     public void postStatus(String status) {
-        SmartDashboard.putString("Flywheel/Status", status);
+        Telemetry.log("Flywheel/Status", status);
     }
 
 }

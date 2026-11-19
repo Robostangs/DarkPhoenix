@@ -1,10 +1,9 @@
 package frc.robot.commands.DumperCommands.Hood;
 import org.wpilib.system.Timer;
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Dumper.Hood;
-
+import org.wpilib.telemetry.*;
 public class HomeHood extends Command {
     /*
      * The elevator is sent to its home position once 
@@ -38,7 +37,7 @@ public class HomeHood extends Command {
             timer.stop();
             timer.reset();
         }
-        SmartDashboard.putNumber("Homing Time", timer.get());
+        Telemetry.log("Homing Time", timer.get());
     }
     
 

@@ -1,11 +1,10 @@
 package frc.robot.commands.IntakeCommands;
 
 import org.wpilib.system.Timer;
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake.IntakePivot;
-
+import org.wpilib.telemetry.*;
 public class HomeIntake extends Command {
     IntakePivot intakePivot;
     boolean isUp;
@@ -37,7 +36,7 @@ public class HomeIntake extends Command {
             timer.stop();
             timer.reset();
         }
-        SmartDashboard.putNumber("Homing Time", timer.get());
+        Telemetry.log("Homing Time", timer.get());
     }
 
     @Override

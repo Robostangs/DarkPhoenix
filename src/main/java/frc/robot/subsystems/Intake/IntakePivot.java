@@ -7,8 +7,9 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
+import org.wpilib.telemetry.Telemetry;
+
 import frc.robot.Constants;
 
 public class IntakePivot extends SubsystemBase {
@@ -39,7 +40,7 @@ public class IntakePivot extends SubsystemBase {
     }
 
     public void setIntakePivotConfig() {
-        hopperExtenderMotor = new TalonFX(Constants.KirbyConstants.hopperExtenderID);
+        hopperExtenderMotor = new TalonFX(Constants.KirbyConstants.hopperExtenderID,Constants.rioCAN);
         hopperExtenderConfig = new TalonFXConfiguration();
 
         hopperExtenderConfig.Feedback.SensorToMechanismRatio = Constants.KirbyConstants.extenderSensorToMechanismRatio;
@@ -61,7 +62,7 @@ public class IntakePivot extends SubsystemBase {
     }
 
     public void setDC(double dutyCycle) {
-        hopperExtenderMotor.set(dutyCycle);
+        hopperExtenderMotor.setThrottle(dutyCycle);
     }
 
     public void setHopperExtender(double rots) {
@@ -69,7 +70,7 @@ public class IntakePivot extends SubsystemBase {
     }
 
     public void postStatus(String status) {
-        SmartDashboard.putString("IntakePivot/Status", status);
+        Telemetry.log("IntakePivot/Status", status);
     }
 
     public void setExtenderPosition(double pos) {
@@ -77,7 +78,7 @@ public class IntakePivot extends SubsystemBase {
     }
 
     public void setIntakeExtenderMode(NeutralModeValue mode) {
-        hopperExtenderMotor.setNeutralMode(mode);
+        hopperExtenderMotor.configNeutralMode(mode);
     }
 
 
@@ -93,8 +94,8 @@ public class IntakePivot extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("IntakePivot/position", hopperExtenderMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("IntakePivot/setpoint", extenderControl.Position);
+        Telemetry.log("IntakePivot/position", hopperExtenderMotor.getPosition().getValueAsDouble());
+        Telemetry.log("IntakePivot/setpoint", extenderControl.Position);
 
     }
 }

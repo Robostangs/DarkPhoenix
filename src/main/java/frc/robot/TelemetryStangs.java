@@ -18,12 +18,11 @@ import org.wpilib.util.sendable.Sendable;
 import org.wpilib.util.sendable.SendableBuilder;
 import org.wpilib.smartdashboard.Mechanism2d;
 import org.wpilib.smartdashboard.MechanismLigament2d;
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.util.Color;
 import org.wpilib.util.Color8Bit;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
-public class Telemetry {
+public class TelemetryStangs {
     private final double MaxSpeed;
 
     /**
@@ -31,7 +30,7 @@ public class Telemetry {
      * 
      * @param maxSpeed Maximum speed in meters per second
      */
-    public Telemetry(double maxSpeed) {
+    public TelemetryStangs(double maxSpeed) {
         MaxSpeed = maxSpeed;
         SignalLogger.start();
 

@@ -5,8 +5,9 @@ import com.ctre.phoenix6.controls.MotionMagicExpoDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
+import org.wpilib.telemetry.Telemetry;
+
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -17,7 +18,7 @@ public class Hood extends SubsystemBase {
     static boolean isHomed = false;
 
     private Hood() {
-        mainMotor = new TalonFXS(Constants.HoodConstants.mainMotorID);
+        mainMotor = new TalonFXS(Constants.HoodConstants.mainMotorID,Constants.rioCAN);
         hoodTargetPosition = new MotionMagicExpoDutyCycle(mainMotor.getPosition().getValueAsDouble());
         configureHoodMotor();
     }
@@ -68,7 +69,7 @@ public class Hood extends SubsystemBase {
     }
 
     public void setHoodDutyCycle(double dc) {
-        mainMotor.set(dc);
+        mainMotor.setThrottle(dc);
     }
 
     public boolean getIsHomed() {
@@ -87,7 +88,7 @@ public class Hood extends SubsystemBase {
     }
 
     public void postStatus(String status) {
-        SmartDashboard.putString("Hood/status", status);
+        Telemetry.log("Hood/status", status);
     }
 
     public void setHoodPosition(double pos) {
@@ -129,9 +130,9 @@ public class Hood extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Hood/HoodTargetPosition", hoodTargetPosition.Position);
-        SmartDashboard.putNumber("Hood/Hood pos", mainMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Hood/Stator Current", getStatorCurrent());
+        Telemetry.log("Hood/HoodTargetPosition", hoodTargetPosition.Position);
+        Telemetry.log("Hood/Hood pos", mainMotor.getPosition().getValueAsDouble());
+        Telemetry.log("Hood/Stator Current", getStatorCurrent());
 
     }
 

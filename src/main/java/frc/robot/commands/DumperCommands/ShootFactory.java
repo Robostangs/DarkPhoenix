@@ -3,8 +3,8 @@ package frc.robot.commands.DumperCommands;
 import java.lang.reflect.InaccessibleObjectException;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
+import org.wpilib.telemetry.*;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.DeferredCommand;
 import org.wpilib.command2.WaitCommand;
@@ -59,7 +59,8 @@ public class ShootFactory {
 
                 return new ChargeUp(false)
                                 .alongWith(
-                                                new setHoodPosition(() -> SmartDashboard.getNumber("Regression Hood Setpoint", 0)))
+                                        //TODO: GET THIS
+                                                new setHoodPosition(() -> 0))
                                 .alongWith(
                                                 (SmartFeed(waitUntilFeed)
                                                )

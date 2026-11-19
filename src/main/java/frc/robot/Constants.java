@@ -20,8 +20,6 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
-import org.wpilib.vision.apriltag.AprilTagFieldLayout;
-import org.wpilib.vision.apriltag.AprilTagFields;
 import org.wpilib.math.linalg.Matrix;
 import org.wpilib.math.linalg.VecBuilder;
 import org.wpilib.math.linalg.Vector;
@@ -41,7 +39,16 @@ import org.wpilib.units.measure.LinearVelocity;
 import org.wpilib.units.measure.MomentOfInertia;
 import org.wpilib.units.measure.Voltage;
 import org.wpilib.util.Color;
+import org.wpilib.util.Color8Bit;
+
 import static org.wpilib.units.Units.*;
+
+import java.util.List;
+
+import org.wpilib.fields.Field;
+import org.wpilib.fields.FieldTag;
+import org.wpilib.fields.Fields;
+import org.wpilib.hardware.bus.CANPort;
 
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
 
@@ -58,12 +65,12 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+        public static CANBus rioCAN =  new CANBus("rio");
         public static class OperatorConstants {
                 public static final int kDriverControllerPort = 0;
         }
 
-        public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFieldLayout
-                        .loadField(AprilTagFields.kDefaultField);
+        public static final Field kAprilTagFieldLayout = Fields.FRC_2026_REBUILT_ANDY_MARK.loadField();
 
         public static class HopperConstants {
 
@@ -109,10 +116,10 @@ public final class Constants {
         }
 
         public static class ElasticConstants {
-                public static final Color blue = new Color("#0000FF");
-                public static final Color red = new Color("#FF0000");
-                public static final Color purple = new Color("#800080");
-                public static final Color white = new Color("#FFFFFF");
+                // public static final Color8Bit blue = new Color8Bit("#0000FF");
+                // public static final Color8Bit red = new Color8Bit("#FF0000");
+                // public static final Color8Bit purple = new Color8Bit("#800080");
+                // public static final Color8Bit white = new Color8Bit("#FFFFFF");
                 public static final int kPdhCanId = 1;
 
                 public static enum whoCanScore {
@@ -375,7 +382,7 @@ public final class Constants {
 
                 // CAN bus that the devices are located on;
                 // All swerve devices must share the same CAN bus
-                public static final CANBus kCANBus = new CANBus("CANivore", "./logs/example.hoot");
+                public static final CANBus kCANBus = new CANBus("canivore");
 
                 // Theoretical free speed (m/s) at 12 V applied output;
                 // This needs to be tuned to your individual robot
@@ -406,7 +413,7 @@ public final class Constants {
                 private static final Voltage kDriveFrictionVoltage = Volts.of(0.2);
 
                 public static final SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants()
-                                .withCANBusName(kCANBus.getName())
+                                .withNetwork(kCANBus)
                                 .withPigeon2Id(kPigeonId)
                                 .withPigeon2Configs(pigeonConfigs);
 

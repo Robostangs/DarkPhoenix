@@ -1,9 +1,9 @@
 
 // AlignToHub.java
 package frc.robot.commands;
+import org.wpilib.telemetry.*;
 
 import org.wpilib.math.geometry.*;
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.DeferredCommand;
 import org.wpilib.command2.InstantCommand;
@@ -47,7 +47,7 @@ public class AlignToHub {
                 Translation2d targetTranslation = hubPos.plus(
                                 hubToRobot.times(shootRadius / dist));
 
-                Rotation2d facingHub = hubToRobot.getAngle().plus(Rotation2d.k180deg);
+                Rotation2d facingHub = hubToRobot.getAngle().orElse(new Rotation2d()).plus(Rotation2d.k180deg);
 
                 return new Pose2d(targetTranslation, facingHub);
         }
@@ -79,7 +79,7 @@ public class AlignToHub {
 
                                 currentPose.getTranslation()
                                                 .minus(targetPose.getTranslation())
-                                                .getAngle()
+                                                .getAngle().orElse(new Rotation2d())
                                                 .minus(Rotation2d.k180deg));
 
                 Pose2d endPose = new Pose2d(
@@ -135,7 +135,7 @@ public class AlignToHub {
 
                 DeferredCommand alignCommand = new DeferredCommand(() -> {
 
-                        SmartDashboard.putBoolean("IsAligned", false);
+                        Telemetry.log("IsAligned", false);
 
                         drawShootingRing();
 
@@ -144,7 +144,7 @@ public class AlignToHub {
                         Robot.teleopField.getObject("Hub Align Pose").setPose(target);
 
                         return AutoBuilder.followPath(generatePath(target)).andThen(
-                                        new InstantCommand(() -> SmartDashboard.putBoolean("IsAligned", true)));
+                                        new InstantCommand(() -> Telemetry.log("IsAligned", true)));
                 }, Set.of(CommandSwerveDrivetrain.getInstance()));
 
                 return alignCommand.withName("Auto align to hub");

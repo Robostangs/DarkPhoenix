@@ -1,8 +1,8 @@
 package frc.robot.FeederCommands;
 
 import java.util.function.DoubleSupplier;
+import org.wpilib.telemetry.*;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Dumper.Flywheel;
@@ -32,7 +32,7 @@ public class Feed extends Command{
 
         feeder.setFeederControl(currentTarget);
 
-        SmartDashboard.putNumber("Feeder/target velocity", currentTarget);
+        Telemetry.log("Feeder/target velocity", currentTarget);
 
 
         feeder.postStatus("Charging to " + targetRPS + " rps");

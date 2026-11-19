@@ -4,8 +4,9 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
+import org.wpilib.telemetry.Telemetry;
+
 import frc.robot.Constants;
 
 public class Kirby extends SubsystemBase {
@@ -16,7 +17,7 @@ public class Kirby extends SubsystemBase {
     /** The intake wheels. */
     public Kirby() {
 
-        kirbyWheels = new TalonFX(Constants.KirbyConstants.kirbyWheelsID);
+        kirbyWheels = new TalonFX(Constants.KirbyConstants.kirbyWheelsID, Constants.rioCAN);
         setKirbyConfig();
 
     }
@@ -38,10 +39,10 @@ public class Kirby extends SubsystemBase {
     }
 
     public void setKirbyWheels(double speed) {
-        kirbyWheels.set(speed);
+        kirbyWheels.setThrottle(speed);
     }
 
     public void postStatus(String status) {
-        SmartDashboard.putString("Kirby/status", status);
+        Telemetry.log("Kirby/status", status);
     }
 }
