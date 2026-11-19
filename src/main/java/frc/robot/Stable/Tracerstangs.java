@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import org.wpilib.driverstation.DriverStationErrors;
+import org.wpilib.system.RobotController;
+
+import org.wpilib.telemetry.Telemetry;
 
 /**
  * A class for keeping track of how much time it takes for different parts of code to execute. This
@@ -84,6 +87,6 @@ public class Tracerstangs {
   }
 
   public void putToSmartDashboard() {
-    m_epochs.forEach((key, value) -> SmartDashboard.putNumber("Loop Times/"+key,value / 1.0e9));
+    m_epochs.forEach((key, value) -> Telemetry.getTable("Loop Times").log(key,value / 1.0e9));
   }
 }

@@ -12,6 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.wpilib.driverstation.DriverStationErrors;
 import org.wpilib.hardware.hal.HALUtil;
 import org.wpilib.hardware.hal.NotifierJNI;
+import org.wpilib.system.Timer;
 import org.wpilib.units.measure.Time;
 import org.wpilib.util.WPIUtilJNI;
 

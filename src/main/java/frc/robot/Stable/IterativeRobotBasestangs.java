@@ -6,12 +6,12 @@ package frc.robot.Stable;
 
 import org.wpilib.driverstation.DriverStationErrors;
 import org.wpilib.driverstation.internal.DriverStationBackend;
+import org.wpilib.framework.RobotBase;
 import org.wpilib.hardware.hal.ControlWord;
 import org.wpilib.hardware.hal.DriverStationJNI;
 import org.wpilib.hardware.hal.HAL;
 import org.wpilib.hardware.hal.RobotMode;
 import org.wpilib.networktables.NetworkTableInstance;
-import org.wpilib.system.WatchdogStangs;
 import org.wpilib.tunable.TunableRegistry;
 
 /**
