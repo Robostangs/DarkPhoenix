@@ -226,7 +226,6 @@ public class RobotContainer {
                 xTest.rightPaddle().whileTrue(new HomeIntake(false));
                 xTest.leftPaddle().whileTrue(new HomeIntake(true));
                 xTest.a().whileTrue(new HomeHood());
-                xDrive.dpadLeft().onTrue(RobotContainer.turn());
                 xTest.leftBumper().whileTrue(IntakeFactory.ExtendIntake());
                 xTest.rightBumper().whileTrue(IntakeFactory.RetractIntake());
 
