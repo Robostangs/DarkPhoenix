@@ -15,7 +15,7 @@ import frc.robot.Constants;
 public class Feeder extends SubsystemBase {
     TalonFX feederMotor;
     TalonFXConfiguration feedConfigurator;
-    DigitalInput fuelSensor;
+    //DigitalInput fuelSensor;
     VelocityVoltage feederTargetVelocity;
     double targetVelocityRPS;
     public static boolean force = false;
@@ -24,7 +24,7 @@ public class Feeder extends SubsystemBase {
 
     public Feeder() {
         feederMotor = new TalonFX(Constants.FeederConstants.feederMotorID,Constants.rioCAN);
-        fuelSensor = new DigitalInput(Constants.FeederConstants.fuelSensorID);
+        //fuelSensor = new DigitalInput(Constants.FeederConstants.fuelSensorID);
 
         feederTargetVelocity = new VelocityVoltage(0d);
         configureFeeder();
@@ -72,7 +72,8 @@ public class Feeder extends SubsystemBase {
     }
 
     public boolean getfuelSensor() {
-        return fuelSensor.get();
+        //return fuelSensor.get();
+        return false;
     }
 
     public void setFeederMode(NeutralModeValue mode) {

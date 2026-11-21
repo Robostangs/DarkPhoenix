@@ -11,7 +11,7 @@ import frc.robot.Constants;
 import org.wpilib.telemetry.*;;
 public class Hopper extends SubsystemBase {
     public TalonFX roller;
-    private DigitalInput photosensor;
+    //private DigitalInput photosensor;
 
     public static Hopper mInstance;
 
@@ -20,7 +20,7 @@ public class Hopper extends SubsystemBase {
     public Hopper() {
 
         roller = new TalonFX(Constants.HopperConstants.kRollerID,Constants.rioCAN);
-        photosensor = new DigitalInput(1);
+        //photosensor = new DigitalInput(1);
 
     }
 
@@ -40,8 +40,8 @@ public class Hopper extends SubsystemBase {
     }
 
     public boolean getPhotoSensor(){
-        return photosensor.get();
-        // return false;
+        //return photosensor.get();
+         return false;
     }
 
     public void postRollerStatus(String status) {
@@ -64,6 +64,6 @@ public class Hopper extends SubsystemBase {
             hopperAlert.set(false);
         }
 
-        Telemetry.log("Hopper/photoelectric", photosensor.get());
+        //Telemetry.log("Hopper/photoelectric", photosensor.get());
     }
 }
