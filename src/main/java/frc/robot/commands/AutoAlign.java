@@ -76,7 +76,7 @@ public class AutoAlign extends Command {
     public void initialize() {
 
         driveRequest.HeadingController.reset();
-        // SmartDashboard.putData("Auto Align PID", driveRequest.HeadingController);
+        // Telemetry.log("Auto Align PID", driveRequest.HeadingController);
         drivetrain.postStatus("Auto Aligning");
 
         driveRequest.Deadband = Constants.TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.05;

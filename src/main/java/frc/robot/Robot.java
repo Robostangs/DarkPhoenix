@@ -132,22 +132,13 @@ public class Robot extends TimedRobotstangs {
 
     public Robot() {
         m_robotContainer = RobotContainer.getInstance();
-    }
-
-    void postPitTestStatus(String status) {
-        Telemetry.log("PitTest/Pit Test Status", status);
-    }
-
-    @Override
-    public void robotInit() {
-
-        SmartDashboard.putData("Field", teleopField);
+        Telemetry.log("Field", teleopField);
 
         DataLogManager.start("");
         DataLogManager.log("Driverstation connected");
         DriverStation.startDataLog(DataLogManager.getLog());
 
-        RobotController.setBrownoutVoltage(5);
+        RobotController.setBrownoutVoltages(5,7);
 
         CommandScheduler.getInstance()
                 .onCommandInitialize((action) -> DataLogManager.log(action.getName() + " Command Initialized"));
@@ -162,8 +153,7 @@ public class Robot extends TimedRobotstangs {
         CommandScheduler.getInstance()
                 .onCommandFinish((action) -> DataLogManager.log(action.getName() + " Command Finished"));
 
-        configureDisabledTab();
-        configureTeleopTab();
+   
         loadNamedCommands();
 
         Hood.getInstance().setDefaultCommand(new setHoodPosition(() -> 0.1));
@@ -176,6 +166,11 @@ public class Robot extends TimedRobotstangs {
         //CommandScheduler.getInstance().schedule(new InstantCommand(() -> FollowPathCommand.warmupCommand()));
     }
 
+    void postPitTestStatus(String status) {
+        Telemetry.log("PitTest/Pit Test Status", status);
+    }
+
+   
     //run sim for a duration at max CPU speed
     void runSimForSeconds(double durationSeconds)
     {
@@ -309,12 +304,12 @@ public class Robot extends TimedRobotstangs {
     //             .andThen(() -> driveLeftCommand.withTimeout(7))
     //             .andThen(new InstantCommand(() -> postPitTestStatus("Finished Pit Test")));
 
-    //     SmartDashboard.putData("Run Auto pit test (Intake must be up)", pitTestCommand);
+    //     Telemetry.log("Run Auto pit test (Intake must be up)", pitTestCommand);
 
-    //     SmartDashboard.putData("PitTest/Drive Forward", driveForwardCommand);
-    //     SmartDashboard.putData("PitTest/Drive Left", driveLeftCommand);
-    //     SmartDashboard.putData("PitTest/Drive Back", driveBackCommand);
-    //     SmartDashboard.putData("PitTest/Drive Right", driveRightCommand);
+    //     Telemetry.log("PitTest/Drive Forward", driveForwardCommand);
+    //     Telemetry.log("PitTest/Drive Left", driveLeftCommand);
+    //     Telemetry.log("PitTest/Drive Back", driveBackCommand);
+    //     Telemetry.log("PitTest/Drive Right", driveRightCommand);
     // }
 
     // void setupPitTestDashboard() {
@@ -335,12 +330,12 @@ public class Robot extends TimedRobotstangs {
     //             Hood.getInstance().runOnce(() -> {
     //                 Hood.getInstance().setHoodPosition(Constants.HoodConstants.kHoodUpPos);
     //             }));
-    //     SmartDashboard.putData("PitTest/HoodSetpoints", hoodSetpointChooser);
+    //     Telemetry.log("PitTest/HoodSetpoints", hoodSetpointChooser);
 
     //     intakePivotSetpointChooser.add("Extend", IntakeFactory.ExtendIntake());
     //     intakePivotSetpointChooser.add("Retract", IntakeFactory.RetractIntake());
 
-    //     SmartDashboard.putData("PitTest/IntakePivotSetpoints", intakePivotSetpointChooser);
+    //     Telemetry.log("PitTest/IntakePivotSetpoints", intakePivotSetpointChooser);
     // }
 
     // void pitTestPeriodic() {
@@ -800,7 +795,7 @@ NamedCommands.registerCommand("FullShootPrecise",
                         if (Robot.isRed()) {
                             pose = FlippingUtil.flipFieldPose(pose);
                         }
-                        if(flip){Fields.FRC_2026_REBUILT_ANDY_MARK.
+                        if(flip){
                             pose= new Pose2d(pose.getX(), Constants.kAprilTagFieldLayout.getFieldWidth()-pose.getY(),new Rotation2d());
                         }
                         poses.add(pose);

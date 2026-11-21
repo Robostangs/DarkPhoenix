@@ -34,7 +34,7 @@ public class Flywheel extends SubsystemBase {
         Telemetry.log("Flywheel/D", Constants.FlywheelConstants.kShooterMotorD);
 
         ApplyConfigs();
-        SmartDashboard.putData("Apply Flywheel Pid",new InstantCommand(() -> {ApplyConfigs();}));
+       // Telemetry.log("Apply Flywheel Pid",new InstantCommand(() -> {ApplyConfigs();}));
         
     }
     private void ApplyConfigs(){
@@ -48,11 +48,11 @@ public class Flywheel extends SubsystemBase {
         // flywheelConfig.Slot0.kP = Constants.FlywheelConstants.kShooterMotorP;
         // flywheelConfig.Slot0.kI = Constants.FlywheelConstants.kShooterMotorI;
         // flywheelConfig.Slot0.kD = Constants.FlywheelConstants.kShooterMotorD;
-        flywheelConfig.Slot0.kP = SmartDashboard.getNumber("Flywheel/P", Constants.FlywheelConstants.kShooterMotorP);
+        flywheelConfig.Slot0.kP = Constants.FlywheelConstants.kShooterMotorP;
         
-        flywheelConfig.Slot0.kI = SmartDashboard.getNumber("Flywheel/I", Constants.FlywheelConstants.kShooterMotorI);
+        flywheelConfig.Slot0.kI = Constants.FlywheelConstants.kShooterMotorI;
         
-        flywheelConfig.Slot0.kD = SmartDashboard.getNumber("Flywheel/D", Constants.FlywheelConstants.kShooterMotorD);
+        flywheelConfig.Slot0.kD = Constants.FlywheelConstants.kShooterMotorD;
 
         flywheelConfig.Slot0.kA = Constants.FlywheelConstants.kShooterMotorA;
         flywheelConfig.Slot0.kV = Constants.FlywheelConstants.kShooterMotorV;
@@ -146,7 +146,7 @@ public class Flywheel extends SubsystemBase {
 
         Telemetry.log("Flywheel/Main Velocity", mainShooterMotor.getVelocity().getValueAsDouble());
         Telemetry.log("Flywheel/Slave Velocity", slaveShooterMotor.getVelocity().getValueAsDouble());
-        flywheelRegressionTarget=SmartDashboard.getNumber("FlywheelRegressionTarget", 0);
+       // flywheelRegressionTarget=SmartDashboard.getNumber("FlywheelRegressionTarget", 0);
         Telemetry.log("Flywheel/Target Velocity", flywheelTargetVelocity.Velocity);
 
     }

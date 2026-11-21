@@ -39,10 +39,8 @@ import frc.robot.commands.IntakeCommands.IntakeFactory;
 import frc.robot.commands.IntakeCommands.setIntakePosition;
 import frc.robot.commands.IntakeCommands.setKirbyWheels;
 import frc.robot.commands.AutoAlign;
-import frc.robot.commands.BlockerCommands.HomeBlocker;
 import frc.robot.commands.DumperCommands.Flywheel.ChargeUp;
 
-import frc.robot.commands.BlockerCommands.setBlockerPosition;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Dumper.Flywheel;
 
@@ -67,7 +65,10 @@ public class RobotContainer {
                 return xDrive.rightPaddle().getAsBoolean() ? kIntakeSpeedScale : 1;
         }
 
-        /** Translation speed multiplier: intake scale, or 0.25 while slow-mode trigger is held (lowest wins). */
+        /**
+         * Translation speed multiplier: intake scale, or 0.25 while slow-mode trigger
+         * is held (lowest wins).
+         */
         private double translationScale() {
                 double scale = intakeScale();
                 if (xDrive.leftTrigger().getAsBoolean()) {
@@ -76,7 +77,7 @@ public class RobotContainer {
                 return scale;
         }
 
-        private final TelemetryStangs logger = new TelemetryStangs(MaxSpeed);
+       // private final TelemetryStangs logger = new TelemetryStangs(MaxSpeed);
 
         private final ControllerStangs xDrive = new ControllerStangs(0);
         private final ControllerStangs xManip = new ControllerStangs(1);
@@ -101,8 +102,8 @@ public class RobotContainer {
                         configureSimBinds();
 
                 }
-                drivetrain.registerTelemetry(logger::telemeterize);
-                logger.initSwerveLog();
+                //drivetrain.registerTelemetry(logger::telemeterize);
+                //logger.initSwerveLog();
         }
 
         private Command rumbleController(double secs, CommandXboxController controller) {
@@ -122,8 +123,7 @@ public class RobotContainer {
         public static Command rumbleManipController(double secs) {
                 return RobotContainer.getInstance().rumbleController(secs, RobotContainer.getInstance().xManip);
         }
-       
-       
+
         /**
          * TODO:
          * intake
@@ -139,21 +139,20 @@ public class RobotContainer {
                 xDrive.rightTrigger().whileTrue(
                                 (ShootFactory.SmartShoot())).onFalse(ShootFactory.EndShoot());
 
-                 xDrive.leftBumper().whileTrue(new HomeIntake(false));
+                xDrive.leftBumper().whileTrue(new HomeIntake(false));
 
                 // close shoot
 
                 xDrive.rm().whileTrue(new setKirbyWheels(() -> 1));
                 xDrive.lm()
-                        .whileTrue(ShootFactory.DumbShoot())
-                        .onFalse(ShootFactory.EndShoot());
-                
+                                .whileTrue(ShootFactory.DumbShoot())
+                                .onFalse(ShootFactory.EndShoot());
 
                 xDrive.rightPaddle().whileTrue(IntakeFactory.ExtendIntake());
                 xDrive.leftPaddle().whileTrue(IntakeFactory.RetractIntake());
 
                 xDrive.rightBumper().whileTrue(new HomeHood());
-             //   xDrive.dpadRight().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+                // xDrive.dpadRight().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
                 // TODO Find ts pose
                 xDrive.dpadDown().onTrue(
                                 drivetrain.runOnce(() -> drivetrain.resetPose(
@@ -168,27 +167,28 @@ public class RobotContainer {
                 xDrive.dpadRight().onTrue(new InstantCommand(
                                 (() -> useVision = !useVision)));
 
-              xDrive.a().whileTrue(new AutoAlign(() -> xDrive.getLeftY(), () -> xDrive.getLeftX(),
+                xDrive.a().whileTrue(new AutoAlign(() -> xDrive.getLeftY(), () -> xDrive.getLeftX(),
                                 () -> xDrive.getLeftTrigger() < 0.2)
                                 .withInterruptBehavior(InterruptionBehavior.CANCEL_INCOMING).withName("Auto Align"));
-                
+
                 // // X (button 3): automatic 180 spin, driver keeps translating
                 // xDrive.x().whileTrue(new Rotate180(
-                //                 () -> -xDrive.getLeftY() * MaxSpeed * translationScale(),
-                //                 () -> -xDrive.getLeftX() * MaxSpeed * translationScale())
-                //                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Rotate 180"));
+                // () -> -xDrive.getLeftY() * MaxSpeed * translationScale(),
+                // () -> -xDrive.getLeftX() * MaxSpeed * translationScale())
+                // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming).withName("Rotate
+                // 180"));
 
                 xDrive.y().whileTrue(IntakeFactory.TrueSpit());
                 xDrive.b().whileTrue(IntakeFactory.ballStuck());
 
-                //tests
-                
-        }
-        public void configureManipBindings() {
-                
-                // xManip.rightBumper().onTrue(
-                //                 new InstantCommand(() -> Robot.toggleDefense()));
+                // tests
 
+        }
+
+        public void configureManipBindings() {
+
+                // xManip.rightBumper().onTrue(
+                // new InstantCommand(() -> Robot.toggleDefense()));
 
                 new Trigger(() -> Math.abs(xManip.getLeftY()) > 0.05).whileTrue(
                                 new RunCommand(
@@ -204,23 +204,23 @@ public class RobotContainer {
                                 .onFalse(new setHoodPosition(() -> 0));
 
                 xManip.y().whileTrue(ShootFactory.FarPass())
-                                .onFalse(new setHoodPosition(() -> 0));;
+                                .onFalse(new setHoodPosition(() -> 0));
+                ;
                 xManip.b().whileTrue(ShootFactory.MedPass())
                                 .onFalse(new setHoodPosition(() -> 0));
 
-               xManip.leftBumper().whileTrue(ShootFactory.SmartFeed(0.5));
+                xManip.leftBumper().whileTrue(ShootFactory.SmartFeed(0.5));
 
                 xManip.leftPaddle().whileTrue(new HomeIntake(true));
                 xManip.rightPaddle().whileTrue(new ChargeUp(false));
                 // xManip.leftTrigger().whileTrue(new addFlywheelSpeed(() -> 1.0));
                 // xManip.rightTrigger().whileTrue(new addFlywheelSpeed(() -> -1.0));
 
-
         }
 
         public void configureTestBindings() {
-               // setDrivetrain();
-                
+                // setDrivetrain();
+
                 xTest.rightPaddle().whileTrue(new HomeIntake(false));
                 xTest.leftPaddle().whileTrue(new HomeIntake(true));
                 xTest.a().whileTrue(new HomeHood());
@@ -235,21 +235,23 @@ public class RobotContainer {
         }
 
         private void setDrivetrain() {
-                DoubleSupplier leftBumper = () -> (xDrive.leftTrigger().getAsBoolean()|xDrive.a().getAsBoolean()) ? 0.25 : 1;
+                DoubleSupplier leftBumper = () -> (xDrive.leftTrigger().getAsBoolean() | xDrive.a().getAsBoolean())
+                                ? 0.25
+                                : 1;
                 BooleanSupplier isMoving = () -> (!((Math.abs(xDrive.getLeftX()) > 0.1
                                 || Math.abs(xDrive.getLeftY()) > 0.1
                                 || Math.abs(xDrive.getRightX()) > 0.1)));
                 if (Robot.isSimulation() && !Robot.isMatchSim()) {
                         // drivetrain.setDefaultCommand(
-                        //                 drivetrain.applyRequest(
+                        // drivetrain.applyRequest(
 
-                        //                                 () -> drive.withVelocityX((-xSim.getRawAxis(0))
-                        //                                                 * MaxSpeed)
-                        //                                                 .withVelocityY((xSim.getRawAxis(1))
-                        //                                                                 * MaxSpeed)
-                        //                                                 .withRotationalRate((-xSim
-                        //                                                                 .(2))
-                        //                                                                 * MaxAngularRate)));
+                        // () -> drive.withVelocityX((-xSim.getRawAxis(0))
+                        // * MaxSpeed)
+                        // .withVelocityY((xSim.getRawAxis(1))
+                        // * MaxSpeed)
+                        // .withRotationalRate((-xSim
+                        // .(2))
+                        // * MaxAngularRate)));
 
                 } else {
 
@@ -288,7 +290,7 @@ public class RobotContainer {
 
                 }
         }
-        
+
         private void configureSimBinds() {
                 // new Trigger(() -> xSim.getRawButtonPressed(1))
                 //                 .whileTrue(new AutoAlign(() -> 0d,
@@ -301,6 +303,7 @@ public class RobotContainer {
         //  new Trigger(() -> xSim.getRawButtonPressed(1))
         //                         .whileTrue(new  setBlockerPosition(0.5, false));       
         //                           new Trigger(() -> xSim.getRawButtonPressed(2))
-        //                         .whileTrue(new  setBlockerPosition(0, true));     
+        //                         .whileTrue(new  setBlockerPosition(0, true));    
+        } 
 }
-}
+
