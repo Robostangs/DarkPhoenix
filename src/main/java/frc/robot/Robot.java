@@ -11,7 +11,10 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.HootAutoReplay;
+import com.ctre.phoenix6.controls.ModulateVBatOut;
+import com.ctre.phoenix6.hardware.CANdle;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -91,6 +94,7 @@ public class Robot extends TimedRobotstangs {
     public static Field2d teleopField = new Field2d();
     private static GcStatsCollector gscollect = new GcStatsCollector();
     private int lastMatchSecond = -1;
+    private CANdle candle;
 
     public static Alert gcAlert = new Alert("gcBad","MEMORY TWEAKING LOOK INTO TS RN", Level.HIGH);
     public static Alert shiftAlert = new Alert("shiftAler","Alliance shift may not be accurate", Level.MEDIUM);
@@ -133,7 +137,7 @@ public class Robot extends TimedRobotstangs {
     public Robot() {
         m_robotContainer = RobotContainer.getInstance();
         Telemetry.log("Field", teleopField);
-
+        candle = new CANdle(1,  new CANBus("rio"));
         DataLogManager.start("");
         DataLogManager.log("Driverstation connected");
         DriverStation.startDataLog(DataLogManager.getLog());
@@ -380,6 +384,7 @@ public class Robot extends TimedRobotstangs {
         gscollect.update();
         Telemetry.log("Alliance can score", allianceScore.toHexString());
         Telemetry.log("Alliance is Red", Robot.isRed());
+        candle.setControl(new ModulateVBatOut(Robot.isEnabled()?((Timer.getTimestamp()%0.5>0.25)?1.0:0.0):1.0));
 
     }
 

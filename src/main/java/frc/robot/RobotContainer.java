@@ -21,6 +21,7 @@ import org.wpilib.driverstation.GenericHID;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.CommandScheduler;
 import org.wpilib.command2.InstantCommand;
+import org.wpilib.command2.PrintCommand;
 import org.wpilib.command2.RunCommand;
 import org.wpilib.command2.StartEndCommand;
 import org.wpilib.command2.WaitCommand;
@@ -148,7 +149,7 @@ public class RobotContainer {
                                 .whileTrue(ShootFactory.DumbShoot())
                                 .onFalse(ShootFactory.EndShoot());
 
-                xDrive.rightPaddle().whileTrue(IntakeFactory.ExtendIntake());
+                xDrive.x().whileTrue(IntakeFactory.ExtendIntake().alongWith(new PrintCommand("Paddlejohned")));
                 xDrive.leftPaddle().whileTrue(IntakeFactory.RetractIntake());
 
                 xDrive.rightBumper().whileTrue(new HomeHood());
